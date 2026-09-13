@@ -1,5 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { isValidAdminToken } from '../../server-utils';
+
+const adminPassword = process.env.ADMIN_PASSWORD || 'AttriChem2026Admin!';
+const adminToken = `attri_session_token_${adminPassword.split('').reverse().join('')}`;
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'GET') {
@@ -7,7 +9,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const authHeader = req.headers.authorization;
-  if (isValidAdminToken(authHeader)) {
+  if (authHeader === `Bearer ${adminToken}`) {
     return res.json({ authenticated: true });
   }
   return res.status(401).json({ authenticated: false });
