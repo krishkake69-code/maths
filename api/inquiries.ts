@@ -13,8 +13,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const { id } = req.query;
 
+    let body = req.body || {};
+    if (typeof body === 'string') {
+      try {
+        body = JSON.parse(body);
+      } catch (e) {}
+    }
+
     if (req.method === 'POST') {
-      const { name, phone, email, course, message, type } = req.body || {};
+      const { name, phone, email, course, message, type } = body;
       if (!name || !phone) {
         return res.status(400).json({ success: false, error: 'Name and Phone are required.' });
       }
