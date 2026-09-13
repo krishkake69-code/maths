@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import { writeDataStore } from '../lib/firebase';
@@ -13,11 +14,14 @@ async function seedFirebase() {
     if (success) {
       console.log('Firebase store seeded successfully!');
       console.log('Keys:', Object.keys(data));
+      process.exit(0);
     } else {
       console.error('Failed to seed Firebase store.');
+      process.exit(1);
     }
   } catch (err) {
     console.error('Error seeding Firebase:', err);
+    process.exit(1);
   }
 }
 

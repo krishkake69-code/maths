@@ -1,10 +1,11 @@
-import * as admin from 'firebase-admin';
+import { initializeApp, getApps, cert } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
 
 // Initialize Firebase only once
-if (!admin.apps.length) {
+if (getApps().length === 0) {
   try {
-    admin.initializeApp({
-      credential: admin.credential.cert({
+    initializeApp({
+      credential: cert({
         projectId: process.env.FIREBASE_PROJECT_ID,
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
         privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
@@ -15,7 +16,7 @@ if (!admin.apps.length) {
   }
 }
 
-const db = admin.apps.length ? admin.firestore() : null;
+const db = getApps().length > 0 ? getFirestore() : null;
 
 export const readDataStore = async (): Promise<any> => {
   if (!db) return null;
