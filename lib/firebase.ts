@@ -79,14 +79,18 @@ export const readDataStore = async (): Promise<any> => {
 };
 
 export const writeDataStore = async (data: any): Promise<boolean> => {
-  inMemoryStore.set('data-store', data);
   try {
     const db = getDb();
-    if (db) {
-      await db.collection('attri-data').doc('store').set(data);
+    if (!db) {
+      console.error('Firestore is not configured; refusing to report a persistent save.');
+      return false;
     }
+
+    await db.collection('attri-data').doc('store').set(data);
+    inMemoryStore.set('data-store', data);
+    return true;
   } catch (error) {
     console.error('Error writing to Firestore:', error);
+    return false;
   }
-  return true;
 };
