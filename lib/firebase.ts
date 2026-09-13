@@ -1,16 +1,36 @@
 import { initializeApp, getApps, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 
+// Parse private key safely, handling both literal newlines and escaped newlines
+const parsePrivateKey = (key: string | undefined) => {
+  if (!key) return '';
+  if (key.includes('\\n')) return key.replace(/\\n/g, '\n');
+  if (key.startsWith('"') && key.endsWith('"')) {
+    key = key.slice(1, -1);
+    if (key.includes('\\n')) return key.replace(/\\n/g, '\n');
+  }
+  return key;
+};
+
 // Initialize Firebase only once
 if (getApps().length === 0) {
   try {
-    initializeApp({
-      credential: cert({
-        projectId: process.env.FIREBASE_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      }),
-    });
+    const projectId = process.env.FIREBASE_PROJECT_ID;
+    const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+    const privateKey = parsePrivateKey(process.env.FIREBASE_PRIVATE_KEY);
+    
+    if (projectId && clientEmail && privateKey) {
+      initializeApp({
+        credential: cert({
+          projectId,
+          clientEmail,
+          privateKey,
+        }),
+      });
+      console.log('Firebase initialized successfully in production.');
+    } else {
+      console.warn('Firebase credentials missing from environment variables.');
+    }
   } catch (error) {
     console.error('Firebase initialization error', error);
   }
