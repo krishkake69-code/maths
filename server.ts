@@ -101,7 +101,7 @@ function writeDataStore(data: any) {
 let memoryCache = readDataStore();
 
 // Secret token for state verification in current session
-const ADMIN_TOKEN = 'attri_session_token_' + (process.env.ADMIN_PASSWORD || 'rehmaansir@stuido').split('').reverse().join('');
+const ADMIN_TOKEN = 'attri_session_token_' + (process.env.ADMIN_PASSWORD || 'AttriChem2026Admin!').split('').reverse().join('');
 
 // API Routes FIRST
 app.get('/api/health', (req, res) => {
