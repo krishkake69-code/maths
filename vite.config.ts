@@ -3,9 +3,20 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig} from 'vite';
 
+const disablePreviewHmrClient = {
+  name: 'disable-preview-hmr-client',
+  enforce: 'post' as const,
+  transformIndexHtml(html: string) {
+    return html.replace(
+      /<script[^>]*src=["'][^"']*\/@vite\/client[^"']*["'][^>]*><\/script>/g,
+      '',
+    );
+  },
+};
+
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [react(), tailwindcss(), disablePreviewHmrClient],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
