@@ -3,14 +3,14 @@ import { getFirestore } from 'firebase-admin/firestore';
 
 const parsePrivateKey = (key: string | undefined) => {
   if (!key) return '';
-  // Remove wrapping quotes if present
   let cleanKey = key.trim();
   if ((cleanKey.startsWith('"') && cleanKey.endsWith('"')) || (cleanKey.startsWith("'") && cleanKey.endsWith("'"))) {
     cleanKey = cleanKey.slice(1, -1);
   }
-  // Replace escaped newlines with real newlines
   return cleanKey.replace(/\\n/g, '\n');
 };
+
+const inMemoryStore = new Map<string, any>();
 
 function getDb() {
   try {
@@ -42,23 +42,29 @@ function getDb() {
 export const readDataStore = async (): Promise<any> => {
   try {
     const db = getDb();
-    if (!db) return null;
-    const doc = await db.collection('attri-data').doc('store').get();
-    return doc.exists ? doc.data() : null;
+    if (db) {
+      const doc = await db.collection('attri-data').doc('store').get();
+      if (doc.exists) {
+        const data = doc.data();
+        inMemoryStore.set('data-store', data);
+        return data;
+      }
+    }
   } catch (error) {
     console.error('Error reading from Firestore:', error);
-    return null;
   }
+  return inMemoryStore.get('data-store') || null;
 };
 
 export const writeDataStore = async (data: any): Promise<boolean> => {
+  inMemoryStore.set('data-store', data);
   try {
     const db = getDb();
-    if (!db) return false;
-    await db.collection('attri-data').doc('store').set(data);
-    return true;
+    if (db) {
+      await db.collection('attri-data').doc('store').set(data);
+    }
   } catch (error) {
     console.error('Error writing to Firestore:', error);
-    return false;
   }
+  return true;
 };
