@@ -3,7 +3,7 @@ import path from 'path';
 
 const dataFilePath = path.join(process.cwd(), 'src', 'data-store.json');
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'AttriChem2026Admin!';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'rehmaansir@stuido';
 const ADMIN_TOKEN = 'attri_session_token_' + ADMIN_PASSWORD.split('').reverse().join('');
 
 export function readDataStore() {
