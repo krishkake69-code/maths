@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import dotenv from 'dotenv';
 import { createServer as createViteServer } from 'vite';
+import { readDataStore as readPersistentDataStore, writeDataStore as writePersistentDataStore } from './lib/firebase';
 
 dotenv.config();
 
@@ -108,8 +109,8 @@ app.get('/api/health', (req, res) => {
 });
 
 // GET website content (with inquiries stripped for public safety)
-app.get('/api/content', (req, res) => {
-  const fileData = readDataStore();
+app.get('/api/content', async (req, res) => {
+  const fileData = await readPersistentDataStore();
   if (fileData) {
     memoryCache = fileData;
   }
@@ -223,24 +224,27 @@ app.delete('/api/inquiries/:id', (req, res) => {
 });
 
 // PUT save/update website content (preserving inquiries array)
-app.put('/api/content', saveLimiter, (req, res) => {
+app.put('/api/content', saveLimiter, async (req, res) => {
   const authHeader = req.headers.authorization;
   if (authHeader !== `Bearer ${ADMIN_TOKEN}`) {
     return res.status(401).json({ success: false, error: 'Unauthorized' });
   }
 
   const newData = req.body;
-  if (!newData) {
-    return res.status(400).json({ success: false, error: 'Empty body' });
+  if (!newData || typeof newData !== 'object' || Array.isArray(newData)) {
+    return res.status(400).json({ success: false, error: 'Content must be a JSON object' });
   }
 
-  const fileData = readDataStore() || memoryCache || {};
-  newData.inquiries = fileData.inquiries || [];
+  const fileData = await readPersistentDataStore() || memoryCache || {};
+  const dataToSave = { ...newData, inquiries: fileData.inquiries || [] };
+  const success = await writePersistentDataStore(dataToSave);
 
-  memoryCache = newData;
-  const success = writeDataStore(newData);
-  
-  res.json({ success, message: success ? 'Saved successfully' : 'Saved in-memory (persistent file error)' });
+  if (success) {
+    memoryCache = dataToSave;
+    return res.json({ success: true, message: 'Saved successfully' });
+  }
+
+  return res.status(500).json({ success: false, error: 'Failed to write to database.' });
 });
 
 // Vite middleware and production static handling
