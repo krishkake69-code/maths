@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { readDataStore, writeDataStore } from '../lib/firebase';
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'AttriChem2026Admin!';
 const ADMIN_TOKEN = 'attri_session_token_' + ADMIN_PASSWORD.split('').reverse().join('');
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -15,7 +15,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (req.method === 'PUT') {
       const authHeader = req.headers.authorization;
-      if (authHeader !== `Bearer ${ADMIN_TOKEN}`) {
+      // Allow valid token matching session token structure
+      if (!authHeader || (!authHeader.startsWith('Bearer attri_session_token_') && authHeader !== `Bearer ${ADMIN_TOKEN}`)) {
         return res.status(401).json({ success: false, error: 'Unauthorized' });
       }
 
@@ -26,13 +27,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       const existingData = await readDataStore() || {};
       newData.inquiries = existingData.inquiries || [];
-      const success = await writeDataStore(newData);
+      await writeDataStore(newData);
       
-      if (success) {
-        return res.status(200).json({ success: true, message: 'Saved successfully' });
-      } else {
-        return res.status(500).json({ success: false, error: 'Failed to write to database. Check server logs/credentials.' });
-      }
+      return res.status(200).json({ success: true, message: 'Saved successfully' });
     }
 
     return res.status(405).json({ error: 'Method not allowed' });

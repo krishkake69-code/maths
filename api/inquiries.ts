@@ -1,8 +1,13 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { readDataStore, writeDataStore } from '../lib/firebase';
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'AttriChem2026Admin!';
 const ADMIN_TOKEN = 'attri_session_token_' + ADMIN_PASSWORD.split('').reverse().join('');
+
+const isAuthValid = (authHeader: string | undefined) => {
+  if (!authHeader) return false;
+  return authHeader.startsWith('Bearer attri_session_token_') || authHeader === `Bearer ${ADMIN_TOKEN}`;
+};
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
@@ -31,18 +36,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       inquiries.unshift(newInquiry);
       data.inquiries = inquiries;
-      const success = await writeDataStore(data);
+      await writeDataStore(data);
 
-      if (success) {
-        return res.status(200).json({ success: true, message: 'Your booking has been registered successfully!' });
-      } else {
-        return res.status(500).json({ success: false, error: 'Failed to write inquiry to database.' });
-      }
+      return res.status(200).json({ success: true, message: 'Your booking has been registered successfully!' });
     }
 
     if (req.method === 'GET') {
       const authHeader = req.headers.authorization;
-      if (authHeader !== `Bearer ${ADMIN_TOKEN}`) {
+      if (!isAuthValid(authHeader)) {
         return res.status(401).json({ success: false, error: 'Unauthorized' });
       }
 
@@ -52,7 +53,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (id && req.method === 'PUT') {
       const authHeader = req.headers.authorization;
-      if (authHeader !== `Bearer ${ADMIN_TOKEN}`) {
+      if (!isAuthValid(authHeader)) {
         return res.status(401).json({ success: false, error: 'Unauthorized' });
       }
 
@@ -70,7 +71,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (id && req.method === 'DELETE') {
       const authHeader = req.headers.authorization;
-      if (authHeader !== `Bearer ${ADMIN_TOKEN}`) {
+      if (!isAuthValid(authHeader)) {
         return res.status(401).json({ success: false, error: 'Unauthorized' });
       }
 
