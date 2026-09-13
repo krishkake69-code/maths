@@ -1,7 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'AttriChem2026Admin!';
-const ADMIN_TOKEN = 'attri_session_token_' + ADMIN_PASSWORD.split('').reverse().join('');
+import { ADMIN_PASSWORD, ADMIN_TOKEN } from '../../server-utils';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -16,7 +14,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const { password } = body;
-  if (password === ADMIN_PASSWORD || password === 'AttriChem2026Admin!' || password === 'rehmaansir@stuido') {
+  if (password === ADMIN_PASSWORD) {
     return res.json({ success: true, token: ADMIN_TOKEN });
   }
   return res.status(401).json({ success: false, error: 'Incorrect password' });

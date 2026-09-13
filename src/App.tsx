@@ -66,14 +66,23 @@ export default function App() {
         },
         body: JSON.stringify(updatedData)
       });
-      const result = await res.json();
-      if (res.ok && result.success) {
-        setDynamicData(updatedData);
-        return true;
-      } else {
-        console.error('Save failed:', result.error || 'Unknown error');
+      const result = await res.json().catch(() => ({}));
+      if (!res.ok || !result.success) {
+        if (res.status === 401) {
+          localStorage.removeItem('attri_admin_token');
+        }
+        console.error('Save failed:', result.error || `HTTP ${res.status}`);
         return false;
       }
+
+      const refreshedRes = await fetch('/api/content', { cache: 'no-store' });
+      if (!refreshedRes.ok) {
+        console.error('Save succeeded but refreshed content could not be loaded.');
+        return false;
+      }
+      const refreshedData = await refreshedRes.json();
+      setDynamicData(refreshedData);
+      return true;
     } catch (err) {
       console.error('Error saving dynamic content to backend:', err);
       return false;

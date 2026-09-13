@@ -1,8 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { readDataStore, writeDataStore } from '../lib/firebase';
-
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'AttriChem2026Admin!';
-const ADMIN_TOKEN = 'attri_session_token_' + ADMIN_PASSWORD.split('').reverse().join('');
+import { isValidAdminToken } from '../server-utils';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
@@ -15,7 +13,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (req.method === 'PUT') {
       const authHeader = req.headers.authorization;
-      if (!authHeader || (!authHeader.startsWith('Bearer attri_session_token_') && authHeader !== `Bearer ${ADMIN_TOKEN}`)) {
+      if (!isValidAdminToken(authHeader)) {
         return res.status(401).json({ success: false, error: 'Unauthorized' });
       }
 
@@ -32,9 +30,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         }
       }
 
+      if (typeof newData !== 'object' || Array.isArray(newData)) {
+        return res.status(400).json({ success: false, error: 'Content must be a JSON object' });
+      }
+
       const existingData = await readDataStore() || {};
-      newData.inquiries = existingData.inquiries || [];
-      const success = await writeDataStore(newData);
+      const dataToSave = {
+        ...newData,
+        inquiries: Array.isArray(existingData.inquiries) ? existingData.inquiries : [],
+      };
+      const success = await writeDataStore(dataToSave);
       
       if (success) {
         return res.status(200).json({ success: true, message: 'Saved successfully' });
