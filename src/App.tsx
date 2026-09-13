@@ -89,7 +89,7 @@ export default function App() {
       <Navbar 
         darkMode={darkMode} 
         setDarkMode={setDarkMode}
-        onOpenAdmin={() => setIsAdminOpen(true)}
+        onAdminClick={() => setIsAdminOpen(true)}
       />
 
       <main id="main-content" tabIndex={-1} className="outline-none">
@@ -129,6 +129,7 @@ export default function App() {
 
       {/* Footer */}
       <Footer 
+        onAdminClick={() => setIsAdminOpen(true)}
         contactInfo={dynamicData?.contactInfo} 
         centers={dynamicData?.centers} 
       />
