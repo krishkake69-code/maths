@@ -1,5 +1,7 @@
 import { initializeApp, getApps, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import fs from 'fs';
+import path from 'path';
 
 const parsePrivateKey = (key: string | undefined) => {
   if (!key) return '';
@@ -11,6 +13,19 @@ const parsePrivateKey = (key: string | undefined) => {
 };
 
 const inMemoryStore = new Map<string, any>();
+
+function getDefaultData() {
+  try {
+    const dataFilePath = path.join(process.cwd(), 'src', 'data-store.json');
+    if (fs.existsSync(dataFilePath)) {
+      const raw = fs.readFileSync(dataFilePath, 'utf8');
+      return JSON.parse(raw);
+    }
+  } catch (err) {
+    console.error('Error reading default data file:', err);
+  }
+  return null;
+}
 
 function getDb() {
   try {
@@ -52,6 +67,13 @@ export const readDataStore = async (): Promise<any> => {
     }
   } catch (error) {
     console.error('Error reading from Firestore:', error);
+  }
+
+  if (!inMemoryStore.has('data-store')) {
+    const defaultData = getDefaultData();
+    if (defaultData) {
+      inMemoryStore.set('data-store', defaultData);
+    }
   }
   return inMemoryStore.get('data-store') || null;
 };

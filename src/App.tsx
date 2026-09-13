@@ -15,11 +15,12 @@ import Footer from './components/Footer';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import AdminPanel from './components/AdminPanel';
 import { AnimatePresence } from 'motion/react';
+import initialData from './data-store.json';
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
-  const [dynamicData, setDynamicData] = useState<any>(null);
+  const [dynamicData, setDynamicData] = useState<any>(initialData);
 
   // Apply dark mode styling to root document
   useEffect(() => {
@@ -39,7 +40,7 @@ export default function App() {
         if (res.ok) {
           const data = await res.json();
           // Verify that we received valid data objects
-          if (data && data.admissionMessage) {
+          if (data && Object.keys(data).length > 0 && (data.admissionMessage || data.hero || data.courses)) {
             setDynamicData(data);
           }
         }
@@ -80,75 +81,68 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-300 antialiased selection:bg-indigo-600 selection:text-white">
-      {/* 1. Admission Alert Marquee Banner */}
+    <div className="min-h-screen bg-slate-900 text-slate-100 font-sans transition-colors duration-300">
+      {/* Top Admission Alert Bar */}
       <AdmissionBanner message={dynamicData?.admissionMessage} />
 
-      {/* 2. Responsive Sticky Navigation Header */}
+      {/* Main Navigation */}
       <Navbar 
         darkMode={darkMode} 
-        setDarkMode={setDarkMode} 
-        onAdminClick={() => setIsAdminOpen(true)} 
+        setDarkMode={setDarkMode}
+        onOpenAdmin={() => setIsAdminOpen(true)}
       />
 
-      {/* 3. Immersive Hero Portal with 3D Spatial Geometry */}
-      <Hero hero={dynamicData?.hero} stats={dynamicData?.stats} />
+      <main id="main-content" tabIndex={-1} className="outline-none">
+        {/* Hero Section */}
+        <Hero data={dynamicData?.hero} />
 
-      {/* 4. Statistics Counter Section */}
-      <Stats stats={dynamicData?.stats} />
+        {/* Interactive Math 3D Laboratory (Key Differentiator) */}
+        <Math3DLab />
 
-      {/* 5. 3D Interactive Spatial Math Lab */}
-      <Math3DLab />
+        {/* About Rehman Sir */}
+        <About />
 
-      {/* 6. Professional Courses Catalog with Registration Modal */}
-      <Courses courses={dynamicData?.courses} />
+        {/* Performance Statistics */}
+        <Stats data={dynamicData?.stats} />
 
-      {/* 7. Classroom & Teacher About Section */}
-      <About />
+        {/* Academic Courses & Batches */}
+        <Courses courses={dynamicData?.courses} />
 
-      {/* 9. Bento Grid Style: Why Choose Us (Icon Cards) */}
-      <WhyChooseUs />
+        {/* Why Choose Us Features */}
+        <WhyChooseUs />
 
-      {/* 10. Champions Board & Top Ranks Results Section */}
-      <Results results={dynamicData?.results} />
+        {/* Hall of Fame & Results */}
+        <Results results={dynamicData?.results} />
 
-      {/* 10. Reviews & Feedback Slides */}
-      <Testimonials testimonials={dynamicData?.testimonials} />
+        {/* Testimonials */}
+        <Testimonials testimonials={dynamicData?.testimonials} />
 
-      {/* 11. Custom Lightbox Grid Tour Gallery */}
-      <Gallery items={dynamicData?.gallery} />
+        {/* Campus Gallery */}
+        <Gallery gallery={dynamicData?.gallery} />
 
-      {/* 12. Complete Contact Coordinates & Forms */}
-      <Contact contactInfo={dynamicData?.contactInfo} centers={dynamicData?.centers} />
+        {/* Contact & Registration Form */}
+        <Contact 
+          contactInfo={dynamicData?.contactInfo} 
+          centers={dynamicData?.centers} 
+        />
+      </main>
 
-      {/* 13. Professional Informational Footer */}
-      <Footer onAdminClick={() => setIsAdminOpen(true)} contactInfo={dynamicData?.contactInfo} />
+      {/* Footer */}
+      <Footer 
+        contactInfo={dynamicData?.contactInfo} 
+        centers={dynamicData?.centers} 
+      />
 
-      {/* 14. Floating WhatsApp Interactive Desk Widget */}
-      <FloatingWhatsApp phone={dynamicData?.contactInfo?.phone} />
+      {/* Floating Action Button */}
+      <FloatingWhatsApp />
 
-      {/* Admin Panel Modal Control Center */}
+      {/* Admin Panel Modal Overlay */}
       <AnimatePresence>
         {isAdminOpen && (
           <AdminPanel 
             isOpen={isAdminOpen}
             onClose={() => setIsAdminOpen(false)}
-            data={dynamicData || {
-              admissionMessage: "",
-              stats: { studentsCount: "", successRate: "", experience: "" },
-              courses: [],
-              results: [],
-              testimonials: [],
-              gallery: [],
-              contactInfo: {
-                phone: "+91 98765 43210",
-                email: "admissions@attrichemistry.com",
-                instagram: "https://instagram.com/attri_chemistry",
-                facebook: "https://facebook.com/attri_chemistry",
-                whatsapp: "+91 98765 43210"
-              },
-              centers: []
-            }}
+            data={dynamicData}
             onSave={handleSaveContent}
           />
         )}
