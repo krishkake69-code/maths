@@ -1,0 +1,306 @@
+{
+  "admissionMessage": "⚡ ADMISSIONS OPEN FOR SESSION 2026-2027 | CALL 9911667462 | REHMAN CLASSES GHAZIABAD ⚡",
+  "hero": {
+    "badgeText": "Session 2026-2027 Batches Open",
+    "locationText": "D-48 Mahendra Enclave (Near Silver Shine School), Ghaziabad",
+    "locationLink": "https://maps.app.goo.gl/LvyJGmogmsHMHJov9",
+    "title": "Master Mathematics Without the Fear.",
+    "subtitle": "Turn complex calculus, 3D geometry, and trigonometry into simple geometric patterns. Learn step-by-step proofs and lightning-fast JEE question shortcuts with Rehman Sir.",
+    "highlights": [
+      "Visual Graphical Calculus (Zero Rote Memorization)",
+      "Daily Practice Problems (DPP) & Past 15-Yr JEE PYQs",
+      "Personal Doubt Counter & 1-on-1 Mentoring",
+      "CBSE 100/100 Step-Marking Board Mastery"
+    ]
+  },
+  "stats": {
+    "studentsCount": "2,500+",
+    "successRate": "96%",
+    "experience": "15+ Yrs",
+    "selectionsCount": "350+",
+    "topJeeScore": "99.85%",
+    "perfectBoardScore": "100/100",
+    "studentsCountLabel": "Students Mentored",
+    "studentsCountDesc": "JEE aspirants & CBSE board students guided to top percentiles in Ghaziabad.",
+    "successRateLabel": "Board Distinction Rate",
+    "successRateDesc": "Students achieving 90%+ in Class 10 & 12 CBSE Board examinations.",
+    "experienceLabel": "Years of Teaching",
+    "experienceDesc": "Pure mathematics specialization focusing on derivation intuition.",
+    "selectionsLabel": "IIT & NIT Selections",
+    "selectionsDesc": "Proud alumni studying in premier engineering institutions across India."
+  },
+  "courses": [
+    {
+      "id": "class-12-math",
+      "name": "Class XII Mathematics",
+      "category": "Boards",
+      "duration": "Session 2026-2027",
+      "timing": "7.00 PM TO 8.30 PM",
+      "days": "THU, FRI & SAT",
+      "subjects": "Mathematics (CBSE / ISC / IIT-JEE)",
+      "targetClass": "Class XII",
+      "session": "2026-2027",
+      "description": "Specialized batch for Class 12th students targeting 100/100 in CBSE & ISC Boards alongside IIT-JEE Mathematics synchronisation. Focus on Calculus, Vectors, 3D Geometry, and Probability.",
+      "features": [
+        "CBSE & ISC Board step-by-step presentation & proofs",
+        "NCERT & NCERT Exemplar line-by-line solved",
+        "IIT-JEE shortcut methods & graphical techniques",
+        "Special formula compendium for fast board revisions"
+      ],
+      "tag": "Class XII • 7:00-8:30 PM (Thu, Fri, Sat)",
+      "accentColor": "emerald"
+    },
+    {
+      "id": "class-11-math",
+      "name": "Class XI Mathematics",
+      "category": "Boards",
+      "duration": "Session 2026-2027",
+      "timing": "7.00 PM TO 8.30 PM",
+      "days": "MON, TUE & WED",
+      "subjects": "Mathematics (CBSE / ISC / IIT-JEE)",
+      "targetClass": "Class XI",
+      "session": "2026-2027",
+      "description": "The critical cornerstone of higher mathematics. Complete conceptual mastery of Trigonometric Functions, Complex Numbers, Conic Sections, Permutations & Combinations, and early Calculus.",
+      "features": [
+        "Crystal-clear derivations and geometric intuition",
+        "Smooth transition from Class 10 to 11th senior secondary math",
+        "Hand-crafted classroom DPPs and notes by Rehman Sir",
+        "Chapter-wise objective (JEE) and subjective board tests"
+      ],
+      "tag": "Class XI • 7:00-8:30 PM (Mon, Tue, Wed)",
+      "accentColor": "indigo"
+    },
+    {
+      "id": "class-10-math-science",
+      "name": "Class X Mathematics & Science",
+      "category": "Boards",
+      "duration": "Session 2026-2027",
+      "timing": "5.00 PM TO 6.00 PM",
+      "days": "Regular Working Days",
+      "subjects": "Mathematics & Science",
+      "targetClass": "Class X",
+      "session": "2026-2027",
+      "description": "Intensive dual preparation for Class 10th CBSE / ICSE Boards in Mathematics & Science. Comprehensive theorem proofs, numerical mastery in Physics/Chemistry, and board target 100/100.",
+      "features": [
+        "Complete Mathematics & Science syllabus coverage",
+        "Thorough proof of Triangles and Circles theorems",
+        "Physics numericals, Chemistry equations & Biology diagrams",
+        "Strict Board sample papers evaluation with personal feedback"
+      ],
+      "tag": "Class X • 5:00-6:00 PM (Maths & Science)",
+      "accentColor": "orange"
+    },
+    {
+      "id": "class-9-math-science",
+      "name": "Class IX Mathematics & Science",
+      "category": "Foundation",
+      "duration": "Session 2026-2027",
+      "timing": "4.00 PM TO 5.00 PM",
+      "days": "Regular Working Days",
+      "subjects": "Mathematics & Science",
+      "targetClass": "Class IX",
+      "session": "2026-2027",
+      "description": "Build an invincible foundation in 9th grade Mathematics & Science. Demystifying Coordinate Geometry, Polynomials, Linear Equations, Motion, Forces, and Matter with visual experiments.",
+      "features": [
+        "Mathematics & Science foundation for senior competitive exams",
+        "Visual proofs and logical reasoning drills",
+        "Weekly diagnostic tests and school exam preparation",
+        "Personal mentorship by Rehman Sir to build love for math"
+      ],
+      "tag": "Class IX • 4:00-5:00 PM (Maths & Science)",
+      "accentColor": "amber"
+    },
+    {
+      "id": "jee-math",
+      "name": "IIT-JEE Mains & Advanced Mathematics",
+      "category": "JEE",
+      "duration": "1 Year / 2 Years Program",
+      "timing": "7.00 PM TO 8.30 PM",
+      "days": "Advanced Track",
+      "subjects": "Pure Mathematics (JEE Mains & Adv)",
+      "targetClass": "Class XI & XII",
+      "session": "2026-2027",
+      "description": "Designed specifically for engineering aspirants aiming for top percentiles in JEE Main and Advanced. Master Differential & Integral Calculus, Coordinate Geometry, Vectors & 3D, and Probability.",
+      "features": [
+        "Advanced graphical calculus visualizations & shortcuts",
+        "Daily Practice Problems (DPPs) with step-by-step analysis",
+        "Previous 20 Years JEE Main & Advanced papers analysis",
+        "High-speed calculation shortcuts & Vedic Math methods"
+      ],
+      "tag": "IIT-JEE Mains & Advanced",
+      "accentColor": "blue"
+    },
+    {
+      "id": "boards-crash",
+      "name": "CBSE / ISC Board Booster Crash Course",
+      "category": "Boards",
+      "duration": "Intensive Fast-Track",
+      "timing": "Flexible Evening Batches",
+      "days": "Special Doubt Schedule",
+      "subjects": "Mathematics & Science Revision",
+      "targetClass": "Class X & XII",
+      "session": "2026-2027",
+      "description": "Fast-track revision covering high-frequency board questions, derivation tricks, formula sheets, and simulated mock tests with strict step-marking criteria.",
+      "features": [
+        "Top 100 guaranteed board questions analyzed",
+        "Mistake-prevention techniques in long calculation steps",
+        "Formula sheets & quick memory maps",
+        "One-on-one doubt clearing sessions with Rehman Sir"
+      ],
+      "tag": "Crash Course",
+      "accentColor": "rose"
+    }
+  ],
+  "results": [
+    {
+      "id": "res-1",
+      "name": "Aarav Sharma",
+      "rank": "99.85 %ile",
+      "exam": "JEE Mains Math",
+      "score": "96/100 in Maths",
+      "year": "2025",
+      "image": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=300&h=300",
+      "achievement": "Admitted to IIT Delhi (Computer Science)"
+    },
+    {
+      "id": "res-2",
+      "name": "Zaid Khan",
+      "rank": "AIR 142",
+      "exam": "JEE Advanced",
+      "score": "114/120 in Maths",
+      "year": "2025",
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300&h=300",
+      "achievement": "Admitted to IIT Bombay Electrical Engineering"
+    },
+    {
+      "id": "res-3",
+      "name": "Ananya Singh",
+      "rank": "100/100",
+      "exam": "CBSE Class 12 Boards",
+      "score": "100% in Mathematics",
+      "year": "2025",
+      "image": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=300&h=300",
+      "achievement": "Ghaziabad District Mathematics Topper"
+    },
+    {
+      "id": "res-4",
+      "name": "Faizan Rehman",
+      "rank": "AIR 280",
+      "exam": "JEE Advanced",
+      "score": "108/120 in Maths",
+      "year": "2024",
+      "image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300&h=300",
+      "achievement": "Admitted to IIT Roorkee"
+    },
+    {
+      "id": "res-5",
+      "name": "Riya Tyagi",
+      "rank": "99.6 %ile",
+      "exam": "JEE Mains",
+      "score": "98/100 in Maths",
+      "year": "2025",
+      "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=300&h=300",
+      "achievement": "Silver Shine School Alumna • 100/100 in Class 12 Boards"
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "test-1",
+      "name": "Aditya Rajput",
+      "role": "Student",
+      "review": "Rehman Sir makes Calculus feel completely intuitive. I was terrified of integration and 3D geometry, but his graphical proofs and shortcut methods helped me score 99.85 %ile in JEE Mathematics!",
+      "rating": 5,
+      "course": "JEE Mains & Advanced Mathematics",
+      "avatarSeed": "Aditya"
+    },
+    {
+      "id": "test-2",
+      "name": "Dr. Alok Verma",
+      "role": "Parent",
+      "review": "We were looking for the best mathematics coaching near Silver Shine School. Rehman Sir provides dedicated personal attention to each student. My daughter Ananya scored a perfect 100/100 in CBSE Class 12 Mathematics.",
+      "rating": 5,
+      "course": "Parent of Ananya (Shastri Nagar, Ghaziabad)",
+      "avatarSeed": "Alok"
+    },
+    {
+      "id": "test-3",
+      "name": "Mohit Sharma",
+      "role": "Student",
+      "review": "The daily DPPs and Sunday mock tests mirror actual NTA and CBSE exam patterns. Rehman Sir is always available at the doubt desk to solve every problem step-by-step.",
+      "rating": 5,
+      "course": "Class 12th Mathematics (Boards + JEE)",
+      "avatarSeed": "Mohit"
+    },
+    {
+      "id": "test-4",
+      "name": "Mrs. Sunita Tyagi",
+      "role": "Parent",
+      "review": "Having an institute of this caliber right here in Mahendra Enclave, Shastri Nagar has saved so much travel time for my son. His math score jumped from 65% to 95% in pre-boards.",
+      "rating": 5,
+      "course": "Parent of Aman (Mahendra Enclave)",
+      "avatarSeed": "Sunita"
+    }
+  ],
+  "gallery": [
+    {
+      "id": "gal-1",
+      "category": "Classroom",
+      "title": "Interactive Calculus Masterclass",
+      "desc": "Rehman Sir demonstrating 3D vector geometry and integration curves on the smart board.",
+      "imgUrl": "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&q=80&w=600&h=400"
+    },
+    {
+      "id": "gal-2",
+      "category": "Classroom",
+      "title": "Problem-Solving Workshop",
+      "desc": "Students working through high-level JEE Advanced numerical challenges.",
+      "imgUrl": "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=600&h=400"
+    },
+    {
+      "id": "gal-3",
+      "category": "Events",
+      "title": "Annual Toppers Felicitation",
+      "desc": "Awarding trophies and cash scholarships to 100/100 board scorers and JEE qualifiers.",
+      "imgUrl": "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=600&h=400"
+    },
+    {
+      "id": "gal-4",
+      "category": "Classroom",
+      "title": "1-on-1 Doubt Desk",
+      "desc": "Rehman Sir explaining step-marking representations for upcoming board exams.",
+      "imgUrl": "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80&w=600&h=400"
+    },
+    {
+      "id": "gal-5",
+      "category": "Classroom",
+      "title": "Classroom Library & Test Center",
+      "desc": "Silent study zone equipped with past 20 years JEE & CBSE question banks.",
+      "imgUrl": "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=600&h=400"
+    },
+    {
+      "id": "gal-6",
+      "category": "Events",
+      "title": "Parent Orientation & Strategy Meet",
+      "desc": "Interactive seminar sharing time management techniques and exam temperament.",
+      "imgUrl": "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&q=80&w=600&h=400"
+    }
+  ],
+  "contactInfo": {
+    "phone": "+91 99116 67462",
+    "email": "azizrehman891@gmail.com",
+    "instagram": "https://www.instagram.com/rehman_classes?stkn=MXIwdHNrOGtnY2tqcQ==",
+    "facebook": "https://www.facebook.com/share/1HrobLVsuC/",
+    "whatsapp": "+91 99116 67462",
+    "mapUrl": "https://maps.app.goo.gl/LvyJGmogmsHMHJov9"
+  },
+  "centers": [
+    {
+      "id": "center-1",
+      "name": "Rehman Classes (Main Campus)",
+      "address": "D-48 Mahendra Enclave (Near Silver Shine School), Shastri Nagar, Ghaziabad, Uttar Pradesh 201002",
+      "details": "D-48 Mahendra Enclave (Near Silver Shine School) Ghaziabad",
+      "mapUrl": "https://maps.app.goo.gl/LvyJGmogmsHMHJov9"
+    }
+  ],
+  "inquiries": []
+}
