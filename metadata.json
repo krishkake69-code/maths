@@ -1,0 +1,6 @@
+{
+  "name": "Rehman Mathematics Classes",
+  "description": "Premier Mathematics Coaching for JEE Main & Advanced, CBSE/State Boards (11th & 12th), and Foundation by Rehman Sir in Shastri Nagar, Ghaziabad.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
