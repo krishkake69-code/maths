@@ -5,15 +5,15 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 const ADMIN_TOKEN = 'attri_session_token_' + ADMIN_PASSWORD.split('').reverse().join('');
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const { id } = req.query;
+  try {
+    const { id } = req.query;
 
-  if (req.method === 'POST') {
-    const { name, phone, email, course, message, type } = req.body;
-    if (!name || !phone) {
-      return res.status(400).json({ success: false, error: 'Name and Phone are required.' });
-    }
+    if (req.method === 'POST') {
+      const { name, phone, email, course, message, type } = req.body || {};
+      if (!name || !phone) {
+        return res.status(400).json({ success: false, error: 'Name and Phone are required.' });
+      }
 
-    try {
       const data = await readDataStore() || {};
       const inquiries = data.inquiries || [];
 
@@ -31,37 +31,31 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       inquiries.unshift(newInquiry);
       data.inquiries = inquiries;
-      await writeDataStore(data);
+      const success = await writeDataStore(data);
 
-      return res.json({ success: true, message: 'Your booking has been registered successfully!' });
-    } catch (err) {
-      console.error('Firestore error:', err);
-      return res.status(500).json({ success: false, error: 'Server error' });
-    }
-  }
-
-  if (req.method === 'GET') {
-    const authHeader = req.headers.authorization;
-    if (authHeader !== `Bearer ${ADMIN_TOKEN}`) {
-      return res.status(401).json({ success: false, error: 'Unauthorized' });
+      if (success) {
+        return res.status(200).json({ success: true, message: 'Your booking has been registered successfully!' });
+      } else {
+        return res.status(500).json({ success: false, error: 'Failed to write inquiry to database.' });
+      }
     }
 
-    try {
+    if (req.method === 'GET') {
+      const authHeader = req.headers.authorization;
+      if (authHeader !== `Bearer ${ADMIN_TOKEN}`) {
+        return res.status(401).json({ success: false, error: 'Unauthorized' });
+      }
+
       const data = await readDataStore() || {};
-      return res.json(data.inquiries || []);
-    } catch (err) {
-      console.error('Firestore read error:', err);
-      return res.status(500).json({ success: false, error: 'Server error' });
-    }
-  }
-
-  if (id && req.method === 'PUT') {
-    const authHeader = req.headers.authorization;
-    if (authHeader !== `Bearer ${ADMIN_TOKEN}`) {
-      return res.status(401).json({ success: false, error: 'Unauthorized' });
+      return res.status(200).json(data.inquiries || []);
     }
 
-    try {
+    if (id && req.method === 'PUT') {
+      const authHeader = req.headers.authorization;
+      if (authHeader !== `Bearer ${ADMIN_TOKEN}`) {
+        return res.status(401).json({ success: false, error: 'Unauthorized' });
+      }
+
       const data = await readDataStore() || {};
       const inquiries = data.inquiries || [];
       const inquiry = inquiries.find((inq: any) => inq.id === id);
@@ -69,34 +63,29 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         inquiry.read = !inquiry.read;
         data.inquiries = inquiries;
         await writeDataStore(data);
-        return res.json({ success: true, inquiries });
+        return res.status(200).json({ success: true, inquiries });
       }
       return res.status(404).json({ success: false, error: 'Inquiry not found' });
-    } catch (err) {
-      console.error('Firestore error:', err);
-      return res.status(500).json({ success: false, error: 'Server error' });
-    }
-  }
-
-  if (id && req.method === 'DELETE') {
-    const authHeader = req.headers.authorization;
-    if (authHeader !== `Bearer ${ADMIN_TOKEN}`) {
-      return res.status(401).json({ success: false, error: 'Unauthorized' });
     }
 
-    try {
+    if (id && req.method === 'DELETE') {
+      const authHeader = req.headers.authorization;
+      if (authHeader !== `Bearer ${ADMIN_TOKEN}`) {
+        return res.status(401).json({ success: false, error: 'Unauthorized' });
+      }
+
       const data = await readDataStore() || {};
       const inquiries = data.inquiries || [];
       const filtered = inquiries.filter((inq: any) => inq.id !== id);
       data.inquiries = filtered;
       await writeDataStore(data);
 
-      return res.json({ success: true, inquiries: filtered });
-    } catch (err) {
-      console.error('Firestore error:', err);
-      return res.status(500).json({ success: false, error: 'Server error' });
+      return res.status(200).json({ success: true, inquiries: filtered });
     }
-  }
 
-  return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ error: 'Method not allowed' });
+  } catch (err: any) {
+    console.error('Unhandled API Inquiries error:', err);
+    return res.status(500).json({ success: false, error: err?.message || 'Server error' });
+  }
 }
