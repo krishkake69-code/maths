@@ -1,19 +1,18 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { kv } from '@vercel/kv';
+import { readDataStore, writeDataStore } from '../lib/firebase';
 
-const DATA_KEY = 'attri:data-store';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 const ADMIN_TOKEN = 'attri_session_token_' + ADMIN_PASSWORD.split('').reverse().join('');
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'GET') {
     try {
-      const data = (await kv.get(DATA_KEY)) as Record<string, any> | null;
-      const cleanData = data ? { ...data } : {};
+      const data = await readDataStore() || {};
+      const cleanData = { ...data };
       delete cleanData.inquiries;
       return res.json(cleanData);
     } catch (err) {
-      console.error('KV read error:', err);
+      console.error('Firestore read error:', err);
       return res.json({});
     }
   }
@@ -30,12 +29,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     try {
-      const existingData = ((await kv.get(DATA_KEY)) as Record<string, any> | null) || {};
+      const existingData = await readDataStore() || {};
       newData.inquiries = existingData.inquiries || [];
-      await kv.set(DATA_KEY, newData);
+      await writeDataStore(newData);
       return res.json({ success: true, message: 'Saved successfully' });
     } catch (err) {
-      console.error('KV write error:', err);
+      console.error('Firestore write error:', err);
       return res.status(500).json({ success: false, error: 'Save failed' });
     }
   }
