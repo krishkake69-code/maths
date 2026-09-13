@@ -5,39 +5,39 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 const ADMIN_TOKEN = 'attri_session_token_' + ADMIN_PASSWORD.split('').reverse().join('');
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method === 'GET') {
-    try {
+  try {
+    if (req.method === 'GET') {
       const data = await readDataStore() || {};
       const cleanData = { ...data };
       delete cleanData.inquiries;
-      return res.json(cleanData);
-    } catch (err) {
-      console.error('Firestore read error:', err);
-      return res.json({});
-    }
-  }
-
-  if (req.method === 'PUT') {
-    const authHeader = req.headers.authorization;
-    if (authHeader !== `Bearer ${ADMIN_TOKEN}`) {
-      return res.status(401).json({ success: false, error: 'Unauthorized' });
+      return res.status(200).json(cleanData);
     }
 
-    const newData = req.body;
-    if (!newData) {
-      return res.status(400).json({ success: false, error: 'Empty body' });
-    }
+    if (req.method === 'PUT') {
+      const authHeader = req.headers.authorization;
+      if (authHeader !== `Bearer ${ADMIN_TOKEN}`) {
+        return res.status(401).json({ success: false, error: 'Unauthorized' });
+      }
 
-    try {
+      const newData = req.body;
+      if (!newData) {
+        return res.status(400).json({ success: false, error: 'Empty body' });
+      }
+
       const existingData = await readDataStore() || {};
       newData.inquiries = existingData.inquiries || [];
-      await writeDataStore(newData);
-      return res.json({ success: true, message: 'Saved successfully' });
-    } catch (err) {
-      console.error('Firestore write error:', err);
-      return res.status(500).json({ success: false, error: 'Save failed' });
+      const success = await writeDataStore(newData);
+      
+      if (success) {
+        return res.status(200).json({ success: true, message: 'Saved successfully' });
+      } else {
+        return res.status(500).json({ success: false, error: 'Failed to write to database. Check server logs/credentials.' });
+      }
     }
-  }
 
-  return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ error: 'Method not allowed' });
+  } catch (err: any) {
+    console.error('Unhandled API Content error:', err);
+    return res.status(500).json({ success: false, error: err?.message || 'Server error' });
+  }
 }
