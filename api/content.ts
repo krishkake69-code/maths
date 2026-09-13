@@ -15,21 +15,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (req.method === 'PUT') {
       const authHeader = req.headers.authorization;
-      // Allow valid token matching session token structure
       if (!authHeader || (!authHeader.startsWith('Bearer attri_session_token_') && authHeader !== `Bearer ${ADMIN_TOKEN}`)) {
         return res.status(401).json({ success: false, error: 'Unauthorized' });
       }
 
-      const newData = req.body;
+      let newData = req.body;
       if (!newData) {
         return res.status(400).json({ success: false, error: 'Empty body' });
       }
 
+      if (typeof newData === 'string') {
+        try {
+          newData = JSON.parse(newData);
+        } catch (e) {
+          return res.status(400).json({ success: false, error: 'Invalid JSON payload' });
+        }
+      }
+
       const existingData = await readDataStore() || {};
       newData.inquiries = existingData.inquiries || [];
-      await writeDataStore(newData);
+      const success = await writeDataStore(newData);
       
-      return res.status(200).json({ success: true, message: 'Saved successfully' });
+      if (success) {
+        return res.status(200).json({ success: true, message: 'Saved successfully' });
+      } else {
+        return res.status(500).json({ success: false, error: 'Failed to write to database.' });
+      }
     }
 
     return res.status(405).json({ error: 'Method not allowed' });
