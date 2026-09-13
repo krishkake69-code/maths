@@ -9,16 +9,17 @@
     "start": "node dist/server.cjs",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
-    "seed:kv": "tsx scripts/seed-kv.ts"
+    "seed:firebase": "tsx scripts/seed-firebase.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
     "@tailwindcss/vite": "^4.1.14",
-    "@vercel/kv": "^3.0.0",
+    
     "@vercel/node": "^5.1.0",
     "@vitejs/plugin-react": "^5.0.4",
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
+    "firebase-admin": "^14.4.0",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
     "react": "^19.0.1",

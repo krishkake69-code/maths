@@ -1,7 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { kv } from '@vercel/kv';
+import { readDataStore, writeDataStore } from '../lib/firebase';
 
-const DATA_KEY = 'attri:data-store';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 const ADMIN_TOKEN = 'attri_session_token_' + ADMIN_PASSWORD.split('').reverse().join('');
 
@@ -15,7 +14,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     try {
-      const data = ((await kv.get(DATA_KEY)) as Record<string, any> | null) || {};
+      const data = await readDataStore() || {};
       const inquiries = data.inquiries || [];
 
       const newInquiry = {
@@ -32,11 +31,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       inquiries.unshift(newInquiry);
       data.inquiries = inquiries;
-      await kv.set(DATA_KEY, data);
+      await writeDataStore(data);
 
       return res.json({ success: true, message: 'Your booking has been registered successfully!' });
     } catch (err) {
-      console.error('KV error:', err);
+      console.error('Firestore error:', err);
       return res.status(500).json({ success: false, error: 'Server error' });
     }
   }
@@ -48,10 +47,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     try {
-      const data = ((await kv.get(DATA_KEY)) as Record<string, any> | null) || {};
+      const data = await readDataStore() || {};
       return res.json(data.inquiries || []);
     } catch (err) {
-      console.error('KV read error:', err);
+      console.error('Firestore read error:', err);
       return res.status(500).json({ success: false, error: 'Server error' });
     }
   }
@@ -63,18 +62,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     try {
-      const data = ((await kv.get(DATA_KEY)) as Record<string, any> | null) || {};
+      const data = await readDataStore() || {};
       const inquiries = data.inquiries || [];
       const inquiry = inquiries.find((inq: any) => inq.id === id);
       if (inquiry) {
         inquiry.read = !inquiry.read;
         data.inquiries = inquiries;
-        await kv.set(DATA_KEY, data);
+        await writeDataStore(data);
         return res.json({ success: true, inquiries });
       }
       return res.status(404).json({ success: false, error: 'Inquiry not found' });
     } catch (err) {
-      console.error('KV error:', err);
+      console.error('Firestore error:', err);
       return res.status(500).json({ success: false, error: 'Server error' });
     }
   }
@@ -86,15 +85,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     try {
-      const data = ((await kv.get(DATA_KEY)) as Record<string, any> | null) || {};
+      const data = await readDataStore() || {};
       const inquiries = data.inquiries || [];
       const filtered = inquiries.filter((inq: any) => inq.id !== id);
       data.inquiries = filtered;
-      await kv.set(DATA_KEY, data);
+      await writeDataStore(data);
 
       return res.json({ success: true, inquiries: filtered });
     } catch (err) {
-      console.error('KV error:', err);
+      console.error('Firestore error:', err);
       return res.status(500).json({ success: false, error: 'Server error' });
     }
   }
