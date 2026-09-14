@@ -79,11 +79,13 @@ export const readDataStore = async (): Promise<any> => {
 };
 
 export const writeDataStore = async (data: any): Promise<boolean> => {
-  inMemoryStore.set('data-store', data);
+  // Strip any undefined properties that Firestore rejects
+  const cleanData = JSON.parse(JSON.stringify(data));
+  inMemoryStore.set('data-store', cleanData);
   try {
     const db = getDb();
     if (db) {
-      await db.collection('attri-data').doc('store').set(data);
+      await db.collection('attri-data').doc('store').set(cleanData);
     }
   } catch (error) {
     console.error('Error writing to Firestore:', error);
