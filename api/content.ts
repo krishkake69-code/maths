@@ -1,17 +1,31 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { readDataStore, writeDataStore } from '../lib/firebase';
+import { isFirebaseConfigured, readDataStore, writeDataStore } from '../lib/firebase';
 import { isValidAdminToken } from '../server-utils';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  res.setHeader('Cache-Control', 'no-store, max-age=0');
+
   try {
     if (req.method === 'GET') {
-      const data = await readDataStore() || {};
+      if (!isFirebaseConfigured()) {
+        return res.status(503).json({ success: false, error: 'Content database is not configured.' });
+      }
+
+      const data = await readDataStore();
+      if (!data) {
+        return res.status(503).json({ success: false, error: 'Content database is unavailable.' });
+      }
+
       const cleanData = { ...data };
       delete cleanData.inquiries;
       return res.status(200).json(cleanData);
     }
 
     if (req.method === 'PUT') {
+      if (!isFirebaseConfigured()) {
+        return res.status(503).json({ success: false, error: 'Content database is not configured.' });
+      }
+
       const authHeader = req.headers.authorization;
       if (!isValidAdminToken(authHeader)) {
         return res.status(401).json({ success: false, error: 'Unauthorized' });

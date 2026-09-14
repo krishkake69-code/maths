@@ -21,6 +21,7 @@ export default function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [dynamicData, setDynamicData] = useState<any>(initialData);
+  const [contentError, setContentError] = useState<string | null>(null);
 
   // Apply dark mode styling to root document
   useEffect(() => {
@@ -37,15 +38,20 @@ export default function App() {
     const fetchContent = async () => {
       try {
         const res = await fetch('/api/content');
-        if (res.ok) {
-          const data = await res.json();
-          // Verify that we received valid data objects
-          if (data && Object.keys(data).length > 0 && (data.admissionMessage || data.hero || data.courses)) {
-            setDynamicData(data);
-          }
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error(data.error || `Content API returned ${res.status}`);
+        }
+
+        if (data && Object.keys(data).length > 0 && (data.admissionMessage || data.hero || data.courses)) {
+          setDynamicData(data);
+          setContentError(null);
+        } else {
+          throw new Error('Content API returned an invalid payload.');
         }
       } catch (err) {
         console.error('Failed to load dynamic data from backend:', err);
+        setContentError('Live content is unavailable. Showing the built-in preview data.');
       }
     };
     fetchContent();
@@ -77,7 +83,8 @@ export default function App() {
 
       const refreshedRes = await fetch('/api/content', { cache: 'no-store' });
       if (!refreshedRes.ok) {
-        console.error('Save succeeded but refreshed content could not be loaded.');
+        const refreshError = await refreshedRes.json().catch(() => ({}));
+        console.error('Save succeeded but refreshed content could not be loaded:', refreshError.error);
         return false;
       }
       const refreshedData = await refreshedRes.json();
@@ -100,6 +107,12 @@ export default function App() {
         setDarkMode={setDarkMode}
         onAdminClick={() => setIsAdminOpen(true)}
       />
+
+      {contentError && (
+        <div role="status" className="border-b border-amber-400/30 bg-amber-500/10 px-4 py-2 text-center text-sm text-amber-200">
+          {contentError}
+        </div>
+      )}
 
       <main id="main-content" tabIndex={-1} className="outline-none">
         {/* Hero Section */}
