@@ -7,10 +7,9 @@ const disablePreviewHmrClient = {
   name: 'disable-preview-hmr-client',
   enforce: 'post' as const,
   transformIndexHtml(html: string) {
-    return html.replace(
-      /<script[^>]*src=["'][^"']*\/@vite\/client[^"']*["'][^>]*><\/script>/g,
-      '',
-    );
+    return html
+      .replace(/<script[^>]*src=["'][^"']*\/@vite\/client[^"']*["'][^>]*><\/script>/gi, '')
+      .replace(/<script[^>]*src=["'][^"']*\/@react-refresh[^"']*["'][^>]*><\/script>/gi, '');
   },
 };
 
