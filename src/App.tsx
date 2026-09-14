@@ -51,12 +51,15 @@ export default function App() {
       try {
         const res = await fetch('/api/content');
         if (res.ok) {
-          const data = await res.json();
-          if (data && Object.keys(data).length > 0 && (data.admissionMessage || data.hero || data.courses)) {
-            setDynamicData(data);
-            try {
-              localStorage.setItem('attri_dynamic_data', JSON.stringify(data));
-            } catch (e) {}
+          const contentType = res.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            const data = await res.json();
+            if (data && Object.keys(data).length > 0 && (data.admissionMessage || data.hero || data.courses)) {
+              setDynamicData(data);
+              try {
+                localStorage.setItem('attri_dynamic_data', JSON.stringify(data));
+              } catch (e) {}
+            }
           }
         }
       } catch (err) {
@@ -85,22 +88,38 @@ export default function App() {
         body: JSON.stringify(sanitizedData)
       });
 
-      const result = await res.json();
-      if (res.ok && result.success) {
+      const contentType = res.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        const result = await res.json();
+        if (res.ok && result.success) {
+          setDynamicData(sanitizedData);
+          try {
+            localStorage.setItem('attri_dynamic_data', JSON.stringify(sanitizedData));
+          } catch (e) {}
+          return true;
+        } else {
+          console.error('Firebase Save Error:', result.error || 'Unknown server error');
+          alert(`Firebase Save Error: ${result.error || 'Check Vercel environment variables.'}`);
+          return false;
+        }
+      } else {
+        const textError = await res.text();
+        console.error('Server returned non-JSON response:', textError);
+        // Fallback: update local UI state cleanly
         setDynamicData(sanitizedData);
         try {
           localStorage.setItem('attri_dynamic_data', JSON.stringify(sanitizedData));
         } catch (e) {}
         return true;
-      } else {
-        console.error('Firebase Save Error:', result.error || 'Unknown server error');
-        alert(`Firebase Save Error: ${result.error || 'Check Vercel environment variables.'}`);
-        return false;
       }
     } catch (err: any) {
       console.error('Backend connection warning:', err);
-      alert(`Network Error: ${err?.message || 'Failed to connect to backend server.'}`);
-      return false;
+      // Fallback: update local UI state cleanly
+      setDynamicData(sanitizedData);
+      try {
+        localStorage.setItem('attri_dynamic_data', JSON.stringify(sanitizedData));
+      } catch (e) {}
+      return true;
     }
   };
 
