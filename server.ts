@@ -257,7 +257,9 @@ async function initServer() {
         // Disable the client injection to prevent repeated "WebSocket closed without opened" errors.
         hmr: false,
       },
-      appType: "spa",
+      // Custom mode prevents Vite from injecting development clients into the
+      // HTML response when Express owns the preview server.
+      appType: "custom",
     });
     app.use(vite.middlewares);
   } else {
