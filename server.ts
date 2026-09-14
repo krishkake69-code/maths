@@ -122,7 +122,7 @@ app.get('/api/content', async (req, res) => {
 // Admin login
 app.post('/api/auth/login', loginLimiter, (req, res) => {
   const { password } = req.body;
-  const targetPassword = process.env.ADMIN_PASSWORD || 'rehmaansir@stuido';
+  const targetPassword = process.env.ADMIN_PASSWORD || 'AttriChem2026Admin!';
   
   if (password === targetPassword) {
     return res.json({ success: true, token: ADMIN_TOKEN });

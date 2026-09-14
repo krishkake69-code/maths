@@ -1,5 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { ADMIN_PASSWORD, ADMIN_TOKEN } from '../../server-utils';
+
+const adminPassword = process.env.ADMIN_PASSWORD || 'AttriChem2026Admin!';
+const adminToken = `attri_session_token_${adminPassword.split('').reverse().join('')}`;
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
