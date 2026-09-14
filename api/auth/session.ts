@@ -7,7 +7,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const authHeader = req.headers.authorization;
-  if (authHeader === `Bearer ${adminToken}`) {
+  if (authHeader === `Bearer ${ADMIN_TOKEN}`) {
     return res.json({ authenticated: true });
   }
   return res.status(401).json({ authenticated: false });
