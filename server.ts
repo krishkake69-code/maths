@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import dotenv from 'dotenv';
 import { createServer as createViteServer } from 'vite';
+import { readDataStore as readPersistentDataStore, writeDataStore as writePersistentDataStore } from './lib/firebase';
 
 dotenv.config();
 
@@ -100,7 +101,7 @@ function writeDataStore(data: any) {
 let memoryCache = readDataStore();
 
 // Secret token for state verification in current session
-const ADMIN_TOKEN = 'attri_session_token_' + (process.env.ADMIN_PASSWORD || 'rehmaansir@stuido').split('').reverse().join('');
+const ADMIN_TOKEN = 'attri_session_token_' + (process.env.ADMIN_PASSWORD || 'AttriChem2026Admin!').split('').reverse().join('');
 
 // API Routes FIRST
 app.get('/api/health', (req, res) => {
@@ -108,8 +109,8 @@ app.get('/api/health', (req, res) => {
 });
 
 // GET website content (with inquiries stripped for public safety)
-app.get('/api/content', (req, res) => {
-  const fileData = readDataStore();
+app.get('/api/content', async (req, res) => {
+  const fileData = await readPersistentDataStore();
   if (fileData) {
     memoryCache = fileData;
   }
@@ -121,7 +122,7 @@ app.get('/api/content', (req, res) => {
 // Admin login
 app.post('/api/auth/login', loginLimiter, (req, res) => {
   const { password } = req.body;
-  const targetPassword = process.env.ADMIN_PASSWORD || 'rehmaansir@stuido';
+  const targetPassword = process.env.ADMIN_PASSWORD || 'AttriChem2026Admin!';
   
   if (password === targetPassword) {
     return res.json({ success: true, token: ADMIN_TOKEN });
@@ -223,32 +224,42 @@ app.delete('/api/inquiries/:id', (req, res) => {
 });
 
 // PUT save/update website content (preserving inquiries array)
-app.put('/api/content', saveLimiter, (req, res) => {
+app.put('/api/content', saveLimiter, async (req, res) => {
   const authHeader = req.headers.authorization;
   if (authHeader !== `Bearer ${ADMIN_TOKEN}`) {
     return res.status(401).json({ success: false, error: 'Unauthorized' });
   }
 
   const newData = req.body;
-  if (!newData) {
-    return res.status(400).json({ success: false, error: 'Empty body' });
+  if (!newData || typeof newData !== 'object' || Array.isArray(newData)) {
+    return res.status(400).json({ success: false, error: 'Content must be a JSON object' });
   }
 
-  const fileData = readDataStore() || memoryCache || {};
-  newData.inquiries = fileData.inquiries || [];
+  const fileData = await readPersistentDataStore() || memoryCache || {};
+  const dataToSave = { ...newData, inquiries: fileData.inquiries || [] };
+  const success = await writePersistentDataStore(dataToSave);
 
-  memoryCache = newData;
-  const success = writeDataStore(newData);
-  
-  res.json({ success, message: success ? 'Saved successfully' : 'Saved in-memory (persistent file error)' });
+  if (success) {
+    memoryCache = dataToSave;
+    return res.json({ success: true, message: 'Saved successfully' });
+  }
+
+  return res.status(500).json({ success: false, error: 'Failed to write to database.' });
 });
 
 // Vite middleware and production static handling
 async function initServer() {
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
+      server: {
+        middlewareMode: true,
+        // Express owns the HTTP server, so Vite cannot attach its HMR WebSocket here.
+        // Disable the client injection to prevent repeated "WebSocket closed without opened" errors.
+        hmr: false,
+      },
+      // Custom mode prevents Vite from injecting development clients into the
+      // HTML response when Express owns the preview server.
+      appType: "custom",
     });
     app.use(vite.middlewares);
   } else {

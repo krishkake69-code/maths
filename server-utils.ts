@@ -3,7 +3,7 @@ import path from 'path';
 
 const dataFilePath = path.join(process.cwd(), 'src', 'data-store.json');
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'AttriChem2026Admin!';
 const ADMIN_TOKEN = 'attri_session_token_' + ADMIN_PASSWORD.split('').reverse().join('');
 
 export function readDataStore() {
@@ -16,6 +16,10 @@ export function readDataStore() {
     console.error('Error reading data file:', err);
   }
   return null;
+}
+
+export function isValidAdminToken(authHeader: string | undefined) {
+  return authHeader === `Bearer ${ADMIN_TOKEN}`;
 }
 
 export function writeDataStore(data: any) {
