@@ -5,6 +5,11 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'AttriChem2026Admin!';
 const ADMIN_TOKEN = 'attri_session_token_' + ADMIN_PASSWORD.split('').reverse().join('');
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Prevent any browser or CDN caching for live data sync
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+
   try {
     if (req.method === 'GET') {
       const data = await readDataStore() || {};
