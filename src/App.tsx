@@ -67,14 +67,8 @@ export default function App() {
   }, []);
 
   const handleSaveContent = async (updatedData: any) => {
-    // 1. Immediately update UI state and local persistence
     const sanitizedData = JSON.parse(JSON.stringify(updatedData));
-    setDynamicData(sanitizedData);
-    try {
-      localStorage.setItem('attri_dynamic_data', JSON.stringify(sanitizedData));
-    } catch (e) {}
 
-    // 2. Dispatch save to backend API
     try {
       let token = localStorage.getItem('attri_admin_token');
       if (!token) {
@@ -82,7 +76,7 @@ export default function App() {
         localStorage.setItem('attri_admin_token', token);
       }
 
-      await fetch('/api/content', {
+      const res = await fetch('/api/content', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -90,12 +84,24 @@ export default function App() {
         },
         body: JSON.stringify(sanitizedData)
       });
-    } catch (err) {
-      console.error('Backend sync warning:', err);
-    }
 
-    // Always return true to signal instant, successful save to Admin Panel UI
-    return true;
+      const result = await res.json();
+      if (res.ok && result.success) {
+        setDynamicData(sanitizedData);
+        try {
+          localStorage.setItem('attri_dynamic_data', JSON.stringify(sanitizedData));
+        } catch (e) {}
+        return true;
+      } else {
+        console.error('Firebase Save Error:', result.error || 'Unknown server error');
+        alert(`Firebase Save Error: ${result.error || 'Check Vercel environment variables.'}`);
+        return false;
+      }
+    } catch (err: any) {
+      console.error('Backend connection warning:', err);
+      alert(`Network Error: ${err?.message || 'Failed to connect to backend server.'}`);
+      return false;
+    }
   };
 
   return (

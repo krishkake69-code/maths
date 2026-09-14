@@ -39,12 +39,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       const existingData = await readDataStore() || {};
       newData.inquiries = existingData.inquiries || [];
-      const success = await writeDataStore(newData);
+      const result = await writeDataStore(newData);
       
-      if (success) {
-        return res.status(200).json({ success: true, message: 'Saved successfully' });
+      if (result.success) {
+        return res.status(200).json({ success: true, message: 'Saved successfully to Firebase!' });
       } else {
-        return res.status(500).json({ success: false, error: 'Failed to write to database.' });
+        return res.status(500).json({ success: false, error: result.error || 'Failed to write to Firebase.' });
       }
     }
 
