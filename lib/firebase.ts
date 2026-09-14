@@ -27,6 +27,14 @@ function getDefaultData() {
   return null;
 }
 
+export function isFirebaseConfigured() {
+  return Boolean(
+    process.env.FIREBASE_PROJECT_ID?.trim() &&
+    process.env.FIREBASE_CLIENT_EMAIL?.trim() &&
+    parsePrivateKey(process.env.FIREBASE_PRIVATE_KEY)
+  );
+}
+
 function getDb() {
   try {
     if (getApps().length === 0) {
