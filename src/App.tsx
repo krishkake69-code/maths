@@ -16,10 +16,30 @@ import FloatingWhatsApp from './components/FloatingWhatsApp';
 import AdminPanel from './components/AdminPanel';
 import initialData from './data-store.json';
 
+function normalizeContentData(value: unknown) {
+  const incoming = value && typeof value === 'object' && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : {};
+  const defaults = initialData as Record<string, any>;
+
+  return {
+    ...defaults,
+    ...incoming,
+    hero: { ...defaults.hero, ...(incoming.hero && typeof incoming.hero === 'object' ? incoming.hero : {}) },
+    stats: { ...defaults.stats, ...(incoming.stats && typeof incoming.stats === 'object' ? incoming.stats : {}) },
+    contactInfo: { ...defaults.contactInfo, ...(incoming.contactInfo && typeof incoming.contactInfo === 'object' ? incoming.contactInfo : {}) },
+    centers: Array.isArray(incoming.centers) ? incoming.centers : defaults.centers,
+    courses: Array.isArray(incoming.courses) ? incoming.courses : defaults.courses,
+    results: Array.isArray(incoming.results) ? incoming.results : defaults.results,
+    testimonials: Array.isArray(incoming.testimonials) ? incoming.testimonials : defaults.testimonials,
+    gallery: Array.isArray(incoming.gallery) ? incoming.gallery : defaults.gallery,
+  };
+}
+
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
-  const [dynamicData, setDynamicData] = useState<any>(initialData);
+  const [dynamicData, setDynamicData] = useState<any>(() => normalizeContentData(initialData));
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
@@ -30,7 +50,7 @@ export default function App() {
       .then(async (response) => {
         const data = await response.json().catch(() => ({}));
         if (!response.ok) throw new Error(data.error || `Content API returned ${response.status}`);
-        setDynamicData(data);
+        setDynamicData(normalizeContentData(data));
       })
       .catch((error) => console.error('Failed to load live content:', error));
   }, []);
@@ -72,7 +92,7 @@ export default function App() {
         console.error('Saved content could not be reloaded:', error);
         return { success: false, error };
       }
-      setDynamicData(refreshedData);
+      setDynamicData(normalizeContentData(refreshedData));
       return { success: true };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Network request failed';
