@@ -33,22 +33,36 @@ function normalizeContentData(value: unknown) {
   const objectArray = (key: string) => {
     const candidate = incoming[key];
     const fallback = Array.isArray(defaults[key]) ? defaults[key] : [];
-    return (Array.isArray(candidate) ? candidate : fallback).filter((item) => item && typeof item === 'object' && !Array.isArray(item));
+    const validCandidate = Array.isArray(candidate)
+      ? candidate.filter((item) => item && typeof item === 'object' && !Array.isArray(item))
+      : [];
+    return validCandidate.length > 0 ? validCandidate : fallback;
   };
-  const courses = objectArray('courses').map((course: RecordValue) => ({
-    ...course,
-    id: asString(course.id, `course-${Math.random()}`),
-    name: asString(course.name, 'Course'),
-    features: Array.isArray(course.features) ? course.features.filter((feature): feature is string => typeof feature === 'string') : [],
-  }));
-  const gallery = objectArray('gallery').map((item: RecordValue) => ({
-    ...item,
-    id: asString(item.id, `gallery-${Math.random()}`),
-    category: ['Classroom', 'Lab', 'Events'].includes(item.category) ? item.category : 'Classroom',
-    title: asString(item.title, 'Gallery image'),
-    desc: asString(item.desc),
-    imgUrl: asString(item.imgUrl),
-  }));
+  const courses = objectArray('courses').map((course: RecordValue, index: number) => {
+    const fallback = asRecord(Array.isArray(defaults.courses) ? defaults.courses[index] : undefined);
+    return {
+      ...fallback,
+      ...course,
+      id: asString(course.id, asString(fallback.id, `course-${index + 1}`)),
+      name: asString(course.name, asString(fallback.name, 'Course')),
+      features: Array.isArray(course.features)
+        ? course.features.filter((feature): feature is string => typeof feature === 'string')
+        : Array.isArray(fallback.features) ? fallback.features : [],
+    };
+  });
+  const gallery = objectArray('gallery').map((item: RecordValue, index: number) => {
+    const fallback = asRecord(Array.isArray(defaults.gallery) ? defaults.gallery[index] : undefined);
+    const category = item.category === 'Workshops' ? 'Lab' : item.category;
+    return {
+      ...fallback,
+      ...item,
+      id: asString(item.id, asString(fallback.id, `gallery-${index + 1}`)),
+      category: ['Classroom', 'Lab', 'Events'].includes(category) ? category : 'Classroom',
+      title: asString(item.title, asString(fallback.title, 'Gallery image')),
+      desc: asString(item.desc, asString(fallback.desc)),
+      imgUrl: asString(item.imgUrl, asString(fallback.imgUrl)),
+    };
+  });
 
   return {
     ...defaults,
@@ -145,18 +159,29 @@ export default function App() {
       )}
       <AdmissionBanner message={dynamicData?.admissionMessage} />
       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} onAdminClick={() => setIsAdminOpen(true)} />
-      <main id="main-content">
-        <Hero data={dynamicData?.hero} stats={dynamicData?.stats} />
-        <Math3DLab />
-        <About />
-        <Stats stats={dynamicData?.stats} />
-        <Courses courses={dynamicData?.courses} />
-        <WhyChooseUs />
-        <Results results={dynamicData?.results} />
-        <Testimonials testimonials={dynamicData?.testimonials} />
-        <Gallery items={dynamicData?.gallery} />
-        <Contact contactInfo={dynamicData?.contactInfo} centers={dynamicData?.centers} />
-      </main>
+      <ErrorBoundary
+        fallback={
+          <main id="main-content" className="min-h-[60vh] px-4 py-24 text-center">
+            <h1 className="text-2xl font-bold text-white">Content is temporarily unavailable</h1>
+            <p className="mx-auto mt-2 max-w-lg text-slate-400">
+              The saved content could not be displayed. Please refresh and try again.
+            </p>
+          </main>
+        }
+      >
+        <main id="main-content">
+          <Hero data={dynamicData?.hero} stats={dynamicData?.stats} />
+          <Math3DLab />
+          <About />
+          <Stats stats={dynamicData?.stats} />
+          <Courses courses={dynamicData?.courses} />
+          <WhyChooseUs />
+          <Results results={dynamicData?.results} />
+          <Testimonials testimonials={dynamicData?.testimonials} />
+          <Gallery items={dynamicData?.gallery} />
+          <Contact contactInfo={dynamicData?.contactInfo} centers={dynamicData?.centers} />
+        </main>
+      </ErrorBoundary>
       <Footer onAdminClick={() => setIsAdminOpen(true)} contactInfo={dynamicData?.contactInfo} />
       <FloatingWhatsApp phone={dynamicData?.contactInfo?.phone} />
       <ErrorBoundary>
