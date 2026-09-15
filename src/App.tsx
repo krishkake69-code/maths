@@ -14,35 +14,49 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import AdminPanel from './components/AdminPanel';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import initialData from './data-store.json';
 
+type RecordValue = Record<string, any>;
+
+function asRecord(value: unknown): RecordValue {
+  return value && typeof value === 'object' && !Array.isArray(value) ? value as RecordValue : {};
+}
+
+function asString(value: unknown, fallback = '') {
+  return typeof value === 'string' ? value : fallback;
+}
+
 function normalizeContentData(value: unknown) {
-  const incoming = value && typeof value === 'object' && !Array.isArray(value)
-    ? value as Record<string, unknown>
-    : {};
-  const defaults = initialData as Record<string, any>;
+  const incoming = asRecord(value);
+  const defaults = initialData as RecordValue;
   const objectArray = (key: string) => {
     const candidate = incoming[key];
-    return Array.isArray(candidate) ? candidate.filter((item) => item && typeof item === 'object') : defaults[key];
+    const fallback = Array.isArray(defaults[key]) ? defaults[key] : [];
+    return (Array.isArray(candidate) ? candidate : fallback).filter((item) => item && typeof item === 'object' && !Array.isArray(item));
   };
-  const courses = objectArray('courses').map((course: any) => ({
+  const courses = objectArray('courses').map((course: RecordValue) => ({
     ...course,
-    features: Array.isArray(course.features) ? course.features.filter((feature: unknown) => typeof feature === 'string') : [],
+    id: asString(course.id, `course-${Math.random()}`),
+    name: asString(course.name, 'Course'),
+    features: Array.isArray(course.features) ? course.features.filter((feature): feature is string => typeof feature === 'string') : [],
   }));
-  const gallery = objectArray('gallery').map((item: any) => ({
+  const gallery = objectArray('gallery').map((item: RecordValue) => ({
     ...item,
+    id: asString(item.id, `gallery-${Math.random()}`),
     category: ['Classroom', 'Lab', 'Events'].includes(item.category) ? item.category : 'Classroom',
-    title: typeof item.title === 'string' ? item.title : 'Gallery image',
-    desc: typeof item.desc === 'string' ? item.desc : '',
-    imgUrl: typeof item.imgUrl === 'string' ? item.imgUrl : '',
+    title: asString(item.title, 'Gallery image'),
+    desc: asString(item.desc),
+    imgUrl: asString(item.imgUrl),
   }));
 
   return {
     ...defaults,
     ...incoming,
-    hero: { ...defaults.hero, ...(incoming.hero && typeof incoming.hero === 'object' ? incoming.hero : {}) },
-    stats: { ...defaults.stats, ...(incoming.stats && typeof incoming.stats === 'object' ? incoming.stats : {}) },
-    contactInfo: { ...defaults.contactInfo, ...(incoming.contactInfo && typeof incoming.contactInfo === 'object' ? incoming.contactInfo : {}) },
+    admissionMessage: asString(incoming.admissionMessage, asString(defaults.admissionMessage)),
+    hero: { ...asRecord(defaults.hero), ...asRecord(incoming.hero) },
+    stats: { ...asRecord(defaults.stats), ...asRecord(incoming.stats) },
+    contactInfo: { ...asRecord(defaults.contactInfo), ...asRecord(incoming.contactInfo) },
     centers: objectArray('centers'),
     courses,
     results: objectArray('results'),
@@ -54,6 +68,7 @@ function normalizeContentData(value: unknown) {
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [syncError, setSyncError] = useState('');
   const [dynamicData, setDynamicData] = useState<any>(() => normalizeContentData(initialData));
 
   useEffect(() => {
@@ -66,8 +81,12 @@ export default function App() {
         const data = await response.json().catch(() => ({}));
         if (!response.ok) throw new Error(data.error || `Content API returned ${response.status}`);
         setDynamicData(normalizeContentData(data));
+        setSyncError('');
       })
-      .catch((error) => console.error('Failed to load live content:', error));
+      .catch((error) => {
+        console.error('Failed to load live content:', error);
+        setSyncError('Live content could not be synced. Showing the last saved content.');
+      });
   }, []);
 
   async function handleSaveContent(updatedData: any): Promise<{ success: boolean; error?: string }> {
@@ -108,6 +127,7 @@ export default function App() {
         return { success: false, error };
       }
       setDynamicData(normalizeContentData(refreshedData));
+      setSyncError('');
       return { success: true };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Network request failed';
@@ -118,6 +138,11 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100 font-sans">
+      {syncError && (
+        <div role="status" className="bg-amber-500/15 px-4 py-2 text-center text-sm text-amber-200">
+          {syncError}
+        </div>
+      )}
       <AdmissionBanner message={dynamicData?.admissionMessage} />
       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} onAdminClick={() => setIsAdminOpen(true)} />
       <main id="main-content">
@@ -134,7 +159,9 @@ export default function App() {
       </main>
       <Footer onAdminClick={() => setIsAdminOpen(true)} contactInfo={dynamicData?.contactInfo} />
       <FloatingWhatsApp phone={dynamicData?.contactInfo?.phone} />
-      <AdminPanel isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} data={dynamicData} onSave={handleSaveContent} />
+      <ErrorBoundary>
+        <AdminPanel isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} data={dynamicData} onSave={handleSaveContent} />
+      </ErrorBoundary>
     </div>
   );
 }
