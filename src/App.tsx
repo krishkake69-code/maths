@@ -35,32 +35,49 @@ export default function App() {
       .catch((error) => console.error('Failed to load live content:', error));
   }, []);
 
-  async function handleSaveContent(updatedData: any) {
+  async function handleSaveContent(updatedData: any): Promise<{ success: boolean; error?: string }> {
     const token = localStorage.getItem('attri_admin_token');
-    if (!token) return false;
+    if (!token) return { success: false, error: 'Your admin session has expired. Please sign in again.' };
+
+    const readResponse = async (response: Response) => {
+      const text = await response.text();
+      try {
+        return text ? JSON.parse(text) : {};
+      } catch {
+        return { error: text || `Server returned ${response.status}` };
+      }
+    };
+
     try {
       const response = await fetch('/api/content', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(updatedData),
       });
-      const result = await response.json().catch(() => ({}));
+      const result = await readResponse(response);
+      if (response.status === 401) {
+        localStorage.removeItem('attri_admin_token');
+        return { success: false, error: 'Your admin session expired. Please authenticate again.' };
+      }
       if (!response.ok || result.success === false) {
-        console.error('Failed to save live content:', result.error || `Content API returned ${response.status}`);
-        return false;
+        const error = result.error || `Content API returned ${response.status}`;
+        console.error('Failed to save live content:', error);
+        return { success: false, error };
       }
 
-      const refreshed = await fetch('/api/content', { cache: 'no-store' });
-      const refreshedData = await refreshed.json().catch(() => ({}));
+      const refreshed = await fetch('/api/content', { cache: 'no-store', headers: { Accept: 'application/json' } });
+      const refreshedData = await readResponse(refreshed);
       if (!refreshed.ok) {
-        console.error('Saved content could not be reloaded:', refreshedData.error || `Content API returned ${refreshed.status}`);
-        return false;
+        const error = refreshedData.error || `Content reload returned ${refreshed.status}`;
+        console.error('Saved content could not be reloaded:', error);
+        return { success: false, error };
       }
       setDynamicData(refreshedData);
-      return true;
+      return { success: true };
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'Network request failed';
       console.error('Failed to save live content:', error);
-      return false;
+      return { success: false, error: `Could not reach the content server: ${message}` };
     }
   }
 

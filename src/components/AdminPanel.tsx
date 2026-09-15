@@ -11,7 +11,7 @@ interface AdminPanelProps {
   isOpen: boolean;
   onClose: () => void;
   data: DynamicData;
-  onSave: (updatedData: DynamicData) => Promise<boolean>;
+  onSave: (updatedData: DynamicData) => Promise<{ success: boolean; error?: string }>;
 }
 
 export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanelProps) {
@@ -39,6 +39,7 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
   const [activeTab, setActiveTab] = useState<'general' | 'stats' | 'courses' | 'results' | 'testimonials' | 'gallery' | 'mailbox'>('general');
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [saveError, setSaveError] = useState('');
 
   // Inquiries mailbox states
   const [inquiries, setInquiries] = useState<any[]>([]);
@@ -186,16 +187,19 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
     if (!localData) return;
     setIsSaving(true);
     setSaveStatus('idle');
+    setSaveError('');
 
     try {
-      const success = await onSave(localData);
-      if (success) {
+      const result = await onSave(localData);
+      if (result.success) {
         setSaveStatus('success');
         setTimeout(() => setSaveStatus('idle'), 3000);
       } else {
+        setSaveError(result.error || 'The server rejected the changes.');
         setSaveStatus('error');
       }
     } catch (err) {
+      setSaveError(err instanceof Error ? err.message : 'The save request failed.');
       setSaveStatus('error');
     } finally {
       setIsSaving(false);
@@ -2002,16 +2006,19 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                     <Check className="w-4 h-4" /> Live Content Synced
                   </motion.div>
                 )}
-                {saveStatus === 'error' && (
-                  <motion.div 
-                    initial={{ opacity: 0, x: 10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 10 }}
-                    className="flex items-center gap-1.5 text-xs text-rose-600 dark:text-rose-400 font-bold uppercase tracking-wide bg-rose-50 dark:bg-rose-950/30 px-3 py-1.5 rounded-lg border border-rose-200"
-                  >
-                    <AlertCircle className="w-4 h-4" /> Sync Failure
-                  </motion.div>
-                )}
+  {saveStatus === 'error' && (
+  <motion.div
+  initial={{ opacity: 0, x: 10 }}
+  animate={{ opacity: 1, x: 0 }}
+  exit={{ opacity: 0, x: 10 }}
+  className="flex max-w-md items-center gap-1.5 text-xs text-rose-600 dark:text-rose-400 font-bold bg-rose-50 dark:bg-rose-950/30 px-3 py-1.5 rounded-lg border border-rose-200"
+  role="alert"
+  title={saveError}
+  >
+  <AlertCircle className="w-4 h-4 shrink-0" />
+  <span>Sync failed: {saveError}</span>
+  </motion.div>
+  )}
               </AnimatePresence>
 
               <button 
