@@ -21,6 +21,21 @@ function normalizeContentData(value: unknown) {
     ? value as Record<string, unknown>
     : {};
   const defaults = initialData as Record<string, any>;
+  const objectArray = (key: string) => {
+    const candidate = incoming[key];
+    return Array.isArray(candidate) ? candidate.filter((item) => item && typeof item === 'object') : defaults[key];
+  };
+  const courses = objectArray('courses').map((course: any) => ({
+    ...course,
+    features: Array.isArray(course.features) ? course.features.filter((feature: unknown) => typeof feature === 'string') : [],
+  }));
+  const gallery = objectArray('gallery').map((item: any) => ({
+    ...item,
+    category: ['Classroom', 'Lab', 'Events'].includes(item.category) ? item.category : 'Classroom',
+    title: typeof item.title === 'string' ? item.title : 'Gallery image',
+    desc: typeof item.desc === 'string' ? item.desc : '',
+    imgUrl: typeof item.imgUrl === 'string' ? item.imgUrl : '',
+  }));
 
   return {
     ...defaults,
@@ -28,11 +43,11 @@ function normalizeContentData(value: unknown) {
     hero: { ...defaults.hero, ...(incoming.hero && typeof incoming.hero === 'object' ? incoming.hero : {}) },
     stats: { ...defaults.stats, ...(incoming.stats && typeof incoming.stats === 'object' ? incoming.stats : {}) },
     contactInfo: { ...defaults.contactInfo, ...(incoming.contactInfo && typeof incoming.contactInfo === 'object' ? incoming.contactInfo : {}) },
-    centers: Array.isArray(incoming.centers) ? incoming.centers : defaults.centers,
-    courses: Array.isArray(incoming.courses) ? incoming.courses : defaults.courses,
-    results: Array.isArray(incoming.results) ? incoming.results : defaults.results,
-    testimonials: Array.isArray(incoming.testimonials) ? incoming.testimonials : defaults.testimonials,
-    gallery: Array.isArray(incoming.gallery) ? incoming.gallery : defaults.gallery,
+    centers: objectArray('centers'),
+    courses,
+    results: objectArray('results'),
+    testimonials: objectArray('testimonials'),
+    gallery,
   };
 }
 
