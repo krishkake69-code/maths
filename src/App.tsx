@@ -44,10 +44,19 @@ export default function App() {
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(updatedData),
       });
-      if (!response.ok) return false;
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || result.success === false) {
+        console.error('Failed to save live content:', result.error || `Content API returned ${response.status}`);
+        return false;
+      }
+
       const refreshed = await fetch('/api/content', { cache: 'no-store' });
-      if (!refreshed.ok) return false;
-      setDynamicData(await refreshed.json());
+      const refreshedData = await refreshed.json().catch(() => ({}));
+      if (!refreshed.ok) {
+        console.error('Saved content could not be reloaded:', refreshedData.error || `Content API returned ${refreshed.status}`);
+        return false;
+      }
+      setDynamicData(refreshedData);
       return true;
     } catch (error) {
       console.error('Failed to save live content:', error);
