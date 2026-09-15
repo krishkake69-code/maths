@@ -1,9 +1,18 @@
 import { cert, getApps, initializeApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 
-const projectId = process.env.FIREBASE_PROJECT_ID;
-const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+function normalizeEnvValue(value: string | undefined) {
+  if (!value) return undefined;
+  const trimmed = value.trim();
+  if (trimmed.startsWith('"') && trimmed.endsWith('"')) {
+    return trimmed.slice(1, -1);
+  }
+  return trimmed;
+}
+
+const projectId = normalizeEnvValue(process.env.FIREBASE_PROJECT_ID);
+const clientEmail = normalizeEnvValue(process.env.FIREBASE_CLIENT_EMAIL);
+const privateKey = normalizeEnvValue(process.env.FIREBASE_PRIVATE_KEY)?.replace(/\\n/g, '\n');
 
 function getDb() {
   if (!projectId || !clientEmail || !privateKey) return null;
