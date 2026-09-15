@@ -4,7 +4,7 @@ import { Maximize2, X, Sparkles, LayoutGrid, Compass, Camera } from 'lucide-reac
 
 interface GalleryItem {
   id: string;
-  category: 'Classroom' | 'Workshops' | 'Events';
+  category: 'Classroom' | 'Lab' | 'Events';
   title: string;
   desc: string;
   imgUrl: string;
@@ -60,7 +60,7 @@ interface GalleryProps {
 }
 
 export default function Gallery({ items }: GalleryProps) {
-  const [filter, setFilter] = useState<'All' | 'Classroom' | 'Workshops' | 'Events'>('All');
+  const [filter, setFilter] = useState<'All' | 'Classroom' | 'Lab' | 'Events'>('All');
   const [activeItemForLightBox, setActiveItemForLightBox] = useState<GalleryItem | null>(null);
 
   const galleryItemsToDisplay = items || GALLERY_ITEMS;
@@ -95,7 +95,7 @@ export default function Gallery({ items }: GalleryProps) {
           {[
             { id: 'All', label: 'All Photos' },
             { id: 'Classroom', label: 'Classrooms' },
-            { id: 'Workshops', label: 'PYQ Drills' },
+            { id: 'Lab', label: 'Labs' },
             { id: 'Events', label: 'Toppers' }
           ].map((tab) => (
             <button
