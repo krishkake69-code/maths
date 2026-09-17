@@ -1,4 +1,4 @@
-# Attri Chemistry Classes
+# REHMAN Classes
 
 A premium educational coaching platform for NEET, JEE, Board Exams, and competitive Chemistry examinations.
 
