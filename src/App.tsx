@@ -170,7 +170,7 @@ export default function App() {
         }
       >
         <main id="main-content">
-          <Hero data={dynamicData?.hero} stats={dynamicData?.stats} />
+          <Hero hero={dynamicData?.hero} stats={dynamicData?.stats} />
           <Math3DLab />
           <About />
           <Stats stats={dynamicData?.stats} />
