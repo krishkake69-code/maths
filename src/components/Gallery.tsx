@@ -20,7 +20,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
   },
   {
     id: 'gal-2',
-    category: 'Workshops',
+    category: 'Lab',
     title: 'JEE Problem Solving Workshop',
     desc: 'Intensive speed-calculation and previous 10-year JEE Advanced question solving marathon.',
     imgUrl: 'https://images.unsplash.com/photo-1518152006812-edab29b069ac?auto=format&fit=crop&q=80&w=600&h=400'
@@ -41,7 +41,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
   },
   {
     id: 'gal-5',
-    category: 'Workshops',
+    category: 'Lab',
     title: '3D Geometry & Vectors Workshop',
     desc: 'Visualizing planes, straight lines, and vector cross products for 12th Board step-marking perfection.',
     imgUrl: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=600&h=400'
