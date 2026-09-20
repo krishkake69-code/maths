@@ -1,5 +1,9 @@
 {
   "framework": "vite",
   "buildCommand": "npm run build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/api/inquiries/:id/read", "destination": "/api/inquiries?id=:id" },
+    { "source": "/api/inquiries/:id", "destination": "/api/inquiries?id=:id" }
+  ]
 }
