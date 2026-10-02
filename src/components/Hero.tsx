@@ -11,13 +11,13 @@ interface HeroProps {
   stats?: StatsData;
 }
 
-export default function Hero({ hero, stats }: HeroProps) {
+export default function Hero({ hero }: HeroProps) {
   const sessionInfo = useMemo(() => getAcademicSessionInfo(), []);
 
   const handleScrollToSection = (sectionId: string) => {
     const el = document.getElementById(sectionId);
     if (el) {
-      const offset = 80;
+      const offset = 88;
       const bodyRect = document.body.getBoundingClientRect().top;
       const targetRect = el.getBoundingClientRect().top;
       const targetPosition = targetRect - bodyRect;
@@ -45,138 +45,137 @@ export default function Hero({ hero, stats }: HeroProps) {
   return (
     <section
       id="home"
-      className="relative min-h-screen pt-28 sm:pt-32 pb-16 md:pb-24 flex items-center justify-center bg-slate-50 dark:bg-[#07090e] math-grid overflow-hidden transition-colors duration-300"
+      className="relative overflow-hidden bg-paper dark:bg-chalk-950 math-grid transition-colors duration-300"
     >
-      {/* Three.js 3D Spatial Geometry Canvas Background */}
+      {/* Three.js spatial geometry canvas */}
       <Spatial3DBackground />
 
-      {/* Modern Ambient Radial Glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] sm:w-[650px] h-[350px] sm:h-[450px] rounded-full bg-gradient-to-tr from-indigo-500/15 via-violet-500/10 to-amber-500/15 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-10 right-10 w-[300px] h-[300px] rounded-full bg-amber-500/10 blur-[100px] pointer-events-none" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center min-h-[100dvh] pt-24 pb-16 lg:py-24">
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center">
-        <div className="space-y-6 sm:space-y-8 flex flex-col items-center">
-          
-          {/* Admissions alert pill & Location */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex flex-wrap items-center justify-center gap-2"
-          >
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200/80 dark:border-indigo-800/60 text-indigo-700 dark:text-indigo-300 text-xs font-bold tracking-wide shadow-xs">
-              <span className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400 animate-ping" />
-              <span>{badgeText}</span>
-            </div>
-            <a 
-              href={locationLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/60 text-amber-800 dark:text-amber-300 text-xs font-bold hover:bg-amber-100/80 transition-colors shadow-xs"
+          {/* Left: value proposition */}
+          <div className="lg:col-span-6 flex flex-col items-start">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
+              className="inline-flex flex-wrap items-center gap-2"
             >
-              <MapPin className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-              <span>{locationText}</span>
-            </a>
-          </motion.div>
-
-          {/* High Impact Modern Student Heading */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-950 dark:text-white tracking-tight leading-[1.08] max-w-4xl"
-            id="hero-main-title"
-          >
-            {hero?.title ? (
-              <span>{hero.title}</span>
-            ) : (
-              <>
-                Master <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-amber-500 dark:from-indigo-400 dark:via-violet-400 dark:to-amber-400">Mathematics</span> <br />
-                Without the Fear.
-              </>
-            )}
-          </motion.h1>
-
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-base sm:text-lg md:text-xl text-slate-600 dark:text-slate-300 font-normal max-w-2xl mx-auto leading-relaxed"
-          >
-            {hero?.subtitle || (
-              <>
-                Turn complex calculus, 3D geometry, and trigonometry into simple geometric patterns. Learn step-by-step proofs and lightning-fast JEE question shortcuts with <strong className="text-slate-900 dark:text-white font-extrabold">Rehman Sir</strong>.
-              </>
-            )}
-          </motion.p>
-
-          {/* Student-appealing highlights chips */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl w-full text-left pt-2"
-          >
-            {highlights.map((text, idx) => (
-              <div key={idx} className="flex items-center gap-2.5 p-3 rounded-2xl bg-white/80 dark:bg-slate-900/70 border border-slate-200/70 dark:border-slate-800 text-xs sm:text-sm text-slate-700 dark:text-slate-200 backdrop-blur-md shadow-xs">
-                <CheckCircle2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
-                <span className="font-semibold">{text}</span>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-chalk-950 dark:bg-chalk-100 text-chalk-50 dark:text-chalk-950 text-xs font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 dark:bg-emerald-600 animate-ping" />
+                <span>{badgeText}</span>
               </div>
-            ))}
-          </motion.div>
+              <a
+                href={locationLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-chalk-300 dark:border-chalk-700 text-chalk-600 dark:text-chalk-300 text-xs font-semibold hover:border-emerald-600 dark:hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors"
+              >
+                <MapPin className="w-3.5 h-3.5" />
+                <span>{locationText}</span>
+              </a>
+            </motion.div>
 
-          {/* CTA 3D tactile buttons */}
+            <motion.h1
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.08, ease: [0.32, 0.72, 0, 1] }}
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-chalk-950 dark:text-chalk-50 tracking-tight leading-[1.06] mt-7 max-w-xl"
+              id="hero-main-title"
+            >
+              {hero?.title ? (
+                <span>{hero.title}</span>
+              ) : (
+                <>
+                  Master <span className="text-emerald-600 dark:text-emerald-400">Mathematics</span> Without the Fear.
+                </>
+              )}
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.16, ease: [0.32, 0.72, 0, 1] }}
+              className="text-base sm:text-lg text-chalk-600 dark:text-chalk-300 max-w-[60ch] leading-relaxed mt-5"
+            >
+              {hero?.subtitle || (
+                <>
+                  Turn complex calculus, 3D geometry, and trigonometry into simple geometric patterns. Learn step-by-step proofs and lightning-fast JEE question shortcuts with <strong className="text-chalk-950 dark:text-chalk-50 font-bold">Rehman Sir</strong>.
+                </>
+              )}
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.24, ease: [0.32, 0.72, 0, 1] }}
+              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-8 w-full sm:w-auto"
+            >
+              <Button3D
+                variant="primary"
+                size="lg"
+                onClick={() => handleScrollToSection('contact')}
+                className="w-full sm:w-auto"
+              >
+                <Zap className="w-4.5 h-4.5 text-emerald-300 dark:text-emerald-500 fill-emerald-300 dark:fill-emerald-500" />
+                <span>Book Free 3-Day Demo</span>
+                <ArrowRight className="w-4 h-4" />
+              </Button3D>
+
+              <Button3D
+                variant="secondary"
+                size="lg"
+                onClick={() => handleScrollToSection('math-3d-lab')}
+                className="w-full sm:w-auto"
+              >
+                <Box className="w-4.5 h-4.5" />
+                <span>Open 3D Math Lab</span>
+              </Button3D>
+            </motion.div>
+          </div>
+
+          {/* Right: chalkboard panel with the live syllabus highlights */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4"
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.32, 0.72, 0, 1] }}
+            className="lg:col-span-6 w-full max-w-xl mx-auto lg:mx-0 lg:ml-auto"
           >
-            <Button3D
-              variant="primary"
-              size="lg"
-              onClick={() => handleScrollToSection('contact')}
-              className="w-full sm:w-auto"
-            >
-              <Zap className="w-5 h-5 text-amber-300 fill-amber-300" />
-              <span>Book Free 3-Day Demo</span>
-              <ArrowRight className="w-4 h-4" />
-            </Button3D>
+            <div className="relative p-1.5 rounded-[2rem] bg-chalk-950/[0.04] dark:bg-white/[0.04] ring-1 ring-chalk-200/80 dark:ring-chalk-800 shadow-[0_40px_80px_-40px_rgba(10,15,12,0.45)] dark:shadow-[0_40px_80px_-40px_rgba(0,0,0,0.9)]">
+              <div className="chalkboard rounded-[calc(2rem-0.375rem)] p-6 sm:p-8 relative overflow-hidden">
+                {/* Chalk formulas */}
+                <div className="flex items-end justify-between gap-4 flex-wrap">
+                  <div>
+                    <p className="font-chalk text-3xl sm:text-4xl text-chalk-100 leading-tight">
+                      d/dx (sin x) = cos x
+                    </p>
+                    <svg viewBox="0 0 220 8" className="w-44 mt-1.5" aria-hidden="true">
+                      <path d="M2 5 Q 30 1, 55 4 T 110 4 T 165 4 T 218 3" fill="none" stroke="rgba(52,211,153,0.6)" strokeWidth="2" strokeLinecap="round" />
+                    </svg>
+                  </div>
+                  <span className="text-[10px] font-mono font-semibold uppercase tracking-[0.18em] text-chalk-400 pb-2">
+                    Class notes
+                  </span>
+                </div>
 
-            <Button3D
-              variant="secondary"
-              size="lg"
-              onClick={() => handleScrollToSection('math-3d-lab')}
-              className="w-full sm:w-auto"
-            >
-              <Box className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-              <span>Open 3D Math Lab</span>
-            </Button3D>
-          </motion.div>
+                <p className="font-chalk text-2xl sm:text-3xl text-chalk-200/90 leading-snug mt-4">
+                  ∫ 1/(1+x²) dx = tan⁻¹(x) + C
+                </p>
 
-          {/* Quick Stats Summary Strip */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl w-full pt-6"
-          >
-            <div className="p-3.5 rounded-2xl bg-white/60 dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-800 backdrop-blur-xs text-center">
-              <p className="text-2xl font-black text-indigo-600 dark:text-indigo-400">{stats?.topJeeScore || '99.85%'}</p>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5">Top JEE Score</p>
-            </div>
-            <div className="p-3.5 rounded-2xl bg-white/60 dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-800 backdrop-blur-xs text-center">
-              <p className="text-2xl font-black text-amber-600 dark:text-amber-400">{stats?.perfectBoardScore || '100/100'}</p>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5">Board Centum</p>
-            </div>
-            <div className="p-3.5 rounded-2xl bg-white/60 dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-800 backdrop-blur-xs text-center">
-              <p className="text-2xl font-black text-emerald-600 dark:text-emerald-400">{stats?.experience || '15+ Yrs'}</p>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5">Rehman Sir Exp</p>
-            </div>
-            <div className="p-3.5 rounded-2xl bg-white/60 dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-800 backdrop-blur-xs text-center">
-              <p className="text-2xl font-black text-violet-600 dark:text-violet-400">{stats?.studentsCount || '2,500+'}</p>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5">Students Guided</p>
+                <div className="border-t border-dashed border-chalk-700/80 mt-6 pt-5">
+                  <p className="text-[10px] font-mono font-semibold uppercase tracking-[0.18em] text-chalk-400">
+                    What every batch covers
+                  </p>
+                  <ul className="mt-3 space-y-2.5">
+                    {highlights.map((text, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5 text-sm text-chalk-200">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        <span className="font-medium leading-snug">{text}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
           </motion.div>
 

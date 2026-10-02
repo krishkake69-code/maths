@@ -1,4 +1,5 @@
 import { Award, Users, BookOpen, Star } from 'lucide-react';
+import { motion } from 'motion/react';
 import { StatsData } from '../types';
 
 interface StatsProps {
@@ -11,92 +12,75 @@ export default function Stats({ stats }: StatsProps) {
       label: stats?.studentsCountLabel || 'Students Mentored',
       value: stats?.studentsCount || '2,500+',
       description: stats?.studentsCountDesc || 'JEE aspirants & CBSE board students guided to top percentiles in Ghaziabad.',
-      icon: Users,
-      badge: 'Ghaziabad Legacy',
-      accent: 'from-indigo-500 to-violet-600'
+      icon: Users
     },
     {
       label: stats?.successRateLabel || 'Board Distinction Rate',
       value: stats?.successRate || '96%',
       description: stats?.successRateDesc || 'Students achieving 90%+ in Class 10 & 12 CBSE Board examinations.',
-      icon: Star,
-      badge: 'Academic Excellence',
-      accent: 'from-amber-500 to-orange-600'
+      icon: Star
     },
     {
       label: stats?.experienceLabel || 'Years of Teaching',
       value: stats?.experience || '15+ Yrs',
       description: stats?.experienceDesc || 'Pure mathematics specialization focusing on derivation intuition.',
-      icon: BookOpen,
-      badge: 'Rehman Sir',
-      accent: 'from-emerald-500 to-teal-600'
+      icon: BookOpen
     },
     {
       label: stats?.selectionsLabel || 'IIT & NIT Selections',
       value: stats?.selectionsCount || '350+',
       description: stats?.selectionsDesc || 'Proud alumni studying in premier engineering institutions across India.',
-      icon: Award,
-      badge: 'Competitive Track',
-      accent: 'from-violet-500 to-indigo-600'
+      icon: Award
     }
   ];
 
   return (
-    <section className="relative py-20 bg-slate-950 text-white math-grid overflow-hidden border-y border-indigo-950/40" id="stats">
-      {/* Background soft ambient glows */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[350px] h-[350px] bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[300px] h-[300px] bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
-
+    <section
+      className="relative py-20 md:py-28 bg-paper-deep dark:bg-chalk-950 math-grid overflow-hidden transition-colors duration-300 border-y border-chalk-200/60 dark:border-chalk-800/70"
+      id="stats"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-          <div>
-            <span className="text-xs font-mono font-bold tracking-widest text-indigo-400 uppercase">
-              // BY THE NUMBERS
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight mt-1">
-              Proven Results in Every Board & Exam.
-            </h2>
-          </div>
-          <p className="text-sm text-slate-400 max-w-md">
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
+          className="max-w-2xl mb-14"
+        >
+          <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] leading-[1.1] font-bold text-chalk-950 dark:text-chalk-50 tracking-tight">
+            Proven results in every board and exam
+          </h2>
+          <p className="text-chalk-600 dark:text-chalk-300 mt-4 text-sm sm:text-base leading-relaxed max-w-[60ch]">
             Our numbers reflect rigorous practice, step-marking discipline, and weekly diagnostic tracking right here in Shastri Nagar.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Bento Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Editorial numbers: no cards, hairline dividers */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-12 sm:gap-y-10 sm:gap-x-10">
           {statsList.map((stat, idx) => (
-            <div
+            <motion.div
               key={idx}
-              className="relative p-6 rounded-3xl bg-slate-900/80 border border-slate-800/90 backdrop-blur-xl shadow-xl hover:border-indigo-500/40 transition-all duration-300 group flex flex-col justify-between"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.6, delay: idx * 0.07, ease: [0.32, 0.72, 0, 1] }}
+              className="sm:border-l sm:border-chalk-300/70 dark:sm:border-chalk-800 sm:pl-6 first:sm:border-l-0 first:sm:pl-0 group"
             >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`p-3 rounded-2xl bg-gradient-to-br ${stat.accent} text-white shadow-md shadow-indigo-950/30 group-hover:scale-110 transition-transform`}>
-                    <stat.icon className="w-5 h-5" />
-                  </div>
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-800/80 text-slate-300 border border-slate-700/50">
-                    {stat.badge}
-                  </span>
-                </div>
-
-                <p className="text-4xl sm:text-5xl font-black tracking-tight text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:via-indigo-200 group-hover:to-amber-300 transition-colors">
-                  {stat.value}
-                </p>
-                <p className="text-base font-bold text-slate-200 mt-1">
-                  {stat.label}
-                </p>
-              </div>
-
-              <p className="text-xs text-slate-400 mt-4 leading-relaxed border-t border-slate-800/70 pt-3">
+              <stat.icon className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+              <p className="text-5xl sm:text-6xl font-display font-bold tracking-tight text-chalk-950 dark:text-chalk-50 tnum mt-4 transition-colors duration-500 group-hover:text-emerald-700 dark:group-hover:text-emerald-400">
+                {stat.value}
+              </p>
+              <p className="text-sm font-bold text-chalk-700 dark:text-chalk-200 mt-2">
+                {stat.label}
+              </p>
+              <p className="text-xs text-chalk-500 dark:text-chalk-400 mt-2 leading-relaxed max-w-[32ch]">
                 {stat.description}
               </p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
     </section>
   );
 }
-

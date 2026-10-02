@@ -239,7 +239,7 @@ export const FEATURES: FeatureCard[] = [
   },
   {
     title: 'Dedicated Doubt Desk',
-    description: 'Instant 1-on-1 doubt clearing after every lecture. Never take an unsolved equation home—get clarity directly from Rehman Sir.',
+    description: 'Instant 1-on-1 doubt clearing after every lecture. Never take an unsolved equation home: get clarity directly from Rehman Sir.',
     iconName: 'Sparkles',
     color: 'from-pink-500 to-rose-600'
   },

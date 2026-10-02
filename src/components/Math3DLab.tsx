@@ -1,17 +1,15 @@
-import { useState } from 'react';
+import { Compass, ArrowRight, Zap } from 'lucide-react';
 import { motion } from 'motion/react';
-import { Compass, Sparkles, Box, ArrowRight, Zap } from 'lucide-react';
 import Math3DViewer, { Math3DMode } from './Math3DViewer';
 import Button3D from './Button3D';
-import Card3D from './Card3D';
 
 export default function Math3DLab() {
-  const [activePreset] = useState<Math3DMode>('vectors');
+  const activePreset: Math3DMode = 'vectors';
 
   const handleScrollToSection = (sectionId: string) => {
     const el = document.getElementById(sectionId);
     if (el) {
-      const offset = 80;
+      const offset = 88;
       const bodyRect = document.body.getBoundingClientRect().top;
       const targetRect = el.getBoundingClientRect().top;
       const targetPosition = targetRect - bodyRect;
@@ -23,187 +21,163 @@ export default function Math3DLab() {
     }
   };
 
+  const legend = [
+    {
+      dot: 'bg-cyan-400',
+      title: 'Vector a',
+      desc: 'Ground reference vector along the Cartesian X-axis with magnitude |a|.'
+    },
+    {
+      dot: 'bg-amber-400',
+      title: 'Vector b',
+      desc: 'Rotates through angle θ relative to vector a across 3D space.'
+    },
+    {
+      dot: 'bg-purple-400',
+      title: 'Normal a × b',
+      desc: 'Magnitude = |a||b| sin(θ), directed perpendicularly via the right-hand rule.'
+    },
+    {
+      dot: 'bg-violet-400',
+      square: true,
+      title: 'Shaded plane area',
+      desc: 'Parallelogram area = |a × b|. Collapses to zero when vectors are parallel.'
+    }
+  ];
+
+  const pillars = [
+    {
+      title: 'Zero angle guesswork',
+      desc: 'Never struggle with cross products or direction cosines. See vectors interact in Cartesian space with right-hand rules.',
+      badge: 'Vector intuition'
+    },
+    {
+      title: 'Step-marking visual proofs',
+      desc: 'Learn how to write board-standard solutions for 3D lines, skew distance, and plane equations to secure 100/100.',
+      badge: 'Class 12 boards'
+    },
+    {
+      title: 'Fast JEE coordinate elimination',
+      desc: 'Quickly spot parallel planes, normal collinearity, and orthogonal dot products to solve JEE problems in under 60 seconds.',
+      badge: 'JEE speed'
+    }
+  ];
+
   return (
     <section
       id="math-3d-lab"
-      className="py-20 md:py-28 bg-slate-900 text-white math-dense-grid relative overflow-hidden border-t border-slate-800"
+      className="py-20 md:py-28 bg-paper dark:bg-chalk-950 math-dense-grid relative overflow-hidden transition-colors duration-300 border-t border-chalk-200/60 dark:border-chalk-800/70"
     >
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-indigo-600/15 blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-10 -right-32 w-96 h-96 rounded-full bg-amber-500/10 blur-[140px] pointer-events-none" />
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-950/80 border border-indigo-500/40 text-indigo-300 text-xs font-mono font-bold uppercase mb-3 shadow-lg shadow-indigo-950/50">
-            <Box className="w-4 h-4 text-amber-400" />
-            <span>IMMERSIVE 3D GEOMETRY & CALCULUS LAB</span>
-          </div>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
-            Visualize in 3D Before You Calculate
+        {/* Section header */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
+          className="max-w-2xl mb-12"
+        >
+          <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] leading-[1.1] font-bold text-chalk-950 dark:text-chalk-50 tracking-tight">
+            Visualize in 3D before you calculate
           </h2>
-
-          <p className="text-slate-300 mt-2 text-sm sm:text-base leading-relaxed">
-            In JEE Advanced and Class 12 Boards, questions from 3D Geometry and Vectors carry over <strong className="text-amber-400">20% of the paper</strong>. Rehman Sir teaches through interactive spatial geometry so you never have to guess angles in your head.
+          <p className="text-chalk-600 dark:text-chalk-300 mt-4 text-sm sm:text-base leading-relaxed max-w-[60ch]">
+            In JEE Advanced and Class 12 Boards, questions from 3D Geometry and Vectors carry over <strong className="text-emerald-700 dark:text-emerald-400 font-bold">20% of the paper</strong>. Rehman Sir teaches through interactive spatial geometry so you never have to guess angles in your head.
           </p>
-          <div className="w-16 h-1 bg-gradient-to-r from-indigo-500 via-violet-500 to-amber-500 mx-auto mt-4 rounded-full" />
+        </motion.div>
+
+        {/* 3D viewer in a machined bezel */}
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
+          className="p-1.5 sm:p-2 rounded-[2rem] bg-chalk-100/70 dark:bg-chalk-900/60 ring-1 ring-chalk-200/80 dark:ring-chalk-800 shadow-[0_40px_90px_-45px_rgba(10,15,12,0.5)] dark:shadow-[0_40px_90px_-45px_rgba(0,0,0,0.95)]"
+        >
+          <Math3DViewer
+            key={activePreset}
+            initialMode={activePreset}
+            height="480px"
+            showControls={true}
+            className="rounded-[calc(2rem-0.5rem)]"
+          />
+        </motion.div>
+
+        {/* Live graph legend */}
+        <div className="mt-10">
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-4">
+            <span className="inline-flex items-center gap-2 text-[11px] font-mono font-semibold uppercase tracking-[0.14em] text-emerald-700 dark:text-emerald-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Live 3D graph analysis
+            </span>
+            <span className="text-[11px] font-mono text-chalk-400 px-2.5 py-1 rounded-full border border-chalk-200 dark:border-chalk-800">
+              3D Cartesian XYZ
+            </span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-6">
+            {legend.map((item, idx) => (
+              <div key={idx} className="lg:border-t border-chalk-200/80 dark:border-chalk-800 lg:pt-4">
+                <div className="flex items-center gap-2">
+                  <span className={`shrink-0 ${item.square ? 'w-2.5 h-2.5 rounded-[3px] border border-current' : 'w-2.5 h-2.5 rounded-full'} ${item.dot} opacity-90`} />
+                  <strong className="text-sm font-bold text-chalk-900 dark:text-chalk-100">{item.title}</strong>
+                </div>
+                <p className="text-xs text-chalk-500 dark:text-chalk-400 leading-relaxed mt-1.5">
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* 3D Viewer Main Showcase */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-12">
-          
-          {/* Main 3D Canvas Container */}
-          <div className="lg:col-span-8">
-            <Math3DViewer
-              key={activePreset}
-              initialMode={activePreset}
-              height="480px"
-              showControls={true}
-              className="shadow-2xl shadow-indigo-950/60"
-            />
-          </div>
-
-          {/* Side 3D Graph Description Panel with 3D Tilt Effect */}
-          <div className="lg:col-span-4 space-y-4">
-            
-            {/* Interactive 3D Card explaining the 3D Vector Graph */}
-            <Card3D
-              id="math-3d-graph-description-card"
-              className="p-5 rounded-3xl bg-slate-950/90 border border-indigo-500/40 shadow-xl shadow-indigo-950/50 backdrop-blur-md space-y-4"
-              intensity={6}
-            >
-              {/* Header Badge & Title */}
-              <div className="border-b border-slate-800 pb-3">
-                <div className="flex items-center justify-between gap-2 mb-1.5">
-                  <span className="inline-flex items-center gap-1.5 text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2.5 py-0.5 rounded-full">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    Live 3D Graph Analysis
-                  </span>
-                  <span className="text-[10px] font-mono text-slate-400 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded-full">
-                    3D Cartesian XYZ
-                  </span>
-                </div>
-                <h3 className="text-base sm:text-lg font-black text-white tracking-tight flex items-center gap-2">
-                  <Compass className="w-4 h-4 text-indigo-400 shrink-0" />
-                  <span>Vector Cross-Product (a × b)</span>
-                </h3>
-              </div>
-
-              {/* Graphical Elements Breakdown */}
-              <div className="space-y-2.5 text-xs">
-                <div className="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-900/80 border border-slate-800/80">
-                  <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 mt-1 shrink-0 shadow-xs shadow-cyan-400" />
-                  <div>
-                    <strong className="text-cyan-300 font-bold">Vector a (Cyan Base):</strong>
-                    <p className="text-slate-400 text-[11px] leading-relaxed mt-0.5">
-                      Ground reference vector along Cartesian X-axis with magnitude |a|.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-900/80 border border-slate-800/80">
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400 mt-1 shrink-0 shadow-xs shadow-amber-400" />
-                  <div>
-                    <strong className="text-amber-300 font-bold">Vector b (Amber Arm):</strong>
-                    <p className="text-slate-400 text-[11px] leading-relaxed mt-0.5">
-                      Rotates through angle θ relative to vector a across 3D space.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-900/80 border border-indigo-950/60 bg-indigo-950/20">
-                  <span className="w-2.5 h-2.5 rounded-full bg-indigo-400 mt-1 shrink-0 shadow-xs shadow-indigo-400" />
-                  <div>
-                    <strong className="text-indigo-300 font-bold">Normal a × b (Perpendicular):</strong>
-                    <p className="text-slate-300 text-[11px] leading-relaxed mt-0.5">
-                      Magnitude = |a||b| sin(θ), directed perpendicularly via the Right-Hand Rule.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/60">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-violet-500/50 border border-violet-400 mt-1 shrink-0" />
-                  <div>
-                    <strong className="text-violet-300 font-bold">Shaded Plane Area:</strong>
-                    <p className="text-slate-400 text-[11px] leading-relaxed mt-0.5">
-                      Geometric area of parallelogram = |a × b|. Collapses to zero when vectors are parallel.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Interactive Tip */}
-              <div className="p-3 rounded-2xl bg-gradient-to-r from-indigo-950/60 to-slate-900 border border-indigo-800/40 text-[11px] text-slate-300">
-                <span className="font-bold text-amber-400 flex items-center gap-1 mb-0.5">
-                  <Sparkles className="w-3.5 h-3.5" /> Interactive Hint
-                </span>
-                Drag to orbit 360°, scroll to zoom, and adjust the angle slider to see the normal vector grow or shrink live.
-              </div>
-            </Card3D>
-
-            {/* Tactile 3D Action Card */}
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-indigo-950/80 to-slate-950 border border-indigo-800/50 space-y-4">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-amber-400" />
-                <span className="text-xs font-bold text-white">Experience 3D Classroom Lectures</span>
-              </div>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Attend 3 days of live vector and calculus sessions with Rehman Sir in Shastri Nagar, Ghaziabad.
-              </p>
-              
-              {/* Tactile 3D Push Button */}
-              <Button3D
-                variant="amber"
-                size="md"
-                onClick={() => handleScrollToSection('contact')}
-                className="w-full"
-              >
-                <Zap className="w-4 h-4 text-slate-950 fill-slate-950" />
-                <span>Reserve Free 3-Day Demo Pass</span>
-                <ArrowRight className="w-4 h-4" />
-              </Button3D>
-            </div>
-
-          </div>
-
-        </div>
-
-        {/* 3 Core Spatial Pillars with 3D Tilt Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-          {[
-            {
-              title: "Zero Angle Guesswork",
-              desc: "Never struggle with cross products or direction cosines. See vectors interact in Cartesian space with right-hand rules.",
-              badge: "Vector Intuition"
-            },
-            {
-              title: "Step-Marking Visual Proofs",
-              desc: "Learn how to write Board-standard solutions for 3D lines, skew distance, and plane equations to secure 100/100.",
-              badge: "Class 12 Boards"
-            },
-            {
-              title: "Fast JEE Coordinate Elimination",
-              desc: "Quickly spot parallel planes, normal collinearity, and orthogonal dot products to solve JEE problems in under 60 seconds.",
-              badge: "JEE Speed"
-            }
-          ].map((pillar, i) => (
-            <Card3D
+        {/* Three pillars */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-14">
+          {pillars.map((pillar, i) => (
+            <motion.div
               key={i}
-              className="p-6 rounded-3xl bg-slate-950/70 border border-slate-800 hover:border-indigo-500/50 transition-colors shadow-lg"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, delay: i * 0.08, ease: [0.32, 0.72, 0, 1] }}
+              className="p-6 rounded-2xl bg-chalk-50 dark:bg-chalk-900/70 border border-chalk-200/70 dark:border-chalk-800"
             >
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400 bg-amber-950/40 border border-amber-800/40 px-2 py-0.5 rounded-full">
+              <span className="text-[10px] font-mono font-semibold uppercase tracking-[0.14em] text-chalk-500 dark:text-chalk-400">
                 {pillar.badge}
               </span>
-              <h3 className="text-lg font-bold text-white mt-3">
+              <h3 className="text-lg font-bold text-chalk-950 dark:text-chalk-50 mt-2.5">
                 {pillar.title}
               </h3>
-              <p className="text-xs sm:text-sm text-slate-400 mt-1.5 leading-relaxed">
+              <p className="text-xs sm:text-sm text-chalk-500 dark:text-chalk-400 mt-2 leading-relaxed">
                 {pillar.desc}
               </p>
-            </Card3D>
+            </motion.div>
           ))}
+        </div>
+
+        {/* CTA band */}
+        <div className="mt-14 p-6 sm:p-8 rounded-[2rem] chalkboard relative overflow-hidden">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 relative z-10">
+            <div className="flex items-start gap-3.5">
+              <Compass className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-lg sm:text-xl font-bold text-chalk-50">
+                  Experience 3D classroom lectures
+                </h3>
+                <p className="text-xs sm:text-sm text-chalk-300 leading-relaxed mt-1 max-w-lg">
+                  Attend 3 days of live vector and calculus sessions with Rehman Sir in Shastri Nagar, Ghaziabad.
+                </p>
+              </div>
+            </div>
+            <Button3D
+              variant="amber"
+              size="md"
+              onClick={() => handleScrollToSection('contact')}
+              className="shrink-0"
+            >
+              <Zap className="w-4 h-4 fill-current" />
+              <span>Reserve Free 3-Day Demo Pass</span>
+              <ArrowRight className="w-4 h-4" />
+            </Button3D>
+          </div>
         </div>
 
       </div>

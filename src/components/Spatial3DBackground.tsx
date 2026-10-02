@@ -45,7 +45,7 @@ export default function Spatial3DBackground() {
       initialY: number;
     }[] = [];
 
-    const colors = [0x6366f1, 0x8b5cf6, 0xf59e0b, 0x10b981, 0x38bdf8];
+    const colors = [0x10b981, 0x34d399, 0x6ee7b7, 0x5f7669, 0xa8b9af];
 
     // Create floating wireframe & translucent 3D solids
     for (let i = 0; i < 9; i++) {
@@ -112,7 +112,7 @@ export default function Spatial3DBackground() {
 
     particleGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     const particleMat = new THREE.PointsMaterial({
-      color: 0x818cf8,
+      color: 0x5f7669,
       size: 0.14,
       transparent: true,
       opacity: 0.45

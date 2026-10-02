@@ -151,23 +151,23 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 font-sans">
+    <div className="min-h-screen bg-paper dark:bg-chalk-950 text-chalk-900 dark:text-chalk-100 font-sans">
       {syncError && (
-        <div role="status" className="bg-amber-500/15 px-4 py-2 text-center text-sm text-amber-200">
+        <div role="status" className="bg-amber-500/15 px-4 py-2 text-center text-sm text-amber-700 dark:text-amber-300">
           {syncError}
         </div>
       )}
       <AdmissionBanner message={dynamicData?.admissionMessage} />
       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} onAdminClick={() => setIsAdminOpen(true)} />
       <ErrorBoundary
-        fallback={
-          <main id="main-content" className="min-h-[60vh] px-4 py-24 text-center">
-            <h1 className="text-2xl font-bold text-white">Content is temporarily unavailable</h1>
-            <p className="mx-auto mt-2 max-w-lg text-slate-400">
-              The saved content could not be displayed. Please refresh and try again.
-            </p>
-          </main>
-        }
+          fallback={
+            <main id="main-content" className="min-h-[60vh] px-4 py-24 text-center">
+              <h1 className="text-2xl font-bold text-chalk-950 dark:text-chalk-50">Content is temporarily unavailable</h1>
+              <p className="mx-auto mt-2 max-w-lg text-chalk-500 dark:text-chalk-400">
+                The saved content could not be displayed. Please refresh and try again.
+              </p>
+            </main>
+          }
       >
         <main id="main-content">
           <Hero hero={dynamicData?.hero} stats={dynamicData?.stats} />

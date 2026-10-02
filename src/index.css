@@ -1,71 +1,118 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
 @import "tailwindcss";
+
+/* Class-based dark mode: the app toggles `.dark` on <html> */
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Space Grotesk", "Plus Jakarta Sans", sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-chalk: "Caveat", cursive;
+
+  /* Chalk ink: one green-tinted neutral family used across the whole site */
+  --color-chalk-50: #F4F7F5;
+  --color-chalk-100: #E5EBE7;
+  --color-chalk-200: #CBD6CF;
+  --color-chalk-300: #A8B9AF;
+  --color-chalk-400: #7E9486;
+  --color-chalk-500: #5F7669;
+  --color-chalk-600: #4A5F54;
+  --color-chalk-700: #3B4C44;
+  --color-chalk-800: #26332C;
+  --color-chalk-900: #16201A;
+  --color-chalk-950: #0A0F0C;
+
+  /* Paper surfaces (light mode) */
+  --color-paper: #FAFAF7;
+  --color-paper-deep: #F1F3EE;
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 80px; /* height of sticky header */
+  scroll-padding-top: 96px; /* floating header height */
 }
 
-/* Base style resets */
 body {
   font-family: var(--font-sans);
-  background-color: #f8fafc;
-  color: #0f172a;
+  background-color: var(--color-paper);
+  color: var(--color-chalk-900);
 }
 
 .dark body {
-  background-color: #07090e;
-  color: #f8fafc;
+  background-color: var(--color-chalk-950);
+  color: var(--color-chalk-100);
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
+  text-wrap: balance;
 }
 
-/* Mathematical Graph Paper Backgrounds for students */
+/* Graph paper texture (subtle, light) */
 .math-grid {
   background-size: 32px 32px;
-  background-image: 
-    linear-gradient(to right, rgba(99, 102, 241, 0.07) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(99, 102, 241, 0.07) 1px, transparent 1px);
+  background-image:
+    linear-gradient(to right, rgba(16, 185, 129, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
 }
 
 .dark .math-grid {
-  background-size: 32px 32px;
-  background-image: 
-    linear-gradient(to right, rgba(129, 140, 248, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(129, 140, 248, 0.08) 1px, transparent 1px);
+  background-image:
+    linear-gradient(to right, rgba(52, 211, 153, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(52, 211, 153, 0.05) 1px, transparent 1px);
 }
 
 .math-dots {
   background-size: 24px 24px;
-  background-image: radial-gradient(rgba(99, 102, 241, 0.18) 1.2px, transparent 1.2px);
+  background-image: radial-gradient(rgba(16, 185, 129, 0.14) 1.2px, transparent 1.2px);
 }
 
 .dark .math-dots {
-  background-size: 24px 24px;
-  background-image: radial-gradient(rgba(129, 140, 248, 0.22) 1.2px, transparent 1.2px);
+  background-image: radial-gradient(rgba(52, 211, 153, 0.1) 1.2px, transparent 1.2px);
 }
 
-/* Engineering millimeter grid */
 .math-dense-grid {
   background-size: 16px 16px;
-  background-image: 
-    linear-gradient(to right, rgba(99, 102, 241, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
+  background-image:
+    linear-gradient(to right, rgba(16, 185, 129, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(16, 185, 129, 0.035) 1px, transparent 1px);
 }
 
 .dark .math-dense-grid {
-  background-size: 16px 16px;
-  background-image: 
-    linear-gradient(to right, rgba(129, 140, 248, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(129, 140, 248, 0.05) 1px, transparent 1px);
+  background-image:
+    linear-gradient(to right, rgba(52, 211, 153, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(52, 211, 153, 0.04) 1px, transparent 1px);
+}
+
+/* Chalkboard surface: deep green ink with faint chalk dust */
+.chalkboard {
+  background-color: var(--color-chalk-950);
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Numerals align in data strips and timings */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Accessible focus indicator */
+:focus-visible {
+  outline: 2px solid var(--color-emerald-500);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--color-chalk-200);
+  color: var(--color-chalk-950);
+}
+
+.dark ::selection {
+  background: rgba(52, 211, 153, 0.28);
+  color: var(--color-chalk-50);
 }
 
 /* Smooth custom scrollbars */
@@ -78,14 +125,23 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: var(--color-chalk-300);
   border-radius: 9999px;
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: var(--color-chalk-800);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: var(--color-chalk-400);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-chalk-700);
+}
+
+/* Thin scrollbar for horizontal scroll rows */
+.scroll-row::-webkit-scrollbar {
+  height: 6px;
 }
