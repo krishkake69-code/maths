@@ -465,19 +465,19 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md overflow-hidden">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-chalk-900/80 backdrop-blur-md overflow-hidden">
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="bg-white dark:bg-slate-900 w-full max-w-6xl h-[85vh] rounded-2xl flex flex-col shadow-2xl border-4 border-blue-900 overflow-hidden text-slate-800 dark:text-slate-100"
+        className="bg-white dark:bg-chalk-900 w-full max-w-6xl h-[85vh] rounded-[2rem] flex flex-col shadow-2xl border border-chalk-300 dark:border-chalk-700 overflow-hidden text-chalk-800 dark:text-chalk-100"
       >
         {/* Modal Header */}
-        <header className="h-16 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 bg-slate-50 dark:bg-slate-950/50 shrink-0">
+        <header className="h-16 border-b border-chalk-200 dark:border-chalk-800 flex items-center justify-between px-6 bg-chalk-50 dark:bg-chalk-950/50 shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-blue-900 text-white rounded-lg flex items-center justify-center font-bold text-base">R</div>
-            <span className="text-blue-900 dark:text-white font-extrabold text-lg uppercase tracking-tight">
-              Control <span className="text-orange-600">Center</span>
+            <div className="w-8 h-8 bg-chalk-950 text-white rounded-lg flex items-center justify-center font-bold text-base">R</div>
+            <span className="text-chalk-950 dark:text-chalk-50 font-extrabold text-lg uppercase tracking-tight">
+              Control <span className="text-emerald-600 dark:text-emerald-400">Center</span>
             </span>
             {isAuthenticated && (
               <span className="bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-400 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full flex items-center gap-1">
@@ -488,7 +488,7 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
 
           <button 
             onClick={onClose}
-            className="p-1.5 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-full text-chalk-400 hover:text-chalk-600 dark:hover:text-chalk-200 hover:bg-chalk-100 dark:hover:bg-chalk-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -498,25 +498,25 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
         <div className="flex-1 overflow-hidden flex flex-col md:flex-row">
           {!isAuthenticated ? (
             /* LOGIN CARD */
-            <div className="flex-1 flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-6">
+            <div className="flex-1 flex items-center justify-center bg-chalk-50 dark:bg-chalk-950 p-6">
               <motion.div 
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                className="w-full max-w-md bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-800 flex flex-col"
+                className="w-full max-w-md bg-white dark:bg-chalk-900 p-8 rounded-2xl shadow-xl border border-chalk-200/60 dark:border-chalk-800 flex flex-col"
               >
-                <div className="w-14 h-14 bg-orange-100 dark:bg-orange-950/40 text-orange-600 rounded-full flex items-center justify-center mb-5 mx-auto">
+                <div className="w-14 h-14 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mb-5 mx-auto">
                   <Lock className="w-6 h-6" />
                 </div>
-                <h2 className="text-center text-2xl font-black text-blue-900 dark:text-white uppercase mb-2">
-                  Admin <span className="text-orange-600">Gatekeeper</span>
+                <h2 className="text-center text-2xl font-black text-chalk-950 dark:text-chalk-50 uppercase mb-2">
+                  Admin <span className="text-emerald-600 dark:text-emerald-400">Gatekeeper</span>
                 </h2>
-                <p className="text-center text-xs text-slate-500 dark:text-slate-400 mb-6">
+                <p className="text-center text-xs text-chalk-500 dark:text-chalk-400 mb-6">
                   Verify your Single-User Administrative Passcode to edit courses, results, and general banners.
                 </p>
 
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-chalk-500 mb-1.5">
                       Passcode
                     </label>
                     <input 
@@ -524,7 +524,7 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••••••••"
-                      className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-transparent text-sm focus:border-blue-900 outline-none transition-colors"
+                      className="w-full px-4 py-3 rounded-xl border-2 border-chalk-200 dark:border-chalk-800 bg-transparent text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-colors"
                       required
                       autoFocus
                     />
@@ -540,7 +540,7 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                   <button 
                     type="submit"
                     disabled={isSubmittingAuth}
-                    className="w-full bg-blue-900 hover:bg-blue-950 text-white font-bold py-3 px-4 rounded-xl text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                    className="w-full bg-chalk-950 hover:bg-chalk-900 text-white font-bold py-3 px-4 rounded-xl text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                   >
                     {isSubmittingAuth ? 'Verifying...' : 'Authenticate Access'}
                     <ArrowRight className="w-4 h-4" />
@@ -552,13 +552,13 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
             /* ADMIN EDITOR DASHBOARD */
             <>
               {/* Left sidebar nav */}
-              <aside className="w-full md:w-60 bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 p-4 flex flex-row md:flex-col gap-1.5 overflow-x-auto md:overflow-x-visible md:overflow-y-auto shrink-0">
+              <aside className="w-full md:w-60 bg-chalk-50 dark:bg-chalk-950 border-r border-chalk-200 dark:border-chalk-800 p-4 flex flex-row md:flex-col gap-1.5 overflow-x-auto md:overflow-x-visible md:overflow-y-auto shrink-0">
                 <button 
                   onClick={() => setActiveTab('general')}
                   className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
                     activeTab === 'general' 
-                      ? 'bg-blue-900 text-white shadow-md' 
-                      : 'hover:bg-slate-200 dark:hover:bg-slate-850 text-slate-500 dark:text-slate-400'
+                      ? 'bg-chalk-950 text-white shadow-md' 
+                      : 'hover:bg-chalk-200 dark:hover:bg-chalk-800 text-chalk-500 dark:text-chalk-400'
                   }`}
                 >
                   <Megaphone className="w-4 h-4 shrink-0" />
@@ -569,8 +569,8 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                   onClick={() => setActiveTab('stats')}
                   className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
                     activeTab === 'stats' 
-                      ? 'bg-blue-900 text-white shadow-md' 
-                      : 'hover:bg-slate-200 dark:hover:bg-slate-850 text-slate-500 dark:text-slate-400'
+                      ? 'bg-chalk-950 text-white shadow-md' 
+                      : 'hover:bg-chalk-200 dark:hover:bg-chalk-800 text-chalk-500 dark:text-chalk-400'
                   }`}
                 >
                   <BarChart3 className="w-4 h-4 shrink-0" />
@@ -581,8 +581,8 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                   onClick={() => setActiveTab('courses')}
                   className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
                     activeTab === 'courses' 
-                      ? 'bg-blue-900 text-white shadow-md' 
-                      : 'hover:bg-slate-200 dark:hover:bg-slate-850 text-slate-500 dark:text-slate-400'
+                      ? 'bg-chalk-950 text-white shadow-md' 
+                      : 'hover:bg-chalk-200 dark:hover:bg-chalk-800 text-chalk-500 dark:text-chalk-400'
                   }`}
                 >
                   <GraduationCap className="w-4 h-4 shrink-0" />
@@ -593,8 +593,8 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                   onClick={() => setActiveTab('results')}
                   className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
                     activeTab === 'results' 
-                      ? 'bg-blue-900 text-white shadow-md' 
-                      : 'hover:bg-slate-200 dark:hover:bg-slate-850 text-slate-500 dark:text-slate-400'
+                      ? 'bg-chalk-950 text-white shadow-md' 
+                      : 'hover:bg-chalk-200 dark:hover:bg-chalk-800 text-chalk-500 dark:text-chalk-400'
                   }`}
                 >
                   <Trophy className="w-4 h-4 shrink-0" />
@@ -605,8 +605,8 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                   onClick={() => setActiveTab('testimonials')}
                   className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
                     activeTab === 'testimonials' 
-                      ? 'bg-blue-900 text-white shadow-md' 
-                      : 'hover:bg-slate-200 dark:hover:bg-slate-850 text-slate-500 dark:text-slate-400'
+                      ? 'bg-chalk-950 text-white shadow-md' 
+                      : 'hover:bg-chalk-200 dark:hover:bg-chalk-800 text-chalk-500 dark:text-chalk-400'
                   }`}
                 >
                   <MessageSquare className="w-4 h-4 shrink-0" />
@@ -617,8 +617,8 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                   onClick={() => setActiveTab('gallery')}
                   className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
                     activeTab === 'gallery' 
-                      ? 'bg-blue-900 text-white shadow-md' 
-                      : 'hover:bg-slate-200 dark:hover:bg-slate-850 text-slate-500 dark:text-slate-400'
+                      ? 'bg-chalk-950 text-white shadow-md' 
+                      : 'hover:bg-chalk-200 dark:hover:bg-chalk-800 text-chalk-500 dark:text-chalk-400'
                   }`}
                 >
                   <Image className="w-4 h-4 shrink-0" />
@@ -629,8 +629,8 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                   onClick={() => setActiveTab('mailbox')}
                   className={`w-full text-left flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
                     activeTab === 'mailbox' 
-                      ? 'bg-blue-900 text-white shadow-md' 
-                      : 'hover:bg-slate-200 dark:hover:bg-slate-850 text-slate-500 dark:text-slate-400'
+                      ? 'bg-chalk-950 text-white shadow-md' 
+                      : 'hover:bg-chalk-200 dark:hover:bg-chalk-800 text-chalk-500 dark:text-chalk-400'
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -638,13 +638,13 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                     <span>Mailbox Inbox</span>
                   </div>
                   {inquiries.filter((inq: any) => !inq.read).length > 0 && (
-                    <span className="bg-orange-500 text-white text-[9px] px-1.5 py-0.5 rounded-full font-extrabold tracking-tight animate-pulse shrink-0">
+                    <span className="bg-emerald-700 text-white text-[9px] px-1.5 py-0.5 rounded-full font-extrabold tracking-tight animate-pulse shrink-0">
                       {inquiries.filter((inq: any) => !inq.read).length} NEW
                     </span>
                   )}
                 </button>
 
-                <div className="hidden md:block flex-1 border-t border-slate-200 dark:border-slate-800 my-4" />
+                <div className="hidden md:block flex-1 border-t border-chalk-200 dark:border-chalk-800 my-4" />
 
                 <button 
                   onClick={handleLogout}
@@ -656,42 +656,42 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
               </aside>
 
               {/* Main editing canvas */}
-              <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-6 bg-slate-50/50 dark:bg-slate-950/20">
+              <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-6 bg-chalk-50/50 dark:bg-chalk-950/20">
                 {localData && (
                   <>
                     {/* Tab 1: General & Hero Settings */}
                     {activeTab === 'general' && (
                       <div className="space-y-6">
                         {/* Marquee Banner */}
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm space-y-4">
-                          <h3 className="text-sm font-black text-blue-900 dark:text-white uppercase tracking-wider pb-2 border-b flex items-center gap-2">
-                            <Megaphone className="w-4 h-4 text-orange-600" /> Marquee Announcement Banner
+                        <div className="bg-white dark:bg-chalk-900 p-6 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 shadow-sm space-y-4">
+                          <h3 className="text-sm font-black text-chalk-950 dark:text-chalk-50 uppercase tracking-wider pb-2 border-b flex items-center gap-2">
+                            <Megaphone className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Marquee Announcement Banner
                           </h3>
                           <div>
-                            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                            <label className="block text-xs font-bold text-chalk-500 uppercase tracking-wide mb-1.5">
                               Alert Marquee Message Text
                             </label>
                             <textarea 
                               value={localData.admissionMessage}
                               onChange={(e) => updateGeneralField('admissionMessage', e.target.value)}
-                              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-transparent text-sm focus:border-blue-900 outline-none transition-colors"
+                              className="w-full px-4 py-3 rounded-xl border-2 border-chalk-200 dark:border-chalk-800 bg-transparent text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-colors"
                               rows={2}
                             />
-                            <p className="text-[10px] text-slate-400 mt-1">
+                            <p className="text-[10px] text-chalk-400 mt-1">
                               This text scrolls in the alert banner right at the very top of the landing page. Keep it highly promotional!
                             </p>
                           </div>
                         </div>
 
                         {/* Hero Header Customization */}
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm space-y-4">
-                          <h3 className="text-sm font-black text-blue-900 dark:text-white uppercase tracking-wider pb-2 border-b flex items-center gap-2">
-                            <Sparkles className="w-4 h-4 text-indigo-600" /> Hero Section & Key Messaging
+                        <div className="bg-white dark:bg-chalk-900 p-6 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 shadow-sm space-y-4">
+                          <h3 className="text-sm font-black text-chalk-950 dark:text-chalk-50 uppercase tracking-wider pb-2 border-b flex items-center gap-2">
+                            <Sparkles className="w-4 h-4 text-emerald-600" /> Hero Section & Key Messaging
                           </h3>
                           
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                              <label className="block text-xs font-bold text-chalk-500 uppercase tracking-wide mb-1.5">
                                 Admissions Badge Text
                               </label>
                               <input 
@@ -699,11 +699,11 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                 value={localData.hero?.badgeText || 'New 2026-27 Batches Open'}
                                 onChange={(e) => updateHeroField('badgeText', e.target.value)}
                                 placeholder="e.g. New 2026-27 Batches Open"
-                                className="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-transparent text-sm focus:border-blue-900 outline-none transition-colors"
+                                className="w-full px-4 py-2.5 rounded-xl border-2 border-chalk-200 dark:border-chalk-800 bg-transparent text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-colors"
                               />
                             </div>
                             <div>
-                              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                              <label className="block text-xs font-bold text-chalk-500 uppercase tracking-wide mb-1.5">
                                 Location Badge Text
                               </label>
                               <input 
@@ -711,13 +711,13 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                 value={localData.hero?.locationText || 'Near Silver Shine School, Shastri Nagar'}
                                 onChange={(e) => updateHeroField('locationText', e.target.value)}
                                 placeholder="e.g. Near Silver Shine School, Shastri Nagar"
-                                className="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-transparent text-sm focus:border-blue-900 outline-none transition-colors"
+                                className="w-full px-4 py-2.5 rounded-xl border-2 border-chalk-200 dark:border-chalk-800 bg-transparent text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-colors"
                               />
                             </div>
                           </div>
 
                           <div>
-                            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                            <label className="block text-xs font-bold text-chalk-500 uppercase tracking-wide mb-1.5">
                               Google Maps Link (for Location Badge)
                             </label>
                             <input 
@@ -725,12 +725,12 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                               value={localData.hero?.locationLink || 'https://maps.app.goo.gl/LvyJGmogmsHMHJov9'}
                               onChange={(e) => updateHeroField('locationLink', e.target.value)}
                               placeholder="https://maps.app.goo.gl/..."
-                              className="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-transparent text-sm focus:border-blue-900 outline-none transition-colors"
+                              className="w-full px-4 py-2.5 rounded-xl border-2 border-chalk-200 dark:border-chalk-800 bg-transparent text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-colors"
                             />
                           </div>
 
                           <div>
-                            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                            <label className="block text-xs font-bold text-chalk-500 uppercase tracking-wide mb-1.5">
                               Hero Main Headline (H1)
                             </label>
                             <input 
@@ -738,12 +738,12 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                               value={localData.hero?.title || 'Master Mathematics Without the Fear.'}
                               onChange={(e) => updateHeroField('title', e.target.value)}
                               placeholder="Master Mathematics Without the Fear."
-                              className="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-transparent text-sm font-black focus:border-blue-900 outline-none transition-colors"
+                              className="w-full px-4 py-2.5 rounded-xl border-2 border-chalk-200 dark:border-chalk-800 bg-transparent text-sm font-black focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-colors"
                             />
                           </div>
 
                           <div>
-                            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                            <label className="block text-xs font-bold text-chalk-500 uppercase tracking-wide mb-1.5">
                               Hero Subtitle / Description
                             </label>
                             <textarea 
@@ -751,20 +751,20 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                               onChange={(e) => updateHeroField('subtitle', e.target.value)}
                               placeholder="Turn complex calculus..."
                               rows={3}
-                              className="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-transparent text-sm focus:border-blue-900 outline-none transition-colors"
+                              className="w-full px-4 py-2.5 rounded-xl border-2 border-chalk-200 dark:border-chalk-800 bg-transparent text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-colors"
                             />
                           </div>
 
                           {/* Hero Highlights Tags */}
-                          <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+                          <div className="pt-2 border-t border-chalk-100 dark:border-chalk-800">
                             <div className="flex justify-between items-center mb-3">
-                              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide">
+                              <label className="block text-xs font-bold text-chalk-500 uppercase tracking-wide">
                                 Hero Key Highlights (Checkmark Tags)
                               </label>
                               <button
                                 type="button"
                                 onClick={addHeroHighlight}
-                                className="text-xs bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/50 dark:hover:bg-indigo-900/60 text-indigo-600 dark:text-indigo-400 font-bold px-3 py-1 rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
+                                className="text-xs bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/50 dark:hover:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 font-bold px-3 py-1 rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
                               >
                                 <Plus className="w-3 h-3" /> Add Highlight
                               </button>
@@ -782,12 +782,12 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                     type="text"
                                     value={item}
                                     onChange={(e) => updateHeroHighlight(idx, e.target.value)}
-                                    className="flex-1 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-xs font-medium outline-none"
+                                    className="flex-1 px-3 py-2 rounded-xl border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs font-medium outline-none"
                                   />
                                   <button
                                     type="button"
                                     onClick={() => deleteHeroHighlight(idx)}
-                                    className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors cursor-pointer"
+                                    className="p-2 text-chalk-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors cursor-pointer"
                                     title="Delete Highlight"
                                   >
                                     <Trash2 className="w-3.5 h-3.5" />
@@ -799,13 +799,13 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                         </div>
 
                         {/* Personal Contact Details */}
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm space-y-4">
-                          <h3 className="text-sm font-black text-blue-900 dark:text-white uppercase tracking-wider pb-2 border-b flex items-center gap-2">
-                            <Settings className="w-4 h-4 text-orange-600" /> Personal Contact & Social Handles
+                        <div className="bg-white dark:bg-chalk-900 p-6 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 shadow-sm space-y-4">
+                          <h3 className="text-sm font-black text-chalk-950 dark:text-chalk-50 uppercase tracking-wider pb-2 border-b flex items-center gap-2">
+                            <Settings className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Personal Contact & Social Handles
                           </h3>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                              <label className="block text-xs font-bold text-chalk-500 uppercase tracking-wide mb-1.5">
                                 Phone Number / Call Line
                               </label>
                               <input 
@@ -813,11 +813,11 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                 value={localData.contactInfo?.phone || ''}
                                 onChange={(e) => updateContactInfoField('phone', e.target.value)}
                                 placeholder="+91 98765 43210"
-                                className="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-transparent text-sm focus:border-blue-900 outline-none transition-colors"
+                                className="w-full px-4 py-2.5 rounded-xl border-2 border-chalk-200 dark:border-chalk-800 bg-transparent text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-colors"
                               />
                             </div>
                             <div>
-                              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                              <label className="block text-xs font-bold text-chalk-500 uppercase tracking-wide mb-1.5">
                                 WhatsApp Direct Number
                               </label>
                               <input 
@@ -825,11 +825,11 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                 value={localData.contactInfo?.whatsapp || ''}
                                 onChange={(e) => updateContactInfoField('whatsapp', e.target.value)}
                                 placeholder="+91 98765 43210"
-                                className="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-transparent text-sm focus:border-blue-900 outline-none transition-colors"
+                                className="w-full px-4 py-2.5 rounded-xl border-2 border-chalk-200 dark:border-chalk-800 bg-transparent text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-colors"
                               />
                             </div>
                             <div>
-                              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                              <label className="block text-xs font-bold text-chalk-500 uppercase tracking-wide mb-1.5">
                                 Email Address
                               </label>
                               <input 
@@ -837,11 +837,11 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                 value={localData.contactInfo?.email || ''}
                                 onChange={(e) => updateContactInfoField('email', e.target.value)}
                                 placeholder="rehmanmathsclasses@gmail.com"
-                                className="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-transparent text-sm focus:border-blue-900 outline-none transition-colors"
+                                className="w-full px-4 py-2.5 rounded-xl border-2 border-chalk-200 dark:border-chalk-800 bg-transparent text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-colors"
                               />
                             </div>
                             <div>
-                              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                              <label className="block text-xs font-bold text-chalk-500 uppercase tracking-wide mb-1.5">
                                 Instagram Profile URL
                               </label>
                               <input 
@@ -849,11 +849,11 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                 value={localData.contactInfo?.instagram || ''}
                                 onChange={(e) => updateContactInfoField('instagram', e.target.value)}
                                 placeholder="https://instagram.com/rehman_mathematics"
-                                className="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-transparent text-sm focus:border-blue-900 outline-none transition-colors"
+                                className="w-full px-4 py-2.5 rounded-xl border-2 border-chalk-200 dark:border-chalk-800 bg-transparent text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-colors"
                               />
                             </div>
                             <div>
-                              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                              <label className="block text-xs font-bold text-chalk-500 uppercase tracking-wide mb-1.5">
                                 Facebook Page URL
                               </label>
                               <input 
@@ -861,22 +861,22 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                 value={localData.contactInfo?.facebook || ''}
                                 onChange={(e) => updateContactInfoField('facebook', e.target.value)}
                                 placeholder="https://facebook.com/rehman_mathematics"
-                                className="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-transparent text-sm focus:border-blue-900 outline-none transition-colors"
+                                className="w-full px-4 py-2.5 rounded-xl border-2 border-chalk-200 dark:border-chalk-800 bg-transparent text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-colors"
                               />
                             </div>
                           </div>
                         </div>
 
                         {/* Multiple Coaching Centers Locations */}
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm space-y-4">
-                          <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
-                            <h3 className="text-sm font-black text-blue-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                              <MapPin className="w-4 h-4 text-orange-600" /> Coaching Center Locations
+                        <div className="bg-white dark:bg-chalk-900 p-6 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 shadow-sm space-y-4">
+                          <div className="flex justify-between items-center pb-2 border-b border-chalk-200 dark:border-chalk-800">
+                            <h3 className="text-sm font-black text-chalk-950 dark:text-chalk-50 uppercase tracking-wider flex items-center gap-2">
+                              <MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Coaching Center Locations
                             </h3>
                             <button 
                               type="button"
                               onClick={addCenter}
-                              className="text-xs bg-orange-600 hover:bg-orange-700 text-white font-bold px-3 py-1.5 rounded-xl flex items-center gap-1 transition-all cursor-pointer"
+                              className="text-xs bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-3 py-1.5 rounded-xl flex items-center gap-1 transition-all cursor-pointer"
                             >
                               <Plus className="w-3.5 h-3.5" /> Add Location
                             </button>
@@ -884,14 +884,14 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
 
                           <div className="space-y-4">
                             {(!localData.centers || localData.centers.length === 0) ? (
-                              <p className="text-xs text-slate-400 italic">No center locations defined. Click 'Add Location' to define branch campuses.</p>
+                              <p className="text-xs text-chalk-400 italic">No center locations defined. Click 'Add Location' to define branch campuses.</p>
                             ) : (
                               localData.centers.map((center, index) => (
-                                <div key={center.id} className="p-4 bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/60 relative space-y-3">
+                                <div key={center.id} className="p-4 bg-chalk-50 dark:bg-chalk-950/60 rounded-xl border border-chalk-200/60 dark:border-chalk-800/60 relative space-y-3">
                                   <button
                                     type="button"
                                     onClick={() => deleteCenter(index)}
-                                    className="absolute top-3 right-3 p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors cursor-pointer"
+                                    className="absolute top-3 right-3 p-1.5 text-chalk-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors cursor-pointer"
                                     title="Delete Location"
                                   >
                                     <Trash2 className="w-4 h-4" />
@@ -899,7 +899,7 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
 
                                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     <div>
-                                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                      <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                         Campus Name
                                       </label>
                                       <input 
@@ -907,11 +907,11 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                         value={center.name}
                                         onChange={(e) => updateCenterField(index, 'name', e.target.value)}
                                         placeholder="e.g. Main Campus / South Hub"
-                                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-xs font-extrabold outline-none"
+                                        className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs font-extrabold outline-none"
                                       />
                                     </div>
                                     <div>
-                                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                      <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                         Subtext / Travel Details
                                       </label>
                                       <input 
@@ -919,13 +919,13 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                         value={center.details}
                                         onChange={(e) => updateCenterField(index, 'details', e.target.value)}
                                         placeholder="e.g. 1 Min walk from Metro Station Exit"
-                                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-xs outline-none"
+                                        className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs outline-none"
                                       />
                                     </div>
                                   </div>
 
                                   <div>
-                                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                    <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                       Full Physical Address
                                     </label>
                                     <textarea 
@@ -933,7 +933,7 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                       onChange={(e) => updateCenterField(index, 'address', e.target.value)}
                                       placeholder="3rd Floor, Golden Plaza, Sector 15..."
                                       rows={2}
-                                      className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-xs outline-none"
+                                      className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs outline-none"
                                     />
                                   </div>
                                 </div>
@@ -948,161 +948,161 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                     {activeTab === 'stats' && (
                       <div className="space-y-6">
                         {/* Section 1: Bento Grid Main Stats Cards */}
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm space-y-6">
-                          <div className="pb-3 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+                        <div className="bg-white dark:bg-chalk-900 p-6 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 shadow-sm space-y-6">
+                          <div className="pb-3 border-b border-chalk-200 dark:border-chalk-800 flex justify-between items-center">
                             <div>
-                              <h3 className="text-sm font-black text-blue-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                                <BarChart3 className="w-4 h-4 text-indigo-600" /> Bento Grid Main Statistics
+                              <h3 className="text-sm font-black text-chalk-950 dark:text-chalk-50 uppercase tracking-wider flex items-center gap-2">
+                                <BarChart3 className="w-4 h-4 text-emerald-600" /> Bento Grid Main Statistics
                               </h3>
-                              <p className="text-xs text-slate-400 mt-0.5">Customize the values, title labels, and narrative descriptions shown in the large statistics showcase.</p>
+                              <p className="text-xs text-chalk-400 mt-0.5">Customize the values, title labels, and narrative descriptions shown in the large statistics showcase.</p>
                             </div>
                           </div>
 
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Stat 1 */}
-                            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800 space-y-3">
+                            <div className="p-4 rounded-xl bg-chalk-50 dark:bg-chalk-950/60 border border-chalk-200/60 dark:border-chalk-800 space-y-3">
                               <div className="flex items-center justify-between">
-                                <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">Metric 1: Mentorship</span>
-                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold">Students Mentored</span>
+                                <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Metric 1: Mentorship</span>
+                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-chalk-100 dark:bg-chalk-900 text-chalk-600 dark:text-chalk-300 font-bold">Students Mentored</span>
                               </div>
                               <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Value (e.g. 2,500+)</label>
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">Value (e.g. 2,500+)</label>
                                   <input 
                                     type="text"
                                     value={localData.stats.studentsCount}
                                     onChange={(e) => updateStatField('studentsCount', e.target.value)}
-                                    className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm font-black outline-none"
+                                    className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm font-black outline-none"
                                   />
                                 </div>
                                 <div>
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Card Title Label</label>
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">Card Title Label</label>
                                   <input 
                                     type="text"
                                     value={localData.stats.studentsCountLabel || 'Students Mentored'}
                                     onChange={(e) => updateStatField('studentsCountLabel', e.target.value)}
-                                    className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-xs font-bold outline-none"
+                                    className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs font-bold outline-none"
                                   />
                                 </div>
                               </div>
                               <div>
-                                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Contextual Description</label>
+                                <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">Contextual Description</label>
                                 <textarea 
                                   value={localData.stats.studentsCountDesc || 'JEE aspirants & CBSE board students guided to top percentiles in Ghaziabad.'}
                                   onChange={(e) => updateStatField('studentsCountDesc', e.target.value)}
                                   rows={2}
-                                  className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-xs outline-none"
+                                  className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs outline-none"
                                 />
                               </div>
                             </div>
 
                             {/* Stat 2 */}
-                            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800 space-y-3">
+                            <div className="p-4 rounded-xl bg-chalk-50 dark:bg-chalk-950/60 border border-chalk-200/60 dark:border-chalk-800 space-y-3">
                               <div className="flex items-center justify-between">
-                                <span className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">Metric 2: Academic Rate</span>
-                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-bold">Board Distinction</span>
+                                <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Metric 2: Academic Rate</span>
+                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-chalk-100 dark:bg-chalk-900 text-chalk-600 dark:text-chalk-300 font-bold">Board Distinction</span>
                               </div>
                               <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Value (e.g. 96%)</label>
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">Value (e.g. 96%)</label>
                                   <input 
                                     type="text"
                                     value={localData.stats.successRate}
                                     onChange={(e) => updateStatField('successRate', e.target.value)}
-                                    className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm font-black outline-none"
+                                    className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm font-black outline-none"
                                   />
                                 </div>
                                 <div>
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Card Title Label</label>
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">Card Title Label</label>
                                   <input 
                                     type="text"
                                     value={localData.stats.successRateLabel || 'Board Distinction Rate'}
                                     onChange={(e) => updateStatField('successRateLabel', e.target.value)}
-                                    className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-xs font-bold outline-none"
+                                    className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs font-bold outline-none"
                                   />
                                 </div>
                               </div>
                               <div>
-                                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Contextual Description</label>
+                                <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">Contextual Description</label>
                                 <textarea 
                                   value={localData.stats.successRateDesc || 'Students achieving 90%+ in Class 10 & 12 CBSE Board examinations.'}
                                   onChange={(e) => updateStatField('successRateDesc', e.target.value)}
                                   rows={2}
-                                  className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-xs outline-none"
+                                  className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs outline-none"
                                 />
                               </div>
                             </div>
 
                             {/* Stat 3 */}
-                            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800 space-y-3">
+                            <div className="p-4 rounded-xl bg-chalk-50 dark:bg-chalk-950/60 border border-chalk-200/60 dark:border-chalk-800 space-y-3">
                               <div className="flex items-center justify-between">
                                 <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Metric 3: Experience</span>
                                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold">Teaching Faculty</span>
                               </div>
                               <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Value (e.g. 15+ Yrs)</label>
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">Value (e.g. 15+ Yrs)</label>
                                   <input 
                                     type="text"
                                     value={localData.stats.experience}
                                     onChange={(e) => updateStatField('experience', e.target.value)}
-                                    className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm font-black outline-none"
+                                    className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm font-black outline-none"
                                   />
                                 </div>
                                 <div>
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Card Title Label</label>
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">Card Title Label</label>
                                   <input 
                                     type="text"
                                     value={localData.stats.experienceLabel || 'Years of Teaching'}
                                     onChange={(e) => updateStatField('experienceLabel', e.target.value)}
-                                    className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-xs font-bold outline-none"
+                                    className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs font-bold outline-none"
                                   />
                                 </div>
                               </div>
                               <div>
-                                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Contextual Description</label>
+                                <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">Contextual Description</label>
                                 <textarea 
                                   value={localData.stats.experienceDesc || 'Pure mathematics specialization focusing on derivation intuition.'}
                                   onChange={(e) => updateStatField('experienceDesc', e.target.value)}
                                   rows={2}
-                                  className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-xs outline-none"
+                                  className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs outline-none"
                                 />
                               </div>
                             </div>
 
                             {/* Stat 4 */}
-                            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800 space-y-3">
+                            <div className="p-4 rounded-xl bg-chalk-50 dark:bg-chalk-950/60 border border-chalk-200/60 dark:border-chalk-800 space-y-3">
                               <div className="flex items-center justify-between">
-                                <span className="text-xs font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wider">Metric 4: Selection Track</span>
-                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-violet-100 dark:bg-violet-950 text-violet-700 dark:text-violet-300 font-bold">IIT & NIT Alumni</span>
+                                <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Metric 4: Selection Track</span>
+                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-chalk-100 dark:bg-chalk-900 text-chalk-600 dark:text-chalk-300 font-bold">IIT & NIT Alumni</span>
                               </div>
                               <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Value (e.g. 350+)</label>
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">Value (e.g. 350+)</label>
                                   <input 
                                     type="text"
                                     value={localData.stats.selectionsCount || '350+'}
                                     onChange={(e) => updateStatField('selectionsCount', e.target.value)}
-                                    className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm font-black outline-none"
+                                    className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm font-black outline-none"
                                   />
                                 </div>
                                 <div>
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Card Title Label</label>
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">Card Title Label</label>
                                   <input 
                                     type="text"
                                     value={localData.stats.selectionsLabel || 'IIT & NIT Selections'}
                                     onChange={(e) => updateStatField('selectionsLabel', e.target.value)}
-                                    className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-xs font-bold outline-none"
+                                    className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs font-bold outline-none"
                                   />
                                 </div>
                               </div>
                               <div>
-                                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Contextual Description</label>
+                                <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">Contextual Description</label>
                                 <textarea 
                                   value={localData.stats.selectionsDesc || 'Proud alumni studying in premier engineering institutions across India.'}
                                   onChange={(e) => updateStatField('selectionsDesc', e.target.value)}
                                   rows={2}
-                                  className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-xs outline-none"
+                                  className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs outline-none"
                                 />
                               </div>
                             </div>
@@ -1110,15 +1110,15 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                         </div>
 
                         {/* Section 2: Hero Strip Quick Stats */}
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm space-y-4">
-                          <h3 className="text-sm font-black text-blue-900 dark:text-white uppercase tracking-wider pb-2 border-b flex items-center gap-2">
-                            <Sliders className="w-4 h-4 text-amber-600" /> Hero Quick Stats Indicators
+                        <div className="bg-white dark:bg-chalk-900 p-6 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 shadow-sm space-y-4">
+                          <h3 className="text-sm font-black text-chalk-950 dark:text-chalk-50 uppercase tracking-wider pb-2 border-b flex items-center gap-2">
+                            <Sliders className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Hero Quick Stats Indicators
                           </h3>
-                          <p className="text-xs text-slate-400">These 4 quick stat numbers appear directly underneath the call-to-action buttons in the top Hero header.</p>
+                          <p className="text-xs text-chalk-400">These 4 quick stat numbers appear directly underneath the call-to-action buttons in the top Hero header.</p>
 
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800">
-                              <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                            <div className="p-3 rounded-xl bg-chalk-50 dark:bg-chalk-950/60 border border-chalk-200/60 dark:border-chalk-800">
+                              <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                 Top JEE Score
                               </label>
                               <input 
@@ -1126,11 +1126,11 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                 value={localData.stats.topJeeScore || '99.85%'}
                                 onChange={(e) => updateStatField('topJeeScore', e.target.value)}
                                 placeholder="99.85%"
-                                className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm font-bold outline-none"
+                                className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm font-bold outline-none"
                               />
                             </div>
-                            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800">
-                              <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                            <div className="p-3 rounded-xl bg-chalk-50 dark:bg-chalk-950/60 border border-chalk-200/60 dark:border-chalk-800">
+                              <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                 Board Centum Score
                               </label>
                               <input 
@@ -1138,11 +1138,11 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                 value={localData.stats.perfectBoardScore || '100/100'}
                                 onChange={(e) => updateStatField('perfectBoardScore', e.target.value)}
                                 placeholder="100/100"
-                                className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm font-bold outline-none"
+                                className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm font-bold outline-none"
                               />
                             </div>
-                            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800">
-                              <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                            <div className="p-3 rounded-xl bg-chalk-50 dark:bg-chalk-950/60 border border-chalk-200/60 dark:border-chalk-800">
+                              <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                 Rehman Sir Exp
                               </label>
                               <input 
@@ -1150,11 +1150,11 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                 value={localData.stats.experience || '15+ Yrs'}
                                 onChange={(e) => updateStatField('experience', e.target.value)}
                                 placeholder="15+ Yrs"
-                                className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm font-bold outline-none"
+                                className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm font-bold outline-none"
                               />
                             </div>
-                            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800">
-                              <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                            <div className="p-3 rounded-xl bg-chalk-50 dark:bg-chalk-950/60 border border-chalk-200/60 dark:border-chalk-800">
+                              <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                 Students Guided
                               </label>
                               <input 
@@ -1162,41 +1162,41 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                 value={localData.stats.studentsCount || '2,500+'}
                                 onChange={(e) => updateStatField('studentsCount', e.target.value)}
                                 placeholder="2,500+"
-                                className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm font-bold outline-none"
+                                className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm font-bold outline-none"
                               />
                             </div>
                           </div>
                         </div>
 
                         {/* Live Preview Card */}
-                        <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-inner space-y-4">
-                          <div className="flex items-center justify-between text-xs font-bold text-slate-400 pb-2 border-b border-slate-800">
-                            <span className="flex items-center gap-1.5 text-indigo-400">
+                        <div className="bg-chalk-950 p-6 rounded-2xl border border-chalk-800 shadow-inner space-y-4">
+                          <div className="flex items-center justify-between text-xs font-bold text-chalk-400 pb-2 border-b border-chalk-800">
+                            <span className="flex items-center gap-1.5 text-emerald-400">
                               <Eye className="w-4 h-4" /> Live Bento Card Preview
                             </span>
-                            <span className="text-[10px] font-mono text-slate-500">REALTIME CLIENT VIEW</span>
+                            <span className="text-[10px] font-mono text-chalk-500">REALTIME CLIENT VIEW</span>
                           </div>
 
                           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800">
+                            <div className="p-4 rounded-2xl bg-chalk-900 border border-chalk-800">
                               <p className="text-3xl font-black text-white">{localData.stats.studentsCount || '2,500+'}</p>
-                              <p className="text-xs font-bold text-slate-300 mt-0.5">{localData.stats.studentsCountLabel || 'Students Mentored'}</p>
-                              <p className="text-[10px] text-slate-500 mt-2 line-clamp-2">{localData.stats.studentsCountDesc || 'JEE aspirants & CBSE board students guided...'}</p>
+                              <p className="text-xs font-bold text-chalk-300 mt-0.5">{localData.stats.studentsCountLabel || 'Students Mentored'}</p>
+                              <p className="text-[10px] text-chalk-500 mt-2 line-clamp-2">{localData.stats.studentsCountDesc || 'JEE aspirants & CBSE board students guided...'}</p>
                             </div>
-                            <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800">
+                            <div className="p-4 rounded-2xl bg-chalk-900 border border-chalk-800">
                               <p className="text-3xl font-black text-white">{localData.stats.successRate || '96%'}</p>
-                              <p className="text-xs font-bold text-slate-300 mt-0.5">{localData.stats.successRateLabel || 'Board Distinction Rate'}</p>
-                              <p className="text-[10px] text-slate-500 mt-2 line-clamp-2">{localData.stats.successRateDesc || 'Students achieving 90%+ in CBSE...'}</p>
+                              <p className="text-xs font-bold text-chalk-300 mt-0.5">{localData.stats.successRateLabel || 'Board Distinction Rate'}</p>
+                              <p className="text-[10px] text-chalk-500 mt-2 line-clamp-2">{localData.stats.successRateDesc || 'Students achieving 90%+ in CBSE...'}</p>
                             </div>
-                            <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800">
+                            <div className="p-4 rounded-2xl bg-chalk-900 border border-chalk-800">
                               <p className="text-3xl font-black text-white">{localData.stats.experience || '15+ Yrs'}</p>
-                              <p className="text-xs font-bold text-slate-300 mt-0.5">{localData.stats.experienceLabel || 'Years of Teaching'}</p>
-                              <p className="text-[10px] text-slate-500 mt-2 line-clamp-2">{localData.stats.experienceDesc || 'Pure mathematics specialization...'}</p>
+                              <p className="text-xs font-bold text-chalk-300 mt-0.5">{localData.stats.experienceLabel || 'Years of Teaching'}</p>
+                              <p className="text-[10px] text-chalk-500 mt-2 line-clamp-2">{localData.stats.experienceDesc || 'Pure mathematics specialization...'}</p>
                             </div>
-                            <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800">
+                            <div className="p-4 rounded-2xl bg-chalk-900 border border-chalk-800">
                               <p className="text-3xl font-black text-white">{localData.stats.selectionsCount || '350+'}</p>
-                              <p className="text-xs font-bold text-slate-300 mt-0.5">{localData.stats.selectionsLabel || 'IIT & NIT Selections'}</p>
-                              <p className="text-[10px] text-slate-500 mt-2 line-clamp-2">{localData.stats.selectionsDesc || 'Proud alumni studying in premier...'}</p>
+                              <p className="text-xs font-bold text-chalk-300 mt-0.5">{localData.stats.selectionsLabel || 'IIT & NIT Selections'}</p>
+                              <p className="text-[10px] text-chalk-500 mt-2 line-clamp-2">{localData.stats.selectionsDesc || 'Proud alumni studying in premier...'}</p>
                             </div>
                           </div>
                         </div>
@@ -1206,16 +1206,16 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                     {/* Tab 2: Courses */}
                     {activeTab === 'courses' && (
                       <div className="space-y-6">
-                        <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
+                        <div className="flex justify-between items-center pb-2 border-b border-chalk-200 dark:border-chalk-800">
                           <div>
-                            <h3 className="text-base font-black text-blue-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                              <GraduationCap className="w-5 h-5 text-orange-600" /> Professional Course Offerings
+                            <h3 className="text-base font-black text-chalk-950 dark:text-chalk-50 uppercase tracking-wider flex items-center gap-2">
+                              <GraduationCap className="w-5 h-5 text-emerald-600 dark:text-emerald-400" /> Professional Course Offerings
                             </h3>
-                            <p className="text-xs text-slate-400">Add, delete, or rewrite curriculum specifications for classes.</p>
+                            <p className="text-xs text-chalk-400">Add, delete, or rewrite curriculum specifications for classes.</p>
                           </div>
                           <button 
                             onClick={addCourse}
-                            className="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs uppercase tracking-wider px-4 py-2.5 rounded-xl flex items-center gap-1.5 shadow transition-all cursor-pointer"
+                            className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs uppercase tracking-wider px-4 py-2.5 rounded-xl flex items-center gap-1.5 shadow transition-all cursor-pointer"
                           >
                             <Plus className="w-4 h-4" /> Add Program
                           </button>
@@ -1225,11 +1225,11 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                           {localData.courses.map((course, idx) => (
                             <div 
                               key={course.id} 
-                              className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm relative group"
+                              className="bg-white dark:bg-chalk-900 p-6 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 shadow-sm relative group"
                             >
                               <button 
                                 onClick={() => deleteCourse(course.id)}
-                                className="absolute top-4 right-4 p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-xl transition-colors cursor-pointer"
+                                className="absolute top-4 right-4 p-2 text-chalk-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-xl transition-colors cursor-pointer"
                                 title="Delete Course"
                               >
                                 <Trash2 className="w-4.5 h-4.5" />
@@ -1240,32 +1240,32 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                 <div className="md:col-span-8 space-y-4">
                                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
-                                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                      <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                         Course Title / Name
                                       </label>
                                       <input 
                                         type="text"
                                         value={course.name}
                                         onChange={(e) => updateCourseField(idx, 'name', e.target.value)}
-                                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm focus:border-blue-900 outline-none"
+                                        className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none"
                                       />
                                     </div>
                                     <div>
-                                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                      <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                         Duration Label
                                       </label>
                                       <input 
                                         type="text"
                                         value={course.duration}
                                         onChange={(e) => updateCourseField(idx, 'duration', e.target.value)}
-                                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm focus:border-blue-900 outline-none"
+                                        className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none"
                                       />
                                     </div>
                                   </div>
 
                                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
-                                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                      <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                         Batch Timing (e.g. 7.00 PM TO 8.30 PM)
                                       </label>
                                       <input 
@@ -1273,11 +1273,11 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                         value={course.timing || ''}
                                         onChange={(e) => updateCourseField(idx, 'timing', e.target.value)}
                                         placeholder="4.00 PM TO 5.00 PM"
-                                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm"
+                                        className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm"
                                       />
                                     </div>
                                     <div>
-                                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                      <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                         Batch Days (e.g. MON, TUE & WED)
                                       </label>
                                       <input 
@@ -1285,20 +1285,20 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                         value={course.days || ''}
                                         onChange={(e) => updateCourseField(idx, 'days', e.target.value)}
                                         placeholder="THU, FRI & SAT"
-                                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm"
+                                        className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm"
                                       />
                                     </div>
                                   </div>
 
                                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                     <div>
-                                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                      <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                         Category Target
                                       </label>
                                       <select 
                                         value={course.category}
                                         onChange={(e) => updateCourseField(idx, 'category', e.target.value)}
-                                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm outline-none"
+                                        className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-white dark:bg-chalk-900 text-sm outline-none"
                                       >
                                         <option value="NEET">NEET</option>
                                         <option value="JEE">JEE</option>
@@ -1307,24 +1307,24 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                       </select>
                                     </div>
                                     <div>
-                                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                      <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                         Card Top Badge Tag
                                       </label>
                                       <input 
                                         type="text"
                                         value={course.tag}
                                         onChange={(e) => updateCourseField(idx, 'tag', e.target.value)}
-                                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm"
+                                        className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm"
                                       />
                                     </div>
                                     <div>
-                                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                      <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                         Border Tag Color
                                       </label>
                                       <select 
                                         value={course.accentColor}
                                         onChange={(e) => updateCourseField(idx, 'accentColor', e.target.value)}
-                                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm outline-none"
+                                        className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-white dark:bg-chalk-900 text-sm outline-none"
                                       >
                                         <option value="rose">Rose (Red-NEET)</option>
                                         <option value="blue">Blue (JEE)</option>
@@ -1337,27 +1337,27 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                   </div>
 
                                   <div>
-                                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                    <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                       Course Description
                                     </label>
                                     <textarea 
                                       value={course.description}
                                       onChange={(e) => updateCourseField(idx, 'description', e.target.value)}
-                                      className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm outline-none"
+                                      className="w-full px-3 py-2 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm outline-none"
                                       rows={2}
                                     />
                                   </div>
                                 </div>
 
                                 {/* Features Bulletin */}
-                                <div className="md:col-span-4 border-l border-slate-200 dark:border-slate-800 pl-0 md:pl-5 space-y-3">
+                                <div className="md:col-span-4 border-l border-chalk-200 dark:border-chalk-800 pl-0 md:pl-5 space-y-3">
                                   <div className="flex justify-between items-center">
-                                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide">
+                                    <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide">
                                       Syllabus Bullet Highlights
                                     </label>
                                     <button 
                                       onClick={() => addCourseFeature(idx)}
-                                      className="text-blue-900 dark:text-blue-400 hover:underline text-[10px] font-bold uppercase flex items-center gap-0.5 cursor-pointer"
+                                      className="text-emerald-700 dark:text-emerald-400 hover:underline text-[10px] font-bold uppercase flex items-center gap-0.5 cursor-pointer"
                                     >
                                       <Plus className="w-3.5 h-3.5" /> Add Bullet
                                     </button>
@@ -1370,11 +1370,11 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                           type="text"
                                           value={feat}
                                           onChange={(e) => handleCourseFeatureChange(idx, fIdx, e.target.value)}
-                                          className="flex-1 px-2.5 py-1.5 rounded border border-slate-200 dark:border-slate-800 bg-transparent text-xs"
+                                          className="flex-1 px-2.5 py-1.5 rounded border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs"
                                         />
                                         <button 
                                           onClick={() => removeCourseFeature(idx, fIdx)}
-                                          className="p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded"
+                                          className="p-1 text-chalk-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded"
                                         >
                                           <X className="w-3.5 h-3.5" />
                                         </button>
@@ -1392,16 +1392,16 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                     {/* Tab 3: Hall of Fame / Results */}
                     {activeTab === 'results' && (
                       <div className="space-y-6">
-                        <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
+                        <div className="flex justify-between items-center pb-2 border-b border-chalk-200 dark:border-chalk-800">
                           <div>
-                            <h3 className="text-base font-black text-blue-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                              <Trophy className="w-5 h-5 text-orange-600" /> Hall of Fame Academic Results
+                            <h3 className="text-base font-black text-chalk-950 dark:text-chalk-50 uppercase tracking-wider flex items-center gap-2">
+                              <Trophy className="w-5 h-5 text-emerald-600 dark:text-emerald-400" /> Hall of Fame Academic Results
                             </h3>
-                            <p className="text-xs text-slate-400">Post records and scores of recent JEE and NEET exam achievers.</p>
+                            <p className="text-xs text-chalk-400">Post records and scores of recent JEE and NEET exam achievers.</p>
                           </div>
                           <button 
                             onClick={addResult}
-                            className="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs uppercase tracking-wider px-4 py-2.5 rounded-xl flex items-center gap-1.5 shadow transition-all cursor-pointer"
+                            className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs uppercase tracking-wider px-4 py-2.5 rounded-xl flex items-center gap-1.5 shadow transition-all cursor-pointer"
                           >
                             <Plus className="w-4 h-4" /> Add Achiever
                           </button>
@@ -1411,11 +1411,11 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                           {localData.results.map((resItem, idx) => (
                             <div 
                               key={resItem.id} 
-                              className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm relative space-y-4"
+                              className="bg-white dark:bg-chalk-900 p-5 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 shadow-sm relative space-y-4"
                             >
                               <button 
                                 onClick={() => deleteResult(resItem.id)}
-                                className="absolute top-4 right-4 p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-xl transition-colors"
+                                className="absolute top-4 right-4 p-2 text-chalk-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-xl transition-colors"
                                 title="Delete Record"
                               >
                                 <Trash2 className="w-4.5 h-4.5" />
@@ -1425,81 +1425,81 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                 <img 
                                   src={resItem.image} 
                                   alt={resItem.name}
-                                  className="w-16 h-16 rounded-full object-cover border-2 border-blue-900 shadow-sm"
+                                  className="w-16 h-16 rounded-xl object-cover border border-chalk-200 dark:border-chalk-700"
                                   onError={(e) => {
                                     // Fallback if Unsplash fails
                                     e.currentTarget.src = 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=150&h=150';
                                   }}
                                 />
                                 <div className="flex-1 min-w-0">
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-0.5">
                                     Achiever's Full Name
                                   </label>
                                   <input 
                                     type="text"
                                     value={resItem.name}
                                     onChange={(e) => updateResultField(idx, 'name', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm font-bold"
+                                    className="w-full px-2.5 py-1.5 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm font-bold"
                                   />
                                 </div>
                               </div>
 
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                     Rank / Score Title
                                   </label>
                                   <input 
                                     type="text"
                                     value={resItem.rank}
                                     onChange={(e) => updateResultField(idx, 'rank', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-xs"
+                                    className="w-full px-2.5 py-1.5 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs"
                                   />
                                 </div>
                                 <div>
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                     Exam Level
                                   </label>
                                   <input 
                                     type="text"
                                     value={resItem.exam}
                                     onChange={(e) => updateResultField(idx, 'exam', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-xs"
+                                    className="w-full px-2.5 py-1.5 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs"
                                   />
                                 </div>
                               </div>
 
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                     Score Details
                                   </label>
                                   <input 
                                     type="text"
                                     value={resItem.score}
                                     onChange={(e) => updateResultField(idx, 'score', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-xs"
+                                    className="w-full px-2.5 py-1.5 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs"
                                   />
                                 </div>
                                 <div>
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                     Achieved Year
                                   </label>
                                   <input 
                                     type="text"
                                     value={resItem.year}
                                     onChange={(e) => updateResultField(idx, 'year', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-xs"
+                                    className="w-full px-2.5 py-1.5 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs"
                                   />
                                 </div>
                               </div>
 
                               <div>
-                                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                                <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1.5">
                                   Select Achiever Photo from Device (JPG/PNG/WEBP)
                                 </label>
                                 <div className="flex items-center gap-3">
-                                  <label className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 shrink-0">
+                                  <label className="px-4 py-2 bg-chalk-100 dark:bg-chalk-800 hover:bg-chalk-200 dark:hover:bg-chalk-700 text-chalk-700 dark:text-chalk-300 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors border border-chalk-200 dark:border-chalk-700 flex items-center gap-1.5 shrink-0">
                                     <input 
                                       type="file" 
                                       accept="image/*" 
@@ -1518,7 +1518,7 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                     <span>Upload Photo</span>
                                   </label>
                                   {resItem.image && (
-                                    <span className="text-[10px] text-slate-400 font-mono truncate max-w-xs block">
+                                    <span className="text-[10px] text-chalk-400 font-mono truncate max-w-xs block">
                                       {resItem.image.startsWith('data:') ? '✓ Custom uploaded image' : '✓ Default active image'}
                                     </span>
                                   )}
@@ -1526,14 +1526,14 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                               </div>
 
                               <div>
-                                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                   Specific Milestone / Subject Grade Achievement
                                 </label>
                                 <input 
                                   type="text"
                                   value={resItem.achievement}
                                   onChange={(e) => updateResultField(idx, 'achievement', e.target.value)}
-                                  className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-xs"
+                                  className="w-full px-2.5 py-1.5 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs"
                                 />
                               </div>
                             </div>
@@ -1545,16 +1545,16 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                     {/* Tab 4: Testimonials */}
                     {activeTab === 'testimonials' && (
                       <div className="space-y-6">
-                        <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
+                        <div className="flex justify-between items-center pb-2 border-b border-chalk-200 dark:border-chalk-800">
                           <div>
-                            <h3 className="text-base font-black text-blue-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                              <MessageSquare className="w-5 h-5 text-orange-600" /> Parent & Student Reviews
+                            <h3 className="text-base font-black text-chalk-950 dark:text-chalk-50 uppercase tracking-wider flex items-center gap-2">
+                              <MessageSquare className="w-5 h-5 text-emerald-600 dark:text-emerald-400" /> Parent & Student Reviews
                             </h3>
-                            <p className="text-xs text-slate-400">Edit core student and parent testimonials about Attri Chemistry.</p>
+                            <p className="text-xs text-chalk-400">Edit core student and parent testimonials about Attri Chemistry.</p>
                           </div>
                           <button 
                             onClick={addTestimonial}
-                            className="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs uppercase tracking-wider px-4 py-2.5 rounded-xl flex items-center gap-1.5 shadow transition-all cursor-pointer"
+                            className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs uppercase tracking-wider px-4 py-2.5 rounded-xl flex items-center gap-1.5 shadow transition-all cursor-pointer"
                           >
                             <Plus className="w-4 h-4" /> Add Testimonial
                           </button>
@@ -1564,11 +1564,11 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                           {localData.testimonials.map((testItem, idx) => (
                             <div 
                               key={testItem.id} 
-                              className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm relative space-y-4"
+                              className="bg-white dark:bg-chalk-900 p-6 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 shadow-sm relative space-y-4"
                             >
                               <button 
                                 onClick={() => deleteTestimonial(testItem.id)}
-                                className="absolute top-4 right-4 p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-xl transition-colors cursor-pointer"
+                                className="absolute top-4 right-4 p-2 text-chalk-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-xl transition-colors cursor-pointer"
                                 title="Delete Testimonial"
                               >
                                 <Trash2 className="w-4.5 h-4.5" />
@@ -1576,45 +1576,45 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
 
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div>
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                     Reviewer Full Name
                                   </label>
                                   <input 
                                     type="text"
                                     value={testItem.name}
                                     onChange={(e) => updateTestimonialField(idx, 'name', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm"
+                                    className="w-full px-2.5 py-1.5 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm"
                                   />
                                 </div>
                                 <div>
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                     Role Designation
                                   </label>
                                   <select 
                                     value={testItem.role}
                                     onChange={(e) => updateTestimonialField(idx, 'role', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm outline-none"
+                                    className="w-full px-2.5 py-1.5 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-white dark:bg-chalk-900 text-sm outline-none"
                                   >
                                     <option value="Student">Student</option>
                                     <option value="Parent">Parent</option>
                                   </select>
                                 </div>
                                 <div>
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                     Tag / Course Reference
                                   </label>
                                   <input 
                                     type="text"
                                     value={testItem.course}
                                     onChange={(e) => updateTestimonialField(idx, 'course', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm"
+                                    className="w-full px-2.5 py-1.5 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm"
                                   />
                                 </div>
                               </div>
 
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                     Rating (Stars 1-5)
                                   </label>
                                   <input 
@@ -1623,30 +1623,30 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                     max={5}
                                     value={testItem.rating}
                                     onChange={(e) => updateTestimonialField(idx, 'rating', parseInt(e.target.value) || 5)}
-                                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm"
+                                    className="w-full px-2.5 py-1.5 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm"
                                   />
                                 </div>
                                 <div>
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                     Avatar Initials / Seed Name
                                   </label>
                                   <input 
                                     type="text"
                                     value={testItem.avatarSeed}
                                     onChange={(e) => updateTestimonialField(idx, 'avatarSeed', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm"
+                                    className="w-full px-2.5 py-1.5 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm"
                                   />
                                 </div>
                               </div>
 
                               <div>
-                                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                   Full Review Message Text
                                 </label>
                                 <textarea 
                                   value={testItem.review}
                                   onChange={(e) => updateTestimonialField(idx, 'review', e.target.value)}
-                                  className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-sm"
+                                  className="w-full px-2.5 py-1.5 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-sm"
                                   rows={3}
                                 />
                               </div>
@@ -1659,16 +1659,16 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                     {/* Tab 5: Gallery */}
                     {activeTab === 'gallery' && (
                       <div className="space-y-6">
-                        <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
+                        <div className="flex justify-between items-center pb-2 border-b border-chalk-200 dark:border-chalk-800">
                           <div>
-                            <h3 className="text-base font-black text-blue-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                              <Image className="w-5 h-5 text-orange-600" /> Custom Gallery Tour Photos
+                            <h3 className="text-base font-black text-chalk-950 dark:text-chalk-50 uppercase tracking-wider flex items-center gap-2">
+                              <Image className="w-5 h-5 text-emerald-600 dark:text-emerald-400" /> Custom Gallery Tour Photos
                             </h3>
-                            <p className="text-xs text-slate-400">Manage the educational slide, classroom, laboratory, and event photos.</p>
+                            <p className="text-xs text-chalk-400">Manage the educational slide, classroom, laboratory, and event photos.</p>
                           </div>
                           <button 
                             onClick={addGallery}
-                            className="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs uppercase tracking-wider px-4 py-2.5 rounded-xl flex items-center gap-1.5 shadow transition-all cursor-pointer"
+                            className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs uppercase tracking-wider px-4 py-2.5 rounded-xl flex items-center gap-1.5 shadow transition-all cursor-pointer"
                           >
                             <Plus className="w-4 h-4" /> Add Photo
                           </button>
@@ -1678,11 +1678,11 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                           {localData.gallery.map((galItem, idx) => (
                             <div 
                               key={galItem.id} 
-                              className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm relative space-y-4"
+                              className="bg-white dark:bg-chalk-900 p-5 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 shadow-sm relative space-y-4"
                             >
                               <button 
                                 onClick={() => deleteGallery(galItem.id)}
-                                className="absolute top-4 right-4 p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-xl transition-colors"
+                                className="absolute top-4 right-4 p-2 text-chalk-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-xl transition-colors"
                                 title="Delete Photo"
                               >
                                 <Trash2 className="w-4.5 h-4.5" />
@@ -1692,30 +1692,30 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                 <img 
                                   src={galItem.imgUrl} 
                                   alt={galItem.title}
-                                  className="w-24 h-16 rounded-lg object-cover border border-slate-200"
+                                  className="w-24 h-16 rounded-lg object-cover border border-chalk-200"
                                 />
                                 <div className="flex-1 min-w-0">
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                     Photo Title
                                   </label>
                                   <input 
                                     type="text"
                                     value={galItem.title}
                                     onChange={(e) => updateGalleryField(idx, 'title', e.target.value)}
-                                    className="w-full px-2.5 py-1 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-xs"
+                                    className="w-full px-2.5 py-1 py-1.5 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs"
                                   />
                                 </div>
                               </div>
 
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                     Gallery Category
                                   </label>
                                   <select 
                                     value={galItem.category}
                                     onChange={(e) => updateGalleryField(idx, 'category', e.target.value as any)}
-                                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs outline-none"
+                                    className="w-full px-2.5 py-1.5 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-white dark:bg-chalk-900 text-xs outline-none"
                                   >
                                     <option value="Classroom">Classroom</option>
                                     <option value="Lab">Lab</option>
@@ -1723,24 +1723,24 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                   </select>
                                 </div>
                                 <div className="flex-1">
-                                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+                                  <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1">
                                     Brief Description
                                   </label>
                                   <input 
                                     type="text"
                                     value={galItem.desc}
                                     onChange={(e) => updateGalleryField(idx, 'desc', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent text-xs"
+                                    className="w-full px-2.5 py-1.5 rounded-lg border border-chalk-200 dark:border-chalk-800 bg-transparent text-xs"
                                   />
                                 </div>
                               </div>
 
                               <div>
-                                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                                <label className="block text-[10px] font-bold text-chalk-500 uppercase tracking-wide mb-1.5">
                                   Select Photo from Device (JPG/PNG/WEBP)
                                 </label>
                                 <div className="flex items-center gap-3">
-                                  <label className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 shrink-0">
+                                  <label className="px-4 py-2 bg-chalk-100 dark:bg-chalk-800 hover:bg-chalk-200 dark:hover:bg-chalk-700 text-chalk-700 dark:text-chalk-300 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors border border-chalk-200 dark:border-chalk-700 flex items-center gap-1.5 shrink-0">
                                     <input 
                                       type="file" 
                                       accept="image/*" 
@@ -1759,7 +1759,7 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                     <span>Upload Photo</span>
                                   </label>
                                   {galItem.imgUrl && (
-                                    <span className="text-[10px] text-slate-400 font-mono truncate max-w-xs block">
+                                    <span className="text-[10px] text-chalk-400 font-mono truncate max-w-xs block">
                                       {galItem.imgUrl.startsWith('data:') ? '✓ Custom uploaded image' : '✓ Default active image'}
                                     </span>
                                   )}
@@ -1774,17 +1774,17 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                     {/* Tab 6: Inquiry Mailbox */}
                     {activeTab === 'mailbox' && (
                       <div className="space-y-6">
-                        <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
+                        <div className="flex justify-between items-center pb-2 border-b border-chalk-200 dark:border-chalk-800">
                           <div>
-                            <h3 className="text-base font-black text-blue-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                              <Inbox className="w-5 h-5 text-orange-600" /> Student Booking & Leads Inbox
+                            <h3 className="text-base font-black text-chalk-950 dark:text-chalk-50 uppercase tracking-wider flex items-center gap-2">
+                              <Inbox className="w-5 h-5 text-emerald-600 dark:text-emerald-400" /> Student Booking & Leads Inbox
                             </h3>
-                            <p className="text-xs text-slate-400">View real-time registrations and queries from 'Enroll & Book Demo' or 'Contact' forms.</p>
+                            <p className="text-xs text-chalk-400">View real-time registrations and queries from 'Enroll & Book Demo' or 'Contact' forms.</p>
                           </div>
                           <button 
                             onClick={fetchInquiries}
                             disabled={isLoadingInquiries}
-                            className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs uppercase tracking-wider px-4 py-2.5 rounded-xl flex items-center gap-1.5 shadow transition-all cursor-pointer disabled:opacity-50"
+                            className="bg-chalk-100 hover:bg-chalk-200 dark:bg-chalk-800 dark:hover:bg-chalk-700 text-chalk-700 dark:text-chalk-300 font-bold text-xs uppercase tracking-wider px-4 py-2.5 rounded-xl flex items-center gap-1.5 shadow transition-all cursor-pointer disabled:opacity-50"
                           >
                             <RefreshCw className={`w-4 h-4 ${isLoadingInquiries ? 'animate-spin' : ''}`} /> 
                             {isLoadingInquiries ? 'Refreshing...' : 'Refresh Inbox'}
@@ -1792,29 +1792,29 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                         </div>
 
                         {inquiries.length === 0 ? (
-                          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/60 dark:border-slate-800/60 p-12 text-center space-y-4 shadow-sm">
-                            <div className="w-16 h-16 bg-blue-50 dark:bg-slate-950 rounded-full flex items-center justify-center mx-auto text-blue-600 dark:text-orange-500">
+                          <div className="bg-white dark:bg-chalk-900 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 p-12 text-center space-y-4 shadow-sm">
+                            <div className="w-16 h-16 bg-emerald-50 dark:bg-chalk-950 rounded-full flex items-center justify-center mx-auto text-emerald-600 dark:text-emerald-400">
                               <Mail className="w-8 h-8 opacity-80" />
                             </div>
-                            <h4 className="text-lg font-bold text-slate-900 dark:text-white">Your Mailbox is Empty</h4>
-                            <p className="text-sm text-slate-400 max-w-sm mx-auto leading-relaxed">
+                            <h4 className="text-lg font-bold text-chalk-900 dark:text-white">Your Mailbox is Empty</h4>
+                            <p className="text-sm text-chalk-400 max-w-sm mx-auto leading-relaxed">
                               When students register for demo sessions or contact you from the main landing page, their real-time inquiries will appear here.
                             </p>
                           </div>
                         ) : (
                           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                             {/* Inbox List Panel */}
-                            <div className="lg:col-span-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm overflow-hidden flex flex-col max-h-[600px]">
-                              <div className="p-4 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-950/40 flex justify-between items-center">
-                                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                            <div className="lg:col-span-5 bg-white dark:bg-chalk-900 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 shadow-sm overflow-hidden flex flex-col max-h-[600px]">
+                              <div className="p-4 border-b border-chalk-100 dark:border-chalk-800/80 bg-chalk-50/50 dark:bg-chalk-950/40 flex justify-between items-center">
+                                <span className="text-xs font-bold text-chalk-500 uppercase tracking-wide">
                                   All Messages ({inquiries.length})
                                 </span>
-                                <span className="text-[10px] bg-blue-100 dark:bg-blue-950/50 text-blue-800 dark:text-blue-300 px-2 py-0.5 rounded font-bold">
+                                <span className="text-[10px] bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 px-2 py-0.5 rounded font-bold">
                                   {inquiries.filter((inq: any) => !inq.read).length} Unread
                                 </span>
                               </div>
 
-                              <div className="divide-y divide-slate-100 dark:divide-slate-800/60 overflow-y-auto flex-1">
+                              <div className="divide-y divide-chalk-100 dark:divide-chalk-800/60 overflow-y-auto flex-1">
                                 {inquiries.map((inq: any) => {
                                   const isSelected = selectedInquiryId === inq.id;
                                   return (
@@ -1823,32 +1823,32 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                       onClick={() => setSelectedInquiryId(inq.id)}
                                       className={`p-4 transition-all cursor-pointer text-left relative ${
                                         isSelected 
-                                          ? 'bg-blue-50/70 dark:bg-blue-950/30 border-l-4 border-l-blue-600 dark:border-l-orange-500' 
-                                          : 'hover:bg-slate-50/50 dark:hover:bg-slate-950/20'
+                                          ? 'bg-emerald-50/70 dark:bg-emerald-950/30 border-l-4 border-l-emerald-600' 
+                                          : 'hover:bg-chalk-50/50 dark:hover:bg-chalk-950/20'
                                       } ${!inq.read ? 'font-semibold' : ''}`}
                                     >
                                       {/* Unread status dot indicator */}
                                       {!inq.read && (
-                                        <span className="absolute top-4 right-4 w-2 h-2 rounded-full bg-orange-500" />
+                                        <span className="absolute top-4 right-4 w-2 h-2 rounded-full bg-emerald-500" />
                                       )}
 
                                       <div className="flex items-center gap-2 mb-1.5">
                                         <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded tracking-wider ${
                                           inq.type === 'enroll'
                                             ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300'
-                                            : 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300'
+                                            : 'bg-chalk-100 text-chalk-600 dark:bg-chalk-900 dark:text-chalk-300'
                                         }`}>
                                           {inq.type === 'enroll' ? 'Booking' : 'Inquiry'}
                                         </span>
-                                        <span className="text-[10px] text-slate-400 font-mono">
+                                        <span className="text-[10px] text-chalk-400 font-mono">
                                           {formatDate(inq.timestamp)}
                                         </span>
                                       </div>
 
-                                      <h5 className="text-sm font-bold text-slate-950 dark:text-white truncate">
+                                      <h5 className="text-sm font-bold text-chalk-950 dark:text-white truncate">
                                         {inq.name}
                                       </h5>
-                                      <p className="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                                      <p className="text-xs text-chalk-500 dark:text-chalk-400 truncate mt-0.5">
                                         {inq.course}
                                       </p>
                                     </div>
@@ -1867,22 +1867,22 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                 const waLink = `https://wa.me/${cleanPhoneNum}?text=${encodeURIComponent(`Hi ${activeInquiry.name}, thank you for registering with Attri Chemistry Classes! I would love to schedule your Free Demo session.`)}`;
 
                                 return (
-                                  <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm overflow-hidden flex flex-col">
-                                    <div className="p-6 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-950/40 flex justify-between items-start gap-4 flex-wrap text-left">
+                                  <div className="bg-white dark:bg-chalk-900 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 shadow-sm overflow-hidden flex flex-col">
+                                    <div className="p-6 border-b border-chalk-100 dark:border-chalk-800/80 bg-chalk-50/50 dark:bg-chalk-950/40 flex justify-between items-start gap-4 flex-wrap text-left">
                                       <div className="space-y-1.5">
                                         <div className="flex items-center gap-2">
                                           <span className={`text-[10px] font-black uppercase px-2.5 py-1 rounded tracking-widest ${
                                             activeInquiry.type === 'enroll'
                                               ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-400'
-                                              : 'bg-indigo-100 text-indigo-800 dark:bg-indigo-950/50 dark:text-indigo-400'
+                                              : 'bg-chalk-100 text-chalk-600 dark:bg-chalk-900 dark:text-chalk-300'
                                           }`}>
                                             {activeInquiry.type === 'enroll' ? 'Class Booking Lead' : 'General Contact Message'}
                                           </span>
-                                          <span className="text-xs font-mono text-slate-400">
+                                          <span className="text-xs font-mono text-chalk-400">
                                             {formatDate(activeInquiry.timestamp)}
                                           </span>
                                         </div>
-                                        <h4 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white leading-tight">
+                                        <h4 className="text-lg sm:text-xl font-black text-chalk-900 dark:text-white leading-tight">
                                           {activeInquiry.name}
                                         </h4>
                                       </div>
@@ -1893,7 +1893,7 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                           onClick={() => handleToggleRead(activeInquiry.id)}
                                           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border flex items-center gap-1 cursor-pointer ${
                                             activeInquiry.read 
-                                              ? 'bg-slate-50 dark:bg-slate-850 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-750 hover:bg-slate-100 dark:hover:bg-slate-800'
+                                              ? 'bg-chalk-50 dark:bg-chalk-800 text-chalk-500 dark:text-chalk-400 border-chalk-200 dark:border-chalk-700 hover:bg-chalk-100 dark:hover:bg-chalk-800'
                                               : 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900 hover:bg-emerald-100 dark:hover:bg-emerald-950/60'
                                           }`}
                                           title={activeInquiry.read ? 'Mark as Unread' : 'Mark as Read'}
@@ -1907,7 +1907,7 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border flex items-center gap-1.5 cursor-pointer ${
                                             deleteConfirmId === activeInquiry.id
                                               ? 'bg-rose-600 text-white border-rose-600 hover:bg-rose-700 font-extrabold scale-105'
-                                              : 'bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 border-rose-150 dark:border-rose-950/60 hover:bg-rose-100 dark:hover:bg-rose-950/40'
+                                              : 'bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-950/60 hover:bg-rose-100 dark:hover:bg-rose-950/40'
                                           }`}
                                         >
                                           <Trash2 className="w-4 h-4" />
@@ -1921,11 +1921,11 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 font-sans">
                                         {/* Contact Phone details */}
                                         <div className="space-y-1">
-                                          <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                          <span className="block text-[10px] font-bold text-chalk-400 uppercase tracking-wider">
                                             Contact Phone / WhatsApp
                                           </span>
                                           <div className="flex flex-wrap items-center gap-2">
-                                            <span className="text-sm font-extrabold text-slate-800 dark:text-slate-100 font-mono">
+                                            <span className="text-sm font-extrabold text-chalk-800 dark:text-chalk-100 font-mono">
                                               {activeInquiry.phone}
                                             </span>
                                             {cleanPhoneNum && (
@@ -1943,32 +1943,32 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
 
                                         {/* Contact Email details */}
                                         <div className="space-y-1">
-                                          <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                          <span className="block text-[10px] font-bold text-chalk-400 uppercase tracking-wider">
                                             Email Address
                                           </span>
-                                          <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 block">
-                                            {activeInquiry.email || <span className="text-slate-400 italic">Not Provided</span>}
+                                          <span className="text-sm font-semibold text-chalk-700 dark:text-chalk-300 block">
+                                            {activeInquiry.email || <span className="text-chalk-400 italic">Not Provided</span>}
                                           </span>
                                         </div>
 
                                         {/* Target Course / Batch */}
                                         <div className="space-y-1 sm:col-span-2">
-                                          <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                          <span className="block text-[10px] font-bold text-chalk-400 uppercase tracking-wider">
                                             Chemistry Program / Academic Batch Interest
                                           </span>
-                                          <span className="text-sm font-extrabold text-blue-750 dark:text-orange-400 block bg-blue-50/50 dark:bg-slate-950/50 px-3 py-2 rounded-xl border border-blue-100/30 dark:border-slate-800/80">
+                                          <span className="text-sm font-extrabold text-emerald-700 dark:text-emerald-400 block bg-emerald-50/50 dark:bg-chalk-950/50 px-3 py-2 rounded-xl border border-emerald-200/50 dark:border-chalk-800/80">
                                             {activeInquiry.course}
                                           </span>
                                         </div>
                                       </div>
 
                                       {/* Student details / custom description inquiry message */}
-                                      <div className="space-y-1 border-t border-slate-100 dark:border-slate-800/80 pt-5 font-sans">
-                                        <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                                      <div className="space-y-1 border-t border-chalk-100 dark:border-chalk-800/80 pt-5 font-sans">
+                                        <span className="block text-[10px] font-bold text-chalk-400 uppercase tracking-wider mb-2">
                                           Message Details & Preferences
                                         </span>
-                                        <div className="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-medium min-h-[100px] whitespace-pre-wrap">
-                                          {activeInquiry.message || <span className="text-slate-400 italic font-normal">No additional message or notes provided.</span>}
+                                        <div className="bg-chalk-50 dark:bg-chalk-950 p-4 rounded-xl text-xs sm:text-sm text-chalk-700 dark:text-chalk-300 leading-relaxed font-medium min-h-[100px] whitespace-pre-wrap">
+                                          {activeInquiry.message || <span className="text-chalk-400 italic font-normal">No additional message or notes provided.</span>}
                                         </div>
                                       </div>
                                     </div>
@@ -1989,8 +1989,8 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
 
         {/* Modal Footer Controls */}
         {isAuthenticated && (
-          <footer className="h-16 border-t border-slate-200 dark:border-slate-800 px-6 flex items-center justify-between bg-slate-50 dark:bg-slate-950/50 shrink-0">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+          <footer className="h-16 border-t border-chalk-200 dark:border-chalk-800 px-6 flex items-center justify-between bg-chalk-50 dark:bg-chalk-950/50 shrink-0">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-chalk-400">
               Verify values and click save. Updates sync globally in real-time.
             </span>
 
@@ -2025,7 +2025,7 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                 type="button"
                 onClick={handleSaveAll}
                 disabled={isSaving}
-                className="bg-blue-900 hover:bg-blue-950 text-white font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-xl flex items-center gap-1.5 shadow-md active:scale-95 transition-all cursor-pointer disabled:opacity-50"
+                className="bg-chalk-950 hover:bg-chalk-900 text-white font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-xl flex items-center gap-1.5 shadow-md active:scale-95 transition-all cursor-pointer disabled:opacity-50"
               >
                 <Save className="w-4 h-4" />
                 {isSaving ? 'Syncing...' : 'Save All Changes'}
