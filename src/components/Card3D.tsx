@@ -23,7 +23,7 @@ export default function Card3D({
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
-    
+
     const rotateY = (x / (rect.width / 2)) * intensity;
     const rotateX = -(y / (rect.height / 2)) * intensity;
     setTilt({ rotateX, rotateY, isHovered: true });
@@ -42,9 +42,9 @@ export default function Card3D({
       onMouseLeave={handleMouseLeave}
       style={{
         transform: tilt.isHovered
-          ? `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) scale3d(1.015, 1.015, 1.015)`
+          ? `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) scale3d(1.01, 1.01, 1.01)`
           : 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
-        transition: tilt.isHovered ? 'transform 0.08s ease-out' : 'transform 0.3s cubic-bezier(0.2, 0, 0, 1)',
+        transition: tilt.isHovered ? 'transform 0.1s cubic-bezier(0.32,0.72,0,1)' : 'transform 0.5s cubic-bezier(0.32,0.72,0,1)',
         transformStyle: 'preserve-3d'
       }}
       className={`relative ${className}`}

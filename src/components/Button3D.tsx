@@ -37,10 +37,10 @@ export default function Button3D({
     const rect = buttonRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
-    
-    // Subtle, high-end 3D tilt (capped at 8 degrees)
-    const rotateY = (x / (rect.width / 2)) * 7;
-    const rotateX = -(y / (rect.height / 2)) * 7;
+
+    // Soft, high-end tilt capped at 5 degrees
+    const rotateY = (x / (rect.width / 2)) * 5;
+    const rotateX = -(y / (rect.height / 2)) * 5;
     setTilt({ rotateX, rotateY, isHovered: true });
   };
 
@@ -48,54 +48,49 @@ export default function Button3D({
     setTilt({ rotateX: 0, rotateY: 0, isHovered: false });
   };
 
-  // Size styling
+  // Buttons are full pills; cards stay soft (documented shape system)
   const sizeStyles = {
-    sm: 'px-3.5 py-2 text-xs rounded-xl font-bold',
-    md: 'px-6 py-3.5 text-sm rounded-2xl font-extrabold',
-    lg: 'px-8 py-4 text-base rounded-2xl font-black'
+    sm: 'px-4 py-2 text-xs font-semibold gap-1.5',
+    md: 'px-6 py-3 text-sm font-bold gap-2',
+    lg: 'px-7 py-3.5 text-base font-bold gap-2',
   }[size];
 
-  // 3D theme styles with tactile mechanical extrusion depth
   const variantStyles = {
+    // Ink solid: the house primary
     primary: `
-      bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-600 text-white
-      border-t border-indigo-400/40 border-x border-indigo-500/30
-      shadow-[0_6px_0_#312e81,0_12px_22px_-2px_rgba(79,70,229,0.45)]
-      hover:shadow-[0_8px_0_#312e81,0_16px_26px_-2px_rgba(79,70,229,0.55)]
-      active:shadow-[0_2px_0_#312e81,0_4px_10px_-2px_rgba(79,70,229,0.3)]
+      bg-chalk-950 dark:bg-chalk-100 text-white dark:text-chalk-950
+      shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_24px_-8px_rgba(10,15,12,0.5)]
+      hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_14px_30px_-8px_rgba(10,15,12,0.55)]
+      active:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_10px_-6px_rgba(10,15,12,0.4)]
     `,
+    // Accent solid: single emerald accent (kept for existing call sites)
     amber: `
-      bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600 text-slate-950
-      border-t border-amber-300/60 border-x border-amber-400/40
-      shadow-[0_6px_0_#92400e,0_12px_22px_-2px_rgba(245,158,11,0.45)]
-      hover:shadow-[0_8px_0_#92400e,0_16px_26px_-2px_rgba(245,158,11,0.55)]
-      active:shadow-[0_2px_0_#92400e,0_4px_10px_-2px_rgba(245,158,11,0.3)]
+      bg-emerald-700 hover:bg-emerald-800 text-white
+      shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_24px_-8px_rgba(4,120,87,0.55)]
+      hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_14px_30px_-8px_rgba(4,120,87,0.6)]
+      active:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_4px_10px_-6px_rgba(4,120,87,0.45)]
     `,
     emerald: `
-      bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 text-white
-      border-t border-emerald-300/40 border-x border-emerald-400/30
-      shadow-[0_6px_0_#064e3b,0_12px_22px_-2px_rgba(16,185,129,0.45)]
-      hover:shadow-[0_8px_0_#064e3b,0_16px_26px_-2px_rgba(16,185,129,0.55)]
-      active:shadow-[0_2px_0_#064e3b,0_4px_10px_-2px_rgba(16,185,129,0.3)]
+      bg-emerald-700 hover:bg-emerald-800 text-white
+      shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_24px_-8px_rgba(4,120,87,0.55)]
+      hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_14px_30px_-8px_rgba(4,120,87,0.6)]
+      active:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_4px_10px_-6px_rgba(4,120,87,0.45)]
     `,
+    // Outline: quiet secondary
     secondary: `
-      bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100
-      border border-slate-200/90 dark:border-slate-800
-      border-b-2 border-b-slate-300 dark:border-b-slate-950
-      shadow-[0_5px_0_#cbd5e1,0_10px_18px_-2px_rgba(0,0,0,0.08)]
-      dark:shadow-[0_5px_0_#020617,0_10px_18px_-2px_rgba(0,0,0,0.5)]
-      hover:shadow-[0_7px_0_#cbd5e1,0_14px_22px_-2px_rgba(0,0,0,0.12)]
-      dark:hover:shadow-[0_7px_0_#020617,0_14px_22px_-2px_rgba(0,0,0,0.6)]
-      active:shadow-[0_2px_0_#cbd5e1,0_4px_8px_-2px_rgba(0,0,0,0.05)]
-      dark:active:shadow-[0_2px_0_#020617,0_4px_8px_-2px_rgba(0,0,0,0.3)]
+      bg-transparent text-chalk-800 dark:text-chalk-100
+      border border-chalk-300 dark:border-chalk-700
+      hover:border-chalk-500 dark:hover:border-chalk-500 hover:bg-chalk-50 dark:hover:bg-chalk-900
+      shadow-[0_6px_18px_-10px_rgba(10,15,12,0.25)]
+      dark:shadow-[0_6px_18px_-10px_rgba(0,0,0,0.6)]
+      active:shadow-none
     `,
     dark: `
-      bg-slate-950 text-white
-      border border-slate-800
-      shadow-[0_5px_0_#020617,0_12px_20px_-2px_rgba(0,0,0,0.6)]
-      hover:shadow-[0_7px_0_#020617,0_16px_24px_-2px_rgba(0,0,0,0.7)]
-      active:shadow-[0_2px_0_#020617,0_4px_8px_-2px_rgba(0,0,0,0.4)]
-    `
+      bg-chalk-950 dark:bg-chalk-100 text-white dark:text-chalk-950
+      shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_24px_-8px_rgba(10,15,12,0.5)]
+      hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_14px_30px_-8px_rgba(10,15,12,0.55)]
+      active:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_10px_-6px_rgba(10,15,12,0.4)]
+    `,
   }[variant];
 
   const content = (
@@ -104,15 +99,18 @@ export default function Button3D({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{
-        transform: tilt.isHovered 
-          ? `perspective(600px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) translateY(-2px)`
+        transform: tilt.isHovered
+          ? `perspective(600px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) translateY(-1px)`
           : 'perspective(600px) rotateX(0deg) rotateY(0deg) translateY(0px)',
-        transition: tilt.isHovered ? 'transform 0.08s ease-out' : 'transform 0.25s ease-out, box-shadow 0.2s ease',
-        transformStyle: 'preserve-3d'
+        transition: tilt.isHovered
+          ? 'transform 0.12s cubic-bezier(0.32,0.72,0,1)'
+          : 'transform 0.3s cubic-bezier(0.32,0.72,0,1), box-shadow 0.3s cubic-bezier(0.32,0.72,0,1)',
+        transformStyle: 'preserve-3d',
       }}
       className={`
-        inline-flex items-center justify-center gap-2 cursor-pointer select-none
-        transition-all duration-150 active:translate-y-1 active:scale-[0.99]
+        inline-flex items-center justify-center cursor-pointer select-none whitespace-nowrap
+        rounded-full transition-all duration-200
+        active:translate-y-[1px] active:scale-[0.98]
         relative overflow-hidden group
         ${sizeStyles}
         ${variantStyles}
@@ -120,15 +118,15 @@ export default function Button3D({
         ${className}
       `}
     >
-      {/* Specular shine light bar across surface */}
-      <div 
-        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 pointer-events-none"
+      {/* Soft specular light sweep */}
+      <div
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 pointer-events-none"
       />
-      
-      {/* 3D Elevated child content */}
-      <span 
-        style={{ transform: 'translateZ(15px)' }} 
-        className="flex items-center justify-center gap-2 relative z-10 w-full"
+
+      {/* Elevated child content */}
+      <span
+        style={{ transform: 'translateZ(10px)' }}
+        className="flex items-center justify-center relative z-10 w-full"
       >
         {children}
       </span>
@@ -137,8 +135,8 @@ export default function Button3D({
 
   if (href) {
     return (
-      <a 
-        href={href} 
+      <a
+        href={href}
         onClick={onClick as any}
         id={id}
         target={target}

@@ -1,68 +1,65 @@
 import { FEATURES } from '../data';
 import { motion } from 'motion/react';
 import * as LucideIcons from 'lucide-react';
-import { CheckCircle2 } from 'lucide-react';
 
 export default function WhyChooseUs() {
+  const columns = [FEATURES.slice(0, 3), FEATURES.slice(3, 6)];
+
   return (
     <section
       id="why-us"
-      className="py-20 md:py-28 bg-white dark:bg-[#07090e] transition-colors duration-300 relative overflow-hidden border-t border-slate-200/60 dark:border-slate-800"
+      className="py-20 md:py-28 bg-paper dark:bg-chalk-950 transition-colors duration-300 relative overflow-hidden border-t border-chalk-200/60 dark:border-chalk-800/70"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs font-mono font-bold tracking-widest text-indigo-600 dark:text-indigo-400 uppercase">
-            // THE REHMAN ADVANTAGE
-          </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 dark:text-white tracking-tight mt-1">
-            Built Specifically for High Scores
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
+          className="max-w-2xl mb-14"
+        >
+          <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] leading-[1.1] font-bold text-chalk-950 dark:text-chalk-50 tracking-tight">
+            Built specifically for high scores
           </h2>
-          <p className="text-slate-600 dark:text-slate-400 mt-2 text-sm sm:text-base">
+          <p className="text-chalk-600 dark:text-chalk-300 mt-4 text-sm sm:text-base leading-relaxed max-w-[60ch]">
             How our focused classroom methodology bridges the gap from calculation panic to calm mathematical confidence.
           </p>
-          <div className="w-16 h-1 bg-gradient-to-r from-indigo-600 via-violet-600 to-amber-500 mx-auto mt-4 rounded-full" />
-        </div>
+        </motion.div>
 
-        {/* Feature Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {FEATURES.map((feature, idx) => {
-            const IconComponent = (LucideIcons as any)[feature.iconName] || LucideIcons.HelpCircle;
+        {/* Two hairline columns of three */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-14 gap-y-12">
+          {columns.map((column, colIdx) => (
+            <div key={colIdx} className="divide-y divide-chalk-200/80 dark:divide-chalk-800 border-t border-chalk-200/80 dark:border-chalk-800">
+              {column.map((feature, idx) => {
+                const IconComponent = (LucideIcons as any)[feature.iconName] || LucideIcons.CircleHelp;
+                const globalIdx = colIdx * 3 + idx;
 
-            return (
-              <motion.div
-                key={idx}
-                whileHover={{ y: -6 }}
-                transition={{ duration: 0.25 }}
-                className="bg-slate-50/80 dark:bg-slate-900/80 p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between group relative shadow-sm hover:shadow-xl hover:border-indigo-400/50 transition-all backdrop-blur-xs"
-              >
-                <div className="space-y-4 relative z-10">
-                  <div className="flex items-center justify-between">
-                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-tr ${feature.color} flex items-center justify-center text-white shadow-md shadow-indigo-600/20 group-hover:scale-110 transition-transform`}>
-                      <IconComponent className="w-6 h-6 stroke-[2]" />
+                return (
+                  <motion.div
+                    key={globalIdx}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.4 }}
+                    transition={{ duration: 0.6, delay: globalIdx * 0.05, ease: [0.32, 0.72, 0, 1] }}
+                    className="py-7 flex items-start gap-5 group"
+                  >
+                    <div className="p-2.5 rounded-xl bg-chalk-100 dark:bg-chalk-900 text-emerald-700 dark:text-emerald-400 shrink-0 transition-colors duration-300 group-hover:bg-emerald-50 dark:group-hover:bg-emerald-950/40">
+                      <IconComponent className="w-5 h-5" strokeWidth={1.75} />
                     </div>
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 bg-white dark:bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-200/60 dark:border-slate-700">
-                      Feature 0{idx + 1}
-                    </span>
-                  </div>
-
-                  <h3 className="text-xl font-extrabold text-slate-950 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                    {feature.title}
-                  </h3>
-
-                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                    {feature.description}
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 pt-5 mt-4 border-t border-slate-200/50 dark:border-slate-800">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>Integrated in All Batches</span>
-                </div>
-              </motion.div>
-            );
-          })}
+                    <div>
+                      <h3 className="text-lg font-bold text-chalk-950 dark:text-chalk-50 tracking-tight">
+                        {feature.title}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-chalk-500 dark:text-chalk-400 leading-relaxed mt-2 max-w-[55ch]">
+                        {feature.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          ))}
         </div>
 
       </div>

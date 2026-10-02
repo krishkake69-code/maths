@@ -68,7 +68,7 @@ export default function Math3DViewer({
     activeObjectsGroupRef.current = group;
 
     // 1. Common 3D Coordinate Grid & XYZ Axes
-    const grid = new THREE.GridHelper(10, 20, 0x6366f1, 0x334155);
+    const grid = new THREE.GridHelper(10, 20, 0x34d399, 0x26332c);
     (grid.material as THREE.Material).opacity = 0.25;
     (grid.material as THREE.Material).transparent = true;
     grid.position.y = -0.01;
@@ -436,16 +436,16 @@ export default function Math3DViewer({
   const dotProduct = (vectorALen * vectorBLen * Math.cos(rad)).toFixed(2);
 
   return (
-    <div className={`relative flex flex-col rounded-3xl overflow-hidden bg-gradient-to-b from-slate-950/60 via-slate-950/40 to-slate-950/80 border border-indigo-500/20 backdrop-blur-xl shadow-2xl shadow-indigo-950/40 ${className}`}>
+    <div className={`relative flex flex-col rounded-3xl overflow-hidden bg-chalk-950 border border-chalk-800/80 shadow-2xl shadow-chalk-950/40 ${className}`}>
       
       {/* Top Floating Interactive Mode Header - seamlessly blended */}
       {showControls && (
         <div className="absolute top-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 z-20 pointer-events-none">
           <div className="flex items-center gap-2 pointer-events-auto">
-            <div className="px-3 py-1.5 rounded-2xl text-xs font-bold bg-slate-950/75 border border-indigo-500/30 text-white backdrop-blur-md shadow-lg shadow-indigo-950/40 flex items-center gap-2">
+            <div className="px-3 py-1.5 rounded-2xl text-xs font-bold bg-chalk-900/85 border border-chalk-700/60 text-chalk-50 backdrop-blur-md shadow-lg shadow-chalk-950/40 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span className="text-xs font-bold">Vector Cross-Product (a × b)</span>
-              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded-md bg-indigo-950/90 text-amber-300 border border-indigo-800/50">
+              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded-md bg-chalk-950 text-emerald-300 border border-chalk-700/80">
                 JEE 3D Space
               </span>
             </div>
@@ -457,11 +457,11 @@ export default function Math3DViewer({
               title={isAutoRotate ? "Pause 3D rotation" : "Auto-rotate 3D scene"}
               className={`px-3 py-1.5 rounded-2xl text-xs font-bold border backdrop-blur-md transition-all cursor-pointer flex items-center gap-1.5 shadow-md ${
                 isAutoRotate
-                  ? 'bg-indigo-950/80 border-indigo-500/50 text-indigo-200 shadow-indigo-950/50'
-                  : 'bg-slate-950/70 border-slate-800 text-slate-400 hover:text-white'
+                  ? 'bg-emerald-950/80 border-emerald-600/50 text-emerald-200 shadow-chalk-950/50'
+                  : 'bg-chalk-900/70 border-chalk-800 text-chalk-400 hover:text-chalk-100'
               }`}
             >
-              {isAutoRotate ? <Pause className="w-3.5 h-3.5 text-indigo-400" /> : <Play className="w-3.5 h-3.5" />}
+              {isAutoRotate ? <Pause className="w-3.5 h-3.5 text-emerald-400" /> : <Play className="w-3.5 h-3.5" />}
               <span className="text-[11px]">{isAutoRotate ? 'Orbiting' : 'Paused'}</span>
             </button>
 
@@ -470,11 +470,11 @@ export default function Math3DViewer({
               title="Toggle wireframe rendering"
               className={`px-3 py-1.5 rounded-2xl text-xs font-bold border backdrop-blur-md transition-all cursor-pointer flex items-center gap-1.5 shadow-md ${
                 wireframe
-                  ? 'bg-amber-950/80 border-amber-500/50 text-amber-200 shadow-amber-950/50'
-                  : 'bg-slate-950/70 border-slate-800 text-slate-400 hover:text-white'
+                  ? 'bg-emerald-950/80 border-emerald-600/50 text-emerald-200 shadow-chalk-950/50'
+                  : 'bg-chalk-900/70 border-chalk-800 text-chalk-400 hover:text-chalk-100'
               }`}
             >
-              <Layers className="w-3.5 h-3.5 text-amber-400" />
+              <Layers className="w-3.5 h-3.5 text-emerald-400" />
               <span className="text-[11px]">Wireframe</span>
             </button>
           </div>
@@ -502,38 +502,38 @@ export default function Math3DViewer({
           handleZoom(e.deltaY * 0.005);
         }}
       >
-        {/* Subtle holographic radial glow behind the 3D model */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.12),transparent_70%)] pointer-events-none" />
+        {/* Subtle radial glow behind the 3D model */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.1),transparent_70%)] pointer-events-none" />
 
         <canvas ref={canvasRef} className="w-full h-full block relative z-10" />
 
         {/* Floating Camera Controls Widget */}
-        <div className="absolute top-14 right-3 flex flex-col gap-1.5 bg-slate-950/75 backdrop-blur-md p-1.5 rounded-2xl border border-slate-800/80 shadow-xl z-20">
+        <div className="absolute top-14 right-3 flex flex-col gap-1.5 bg-chalk-900/85 backdrop-blur-md p-1.5 rounded-2xl border border-chalk-700/60 shadow-xl z-20">
           <button
             onClick={() => handleZoom(-1.2)}
             title="Zoom In"
-            className="p-2 rounded-xl bg-slate-900/80 hover:bg-indigo-600 text-slate-300 hover:text-white transition-colors cursor-pointer"
+            className="p-2 rounded-xl bg-chalk-950/80 hover:bg-emerald-700 text-chalk-300 hover:text-white transition-colors cursor-pointer"
           >
             <ZoomIn className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => handleZoom(1.2)}
             title="Zoom Out"
-            className="p-2 rounded-xl bg-slate-900/80 hover:bg-indigo-600 text-slate-300 hover:text-white transition-colors cursor-pointer"
+            className="p-2 rounded-xl bg-chalk-950/80 hover:bg-emerald-700 text-chalk-300 hover:text-white transition-colors cursor-pointer"
           >
             <ZoomOut className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={handleResetCamera}
             title="Reset Camera Angle"
-            className="p-2 rounded-xl bg-slate-900/80 hover:bg-amber-600 text-slate-300 hover:text-white transition-colors cursor-pointer"
+            className="p-2 rounded-xl bg-chalk-950/80 hover:bg-emerald-700 text-chalk-300 hover:text-white transition-colors cursor-pointer"
           >
             <RotateCw className="w-3.5 h-3.5" />
           </button>
         </div>
 
         {/* Live Mathematical Formulas & Realtime HUD Overlay */}
-        <div className="absolute bottom-20 left-3 max-w-[280px] sm:max-w-xs bg-slate-950/80 backdrop-blur-md p-3 rounded-2xl border border-slate-800/80 text-xs text-slate-300 shadow-xl z-20 pointer-events-auto">
+        <div className="absolute bottom-20 left-3 max-w-[280px] sm:max-w-xs bg-chalk-950/85 backdrop-blur-md p-3 rounded-2xl border border-chalk-700/60 text-xs text-chalk-300 shadow-xl z-20 pointer-events-auto">
           {mode === 'vectors' && (
             <div className="space-y-1.5 font-mono">
               <div className="flex items-center justify-between text-[11px] font-bold">
@@ -541,17 +541,17 @@ export default function Math3DViewer({
                 <span className="text-amber-400">|b| = {vectorBLen}</span>
                 <span className="text-indigo-400">θ = {vectorAngle}°</span>
               </div>
-              <div className="p-2 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
+              <div className="p-2 rounded-xl bg-chalk-900/90 border border-chalk-800 space-y-1">
                 <p className="text-[11px] text-purple-300 font-bold flex items-center justify-between">
                   <span>|a × b| =</span>
                   <span className="text-purple-400">{crossMagnitude} u²</span>
                 </p>
-                <p className="text-[10px] text-slate-400 flex items-center justify-between">
+                <p className="text-[10px] text-chalk-400 flex items-center justify-between">
                   <span>a · b =</span>
                   <span className="text-emerald-400 font-semibold">{dotProduct}</span>
                 </p>
               </div>
-              <p className="text-[9px] text-slate-400 leading-tight">
+              <p className="text-[9px] text-chalk-400 leading-tight">
                 Direction follows the Right-Hand Rule along normal axis.
               </p>
             </div>
@@ -563,10 +563,10 @@ export default function Math3DViewer({
                 <Sparkles className="w-3 h-3 text-amber-400" />
                 <span>Hyperbolic Paraboloid</span>
               </div>
-              <p className="text-[11px] text-white font-bold bg-slate-900/90 p-1.5 rounded-lg border border-slate-800">
+              <p className="text-[11px] text-white font-bold bg-chalk-900/90 p-1.5 rounded-lg border border-chalk-800">
                 z = (x² - y²) / 2.5
               </p>
-              <p className="text-[10px] text-slate-400">
+              <p className="text-[10px] text-chalk-400">
                 Origin (0,0,0) is a true Saddle Point!
               </p>
             </div>
@@ -575,7 +575,7 @@ export default function Math3DViewer({
           {mode === 'plane' && (
             <div className="space-y-1.5 font-mono">
               <span className="text-[11px] text-indigo-400 font-bold">3D Plane & Normal Vector</span>
-              <p className="text-[11px] text-white font-bold bg-slate-900/90 p-1.5 rounded-lg border border-slate-800">
+              <p className="text-[11px] text-white font-bold bg-chalk-900/90 p-1.5 rounded-lg border border-chalk-800">
                 2x + 3y + z = 6
               </p>
               <p className="text-[10px] text-emerald-400">
@@ -587,7 +587,7 @@ export default function Math3DViewer({
           {mode === 'polyhedron' && (
             <div className="space-y-1 font-mono">
               <span className="text-[11px] text-indigo-400 font-bold">3D Spatial Symmetry</span>
-              <p className="text-[10px] text-slate-400">
+              <p className="text-[10px] text-chalk-400">
                 Euler's Formula: V - E + F = 2. Visualizing rotational symmetry planes.
               </p>
             </div>
@@ -596,21 +596,21 @@ export default function Math3DViewer({
 
         {/* Bottom Floating Parameter Adjuster Bar - Seamlessly integrated */}
         {showControls && mode === 'vectors' && (
-          <div className="absolute bottom-3 left-3 right-3 p-3 bg-slate-950/85 backdrop-blur-md rounded-2xl border border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs z-20 shadow-xl">
+          <div className="absolute bottom-3 left-3 right-3 p-3 bg-chalk-950/90 backdrop-blur-md rounded-2xl border border-chalk-700/60 flex flex-wrap items-center justify-between gap-3 text-xs z-20 shadow-xl">
             <div className="flex items-center gap-2.5 flex-1 min-w-[170px]">
-              <span className="font-mono font-bold text-slate-400 text-[10px] shrink-0">Angle θ ({vectorAngle}°):</span>
+              <span className="font-mono font-semibold text-chalk-400 text-[10px] shrink-0 tnum">Angle θ ({vectorAngle}°):</span>
               <input
                 type="range"
                 min="10"
                 max="170"
                 value={vectorAngle}
                 onChange={(e) => setVectorAngle(Number(e.target.value))}
-                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                className="w-full h-1.5 bg-chalk-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
               />
             </div>
 
             <div className="flex items-center gap-2.5 min-w-[140px]">
-              <span className="font-mono font-bold text-slate-400 text-[10px] shrink-0">Vector b ({vectorBLen}):</span>
+              <span className="font-mono font-semibold text-chalk-400 text-[10px] shrink-0 tnum">Vector b ({vectorBLen}):</span>
               <input
                 type="range"
                 min="1.5"
@@ -618,7 +618,7 @@ export default function Math3DViewer({
                 step="0.1"
                 value={vectorBLen}
                 onChange={(e) => setVectorBLen(Number(e.target.value))}
-                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                className="w-full h-1.5 bg-chalk-800 rounded-lg appearance-none cursor-pointer accent-amber-500"
               />
             </div>
 
@@ -628,7 +628,7 @@ export default function Math3DViewer({
                 setVectorBLen(3.0);
                 setVectorALen(3.0);
               }}
-              className="px-2.5 py-1 rounded-xl bg-slate-900 hover:bg-indigo-950 border border-slate-800 hover:border-indigo-700 text-slate-300 hover:text-white text-[10px] font-mono transition-colors cursor-pointer shrink-0"
+              className="px-2.5 py-1 rounded-full bg-chalk-900 hover:bg-emerald-800 border border-chalk-700 hover:border-emerald-700 text-chalk-300 hover:text-white text-[10px] font-mono transition-colors cursor-pointer shrink-0"
             >
               Set 90°
             </button>

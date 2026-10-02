@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Maximize2, X, Sparkles, LayoutGrid, Compass, Camera } from 'lucide-react';
+import { Maximize2, X } from 'lucide-react';
 
 interface GalleryItem {
   id: string;
@@ -72,26 +72,27 @@ export default function Gallery({ items }: GalleryProps) {
   return (
     <section
       id="gallery"
-      className="py-20 md:py-28 bg-slate-50/70 dark:bg-[#07090e] math-grid transition-colors duration-300 relative border-t border-slate-200/50 dark:border-slate-800"
+      className="py-20 md:py-28 bg-paper dark:bg-chalk-950 math-grid transition-colors duration-300 relative border-t border-chalk-200/60 dark:border-chalk-800/70"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <span className="text-xs font-mono font-bold tracking-widest text-indigo-600 dark:text-indigo-400 uppercase">
-            // CLASSROOM ENVIRONMENT
-          </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 dark:text-white tracking-tight mt-1">
-            Life Inside Rehman Maths Classes
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
+          className="max-w-2xl mb-10"
+        >
+          <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] leading-[1.1] font-bold text-chalk-950 dark:text-chalk-50 tracking-tight">
+            Life inside Rehman Maths Classes
           </h2>
-          <p className="text-slate-600 dark:text-slate-400 mt-2 text-sm sm:text-base">
+          <p className="text-chalk-600 dark:text-chalk-300 mt-4 text-sm sm:text-base leading-relaxed max-w-[60ch]">
             Take a visual tour of our problem-solving sessions, formula marathons, and doubt counters in Shastri Nagar, Ghaziabad.
           </p>
-          <div className="w-16 h-1 bg-gradient-to-r from-indigo-600 via-violet-600 to-amber-500 mx-auto mt-4 rounded-full" />
-        </div>
+        </motion.div>
 
-        {/* Categories Tab */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12 max-w-md mx-auto bg-white dark:bg-slate-900/80 p-1.5 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-800 backdrop-blur-md">
+        {/* Category filters */}
+        <div className="flex flex-wrap justify-start gap-2 mb-10 max-w-md p-1.5 rounded-full bg-white dark:bg-chalk-900/80 border border-chalk-200/80 dark:border-chalk-800 shadow-[0_10px_30px_-20px_rgba(10,15,12,0.3)]">
           {[
             { id: 'All', label: 'All Photos' },
             { id: 'Classroom', label: 'Classrooms' },
@@ -101,10 +102,10 @@ export default function Gallery({ items }: GalleryProps) {
             <button
               key={tab.id}
               onClick={() => setFilter(tab.id as any)}
-              className={`px-4 sm:px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              className={`px-4 py-2 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
                 filter === tab.id
-                  ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-600/20'
-                  : 'text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-white'
+                  ? 'bg-chalk-950 dark:bg-chalk-100 text-white dark:text-chalk-950'
+                  : 'text-chalk-600 dark:text-chalk-300 hover:text-emerald-700 dark:hover:text-emerald-400'
               }`}
             >
               {tab.label}
@@ -112,62 +113,60 @@ export default function Gallery({ items }: GalleryProps) {
           ))}
         </div>
 
-        {/* Gallery Grid */}
+        {/* Photo grid */}
         <motion.div
           layout
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10"
         >
           <AnimatePresence mode="popLayout">
             {filteredItems.map((item) => (
-              <motion.div
+              <motion.figure
                 key={item.id}
                 layout
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.97 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                className="bg-white/90 dark:bg-slate-900/90 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:border-indigo-400/50 group cursor-pointer relative backdrop-blur-xs transition-all"
+                exit={{ opacity: 0, scale: 0.97 }}
+                transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+                className="group cursor-pointer"
                 onClick={() => setActiveItemForLightBox(item)}
               >
-                {/* Photo box with overlay */}
-                <div className="relative aspect-video overflow-hidden bg-slate-100 dark:bg-slate-950">
+                <div className="relative aspect-4/3 overflow-hidden rounded-2xl bg-chalk-100 dark:bg-chalk-900 ring-1 ring-chalk-200/80 dark:ring-chalk-800 group-hover:ring-emerald-500/50 transition-all duration-500">
                   <img
                     src={item.imgUrl}
                     alt={item.title}
                     referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700 [transition-timing-function:cubic-bezier(0.32,0.72,0,1)]"
                   />
-                  
-                  {/* Hover dark cover */}
-                  <div className="absolute inset-0 bg-slate-950/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-xs">
-                    <div className="p-3 rounded-2xl bg-white/20 backdrop-blur-md text-white border border-white/30 transform translate-y-2 group-hover:translate-y-0 transition-transform">
+
+                  <div className="absolute inset-0 bg-chalk-950/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                    <div className="p-3 rounded-full bg-white/20 backdrop-blur-md text-white border border-white/30 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
                       <Maximize2 className="w-5 h-5" />
                     </div>
                   </div>
-
-                  <span className="absolute top-3.5 right-3.5 text-[10px] font-mono font-bold uppercase tracking-wider bg-slate-950/80 backdrop-blur text-amber-300 px-2.5 py-1 rounded-lg border border-white/15">
-                    {item.category}
-                  </span>
                 </div>
 
-                {/* Details caption */}
-                <div className="p-5">
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                {/* Caption below the image */}
+                <figcaption className="px-1 mt-4">
+                  <p className="text-[10px] font-mono font-semibold uppercase tracking-[0.16em] text-emerald-700 dark:text-emerald-400">
+                    {item.category}
+                  </p>
+                  <h3 className="text-base font-bold text-chalk-950 dark:text-chalk-50 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors mt-1">
                     {item.title}
                   </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                  <p className="text-xs text-chalk-500 dark:text-chalk-400 mt-1.5 line-clamp-2 leading-relaxed">
                     {item.desc}
                   </p>
-                </div>
-              </motion.div>
+                </figcaption>
+              </motion.figure>
             ))}
           </AnimatePresence>
         </motion.div>
 
-        {/* Modal Lightbox */}
+        {/* Lightbox */}
         <AnimatePresence>
           {activeItemForLightBox && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-chalk-950/85 backdrop-blur-sm">
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -177,12 +176,13 @@ export default function Gallery({ items }: GalleryProps) {
               />
 
               <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                className="bg-white dark:bg-slate-900 max-w-3xl w-full rounded-3xl overflow-hidden shadow-2xl relative z-10 border border-slate-200 dark:border-slate-800"
+                initial={{ scale: 0.95, opacity: 0, y: 12 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.95, opacity: 0, y: 12 }}
+                transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+                className="bg-white dark:bg-chalk-900 max-w-3xl w-full rounded-[1.75rem] overflow-hidden shadow-2xl relative z-10 border border-chalk-200/70 dark:border-chalk-800"
               >
-                <div className="relative aspect-video bg-black">
+                <div className="relative aspect-video bg-chalk-950">
                   <img
                     src={activeItemForLightBox.imgUrl}
                     alt={activeItemForLightBox.title}
@@ -191,23 +191,24 @@ export default function Gallery({ items }: GalleryProps) {
                   />
                   <button
                     onClick={() => setActiveItemForLightBox(null)}
-                    className="absolute top-4 right-4 bg-slate-950/70 text-white p-2 rounded-full hover:bg-slate-900 transition-colors cursor-pointer border border-white/20"
+                    className="absolute top-4 right-4 bg-chalk-950/70 text-white p-2 rounded-full hover:bg-chalk-900 transition-colors cursor-pointer border border-white/20"
+                    aria-label="Close"
                   >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
 
-                <div className="p-6">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 px-2.5 py-0.5 rounded-full">
+                <div className="p-6 sm:p-7">
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <span className="text-[10px] font-mono font-semibold uppercase tracking-[0.16em] text-emerald-700 dark:text-emerald-400">
                       {activeItemForLightBox.category}
                     </span>
-                    <span className="text-xs text-slate-400">Rehman Mathematics Classes • Ghaziabad</span>
+                    <span className="text-xs text-chalk-400">Rehman Mathematics Classes • Ghaziabad</span>
                   </div>
-                  <h4 className="text-xl font-black text-slate-900 dark:text-white mt-1">
+                  <h4 className="text-xl font-bold text-chalk-950 dark:text-chalk-50 tracking-tight">
                     {activeItemForLightBox.title}
                   </h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">
+                  <p className="text-sm text-chalk-500 dark:text-chalk-300 mt-2 leading-relaxed">
                     {activeItemForLightBox.desc}
                   </p>
                 </div>
