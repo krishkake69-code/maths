@@ -20,7 +20,7 @@ interface AdminPanelProps {
   onDataChange?: () => void;
 }
 
-export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanelProps) {
+export default function AdminPanel({ isOpen, onClose, data, onSave, onDataChange }: AdminPanelProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
