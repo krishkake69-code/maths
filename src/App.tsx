@@ -187,7 +187,25 @@ export default function App() {
       <Footer onAdminClick={() => setIsAdminOpen(true)} contactInfo={dynamicData?.contactInfo} />
       <FloatingWhatsApp phone={dynamicData?.contactInfo?.phone} />
       <ErrorBoundary>
-        <AdminPanel isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} data={dynamicData} onSave={handleSaveContent} />
+        <AdminPanel 
+          isOpen={isAdminOpen} 
+          onClose={() => setIsAdminOpen(false)} 
+          data={dynamicData} 
+          onSave={handleSaveContent}
+          onDataChange={() => {
+            fetch('/api/content', { cache: 'no-store' })
+              .then(async (response) => {
+                const data = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(data.error || `Content API returned ${response.status}`);
+                setDynamicData(normalizeContentData(data));
+                setSyncError('');
+              })
+              .catch((error) => {
+                console.error('Failed to load live content:', error);
+                setSyncError('Live content could not be synced. Showing the last saved content.');
+              });
+          }}
+        />
       </ErrorBoundary>
       <ErrorBoundary>
         <StudentPortal isOpen={isStudentOpen} onClose={() => setIsStudentOpen(false)} />

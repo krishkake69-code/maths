@@ -17,6 +17,7 @@ interface AdminPanelProps {
   onClose: () => void;
   data: DynamicData;
   onSave: (updatedData: DynamicData) => Promise<{ success: boolean; error?: string }>;
+  onDataChange?: () => void;
 }
 
 export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanelProps) {
@@ -2036,7 +2037,7 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
 
                 {/* Tab 7: Students Management */}
                 {activeTab === 'students' && (
-                  <AdminStudents onAuthError={handleLogout} />
+                  <AdminStudents onAuthError={handleLogout} onStudentChange={onDataChange} />
                 )}
 
                 {/* Tab 8: Attendance */}

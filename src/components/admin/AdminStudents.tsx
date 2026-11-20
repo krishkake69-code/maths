@@ -17,6 +17,7 @@ import type { BatchId, Student } from '../../types';
 
 interface Props {
   onAuthError: () => void;
+  onStudentChange?: () => void;
 }
 
 const emptyForm = {
@@ -128,6 +129,7 @@ export default function AdminStudents({ onAuthError }: Props) {
       setForm(emptyForm);
       setEditing(null);
       load();
+      onStudentChange?.();
     } catch (err: any) {
       if (err?.status === 401) return onAuthError();
       setError(err?.message || 'Could not save student.');
@@ -147,6 +149,7 @@ export default function AdminStudents({ onAuthError }: Props) {
       console.log('[AdminStudents] Delete successful, reloading...');
       flash('Student removed.');
       load();
+      onStudentChange?.(); // Notify parent to refresh
     } catch (err: any) {
       console.error('[AdminStudents] Delete failed:', err);
       if (err?.status === 401) return onAuthError();
