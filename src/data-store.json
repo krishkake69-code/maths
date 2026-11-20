@@ -304,34 +304,7 @@
   ],
   "inquiries": [],
   "newsletter": [],
-  "students": [
-    {
-      "id": "stu_1795174989318_744051ca",
-      "username": "aarav11",
-      "passwordHash": "student123",
-      "name": "Aarav Sharma",
-      "class": "11th",
-      "batchId": "MON_TUE_WED_11",
-      "phone": "",
-      "email": "",
-      "subjects": [],
-      "createdAt": "2026-11-20T11:43:09.318Z",
-      "updatedAt": "2026-11-20T11:43:09.318Z"
-    },
-    {
-      "id": "stu_1795175290688_814757aa",
-      "username": "priya12",
-      "passwordHash": "$2b$10$Af.F/Q8GDxBb4wB02NNw2eKa7gKx68FiVKN6ntZnG/Ic5BXuWOg/G",
-      "name": "Priya Singh",
-      "class": "12th",
-      "batchId": "MON_TUE_WED_12",
-      "phone": "",
-      "email": "",
-      "subjects": [],
-      "createdAt": "2026-11-20T11:48:10.688Z",
-      "updatedAt": "2026-11-20T11:48:10.688Z"
-    }
-  ],
+  "students": [],
   "calendar": [
     {
       "id": "ev_1795175059492_a5bd2978",

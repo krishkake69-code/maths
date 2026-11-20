@@ -45,9 +45,12 @@ export default function AdminStudents({ onAuthError }: Props) {
     setLoading(true);
     setError('');
     try {
+      console.log('[AdminStudents] Loading students...');
       const res = await adminApi.get('/api/admin/students');
+      console.log('[AdminStudents] Load response:', res);
       setStudents(res.students || []);
     } catch (err: any) {
+      console.error('[AdminStudents] Load failed:', err);
       if (err?.status === 401) return onAuthError();
       setError(err?.message || 'Could not load students.');
     } finally {
@@ -136,10 +139,13 @@ export default function AdminStudents({ onAuthError }: Props) {
     if (!window.confirm(`Remove ${s.name} (@${s.username})? This deletes their records too.`)) return;
     setError('');
     try {
+      console.log('[AdminStudents] Deleting student:', s.id, s.name);
       await adminApi.del(`/api/admin/students/${s.id}`);
+      console.log('[AdminStudents] Delete successful, reloading...');
       flash('Student removed.');
       load();
     } catch (err: any) {
+      console.error('[AdminStudents] Delete failed:', err);
       if (err?.status === 401) return onAuthError();
       setError(err?.message || 'Could not remove student.');
     }
