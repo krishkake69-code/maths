@@ -313,10 +313,11 @@ export default function AdminStudents({ onAuthError }: Props) {
             </Field>
             <Field label="Batch *">
               <select
-                value={form.batchId}
+                value={BATCH_IDS.filter((id) => BATCH_INFO[id].className === form.class).includes(form.batchId) ? form.batchId : ''}
                 onChange={(e) => setForm({ ...form, batchId: e.target.value as BatchId })}
                 className={inputCls}
               >
+                <option value="">-- Select Batch --</option>
                 {BATCH_IDS.filter((id) => BATCH_INFO[id].className === form.class).map((id) => (
                   <option key={id} value={id}>
                     {BATCH_INFO[id].name} ({BATCH_INFO[id].days})
