@@ -40,6 +40,7 @@ export default function AdminCalendar({ onAuthError }: Props) {
   const [form, setForm] = useState(emptyForm);
   const [editing, setEditing] = useState<CalendarEvent | null>(null);
   const [yearFilter, setYearFilter] = useState<string>('');
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -120,6 +121,8 @@ export default function AdminCalendar({ onAuthError }: Props) {
 
   const remove = async (e: CalendarEvent) => {
     if (!window.confirm(`Delete "${e.title}"?`)) return;
+    if (deleting === e.id) return;
+    setDeleting(e.id);
     setError('');
     try {
       await adminApi.del(`/api/admin/calendar/${e.id}`);
@@ -128,6 +131,8 @@ export default function AdminCalendar({ onAuthError }: Props) {
     } catch (err: any) {
       if (err?.status === 401) return onAuthError();
       setError(err?.message || 'Could not delete event.');
+    } finally {
+      setDeleting(null);
     }
   };
 
@@ -315,7 +320,8 @@ export default function AdminCalendar({ onAuthError }: Props) {
                   </button>
                   <button
                     onClick={() => remove(e)}
-                    className="rounded-lg p-2 text-ink-soft hover:text-red-600 hover:bg-red-50 transition-colors"
+                    disabled={deleting === e.id}
+                    className="rounded-lg p-2 text-ink-soft hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     title="Delete"
                   >
                     <Trash2 className="h-4 w-4" />

@@ -40,6 +40,7 @@ export default function AdminStudents({ onAuthError }: Props) {
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState<Student | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -137,6 +138,8 @@ export default function AdminStudents({ onAuthError }: Props) {
 
   const remove = async (s: Student) => {
     if (!window.confirm(`Remove ${s.name} (@${s.username})? This deletes their records too.`)) return;
+    if (deleting === s.id) return; // Prevent double-click
+    setDeleting(s.id);
     setError('');
     try {
       console.log('[AdminStudents] Deleting student:', s.id, s.name);
@@ -148,6 +151,8 @@ export default function AdminStudents({ onAuthError }: Props) {
       console.error('[AdminStudents] Delete failed:', err);
       if (err?.status === 401) return onAuthError();
       setError(err?.message || 'Could not remove student.');
+    } finally {
+      setDeleting(null);
     }
   };
 
@@ -395,7 +400,8 @@ export default function AdminStudents({ onAuthError }: Props) {
                         </button>
                         <button
                           onClick={() => remove(s)}
-                          className="rounded-lg p-2 text-ink-soft hover:text-red-600 hover:bg-red-50 transition-colors"
+                          disabled={deleting === s.id}
+                          className="rounded-lg p-2 text-ink-soft hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                           title="Remove"
                         >
                           <Trash2 className="h-4 w-4" />

@@ -42,6 +42,7 @@ export default function AdminMarks({ onAuthError }: Props) {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [editing, setEditing] = useState<MarkRecord | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   const loadStudents = async () => {
     try {
@@ -148,6 +149,8 @@ export default function AdminMarks({ onAuthError }: Props) {
 
   const remove = async (m: MarkRecord) => {
     if (!window.confirm(`Delete "${m.testName}" for this student?`)) return;
+    if (deleting === m.id) return;
+    setDeleting(m.id);
     setError('');
     try {
       await adminApi.del(`/api/admin/marks/${m.id}?studentId=${encodeURIComponent(studentId)}`);
@@ -156,6 +159,8 @@ export default function AdminMarks({ onAuthError }: Props) {
     } catch (err: any) {
       if (err?.status === 401) return onAuthError();
       setError(err?.message || 'Could not delete mark.');
+    } finally {
+      setDeleting(null);
     }
   };
 
@@ -366,7 +371,8 @@ export default function AdminMarks({ onAuthError }: Props) {
                               </button>
                               <button
                                 onClick={() => remove(m)}
-                                className="rounded-lg p-2 text-ink-soft hover:text-red-600 hover:bg-red-50 transition-colors"
+                                disabled={deleting === m.id}
+                                className="rounded-lg p-2 text-ink-soft hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                                 title="Delete"
                               >
                                 <Trash2 className="h-4 w-4" />
