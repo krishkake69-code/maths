@@ -14,6 +14,7 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import AdminPanel from './components/AdminPanel';
+import StudentPortal from './components/StudentPortal';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import initialData from './data-store.json';
 
@@ -82,6 +83,7 @@ function normalizeContentData(value: unknown) {
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [isStudentOpen, setIsStudentOpen] = useState(false);
   const [syncError, setSyncError] = useState('');
   const [dynamicData, setDynamicData] = useState<any>(() => normalizeContentData(initialData));
 
@@ -158,7 +160,7 @@ export default function App() {
         </div>
       )}
       <AdmissionBanner message={dynamicData?.admissionMessage} />
-      <Navbar darkMode={darkMode} setDarkMode={setDarkMode} onAdminClick={() => setIsAdminOpen(true)} />
+      <Navbar darkMode={darkMode} setDarkMode={setDarkMode} onAdminClick={() => setIsAdminOpen(true)} onStudentClick={() => setIsStudentOpen(true)} />
       <ErrorBoundary
           fallback={
             <main id="main-content" className="min-h-[60vh] px-4 py-24 text-center">
@@ -186,6 +188,9 @@ export default function App() {
       <FloatingWhatsApp phone={dynamicData?.contactInfo?.phone} />
       <ErrorBoundary>
         <AdminPanel isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} data={dynamicData} onSave={handleSaveContent} />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <StudentPortal isOpen={isStudentOpen} onClose={() => setIsStudentOpen(false)} />
       </ErrorBoundary>
     </div>
   );

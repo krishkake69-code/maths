@@ -3,9 +3,14 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   Lock, LogOut, Save, ShieldCheck, Check, AlertCircle, X, Plus, Trash2, 
   Settings, Megaphone, BarChart3, GraduationCap, Trophy, MessageSquare, Image, ArrowRight, MapPin,
-  Mail, Inbox, RefreshCw, CheckCircle2, Phone, Sparkles, Sliders, Eye
+  Mail, Inbox, RefreshCw, CheckCircle2, Phone, Sparkles, Sliders, Eye,
+  Users, CalendarCheck2, BookOpenCheck, CalendarPlus
 } from 'lucide-react';
 import { Course, ResultItem, Testimonial, GalleryItem, DynamicData, StatsData, HeroData } from '../types';
+import AdminStudents from './admin/AdminStudents';
+import AdminAttendance from './admin/AdminAttendance';
+import AdminMarks from './admin/AdminMarks';
+import AdminCalendar from './admin/AdminCalendar';
 
 interface AdminPanelProps {
   isOpen: boolean;
@@ -36,7 +41,7 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
   
   // Local editable copies of data
   const [localData, setLocalData] = useState<DynamicData | null>(null);
-  const [activeTab, setActiveTab] = useState<'general' | 'stats' | 'courses' | 'results' | 'testimonials' | 'gallery' | 'mailbox'>('general');
+  const [activeTab, setActiveTab] = useState<'general' | 'stats' | 'courses' | 'results' | 'testimonials' | 'gallery' | 'mailbox' | 'students' | 'attendance' | 'marks' | 'calendar'>('general');
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [saveError, setSaveError] = useState('');
@@ -642,6 +647,54 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                       {inquiries.filter((inq: any) => !inq.read).length} NEW
                     </span>
                   )}
+                </button>
+
+                <button 
+                  onClick={() => setActiveTab('students')}
+                  className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+                    activeTab === 'students' 
+                      ? 'bg-chalk-950 text-white shadow-md' 
+                      : 'hover:bg-chalk-200 dark:hover:bg-chalk-800 text-chalk-500 dark:text-chalk-400'
+                  }`}
+                >
+                  <Users className="w-4 h-4 shrink-0" />
+                  Students
+                </button>
+
+                <button 
+                  onClick={() => setActiveTab('attendance')}
+                  className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+                    activeTab === 'attendance' 
+                      ? 'bg-chalk-950 text-white shadow-md' 
+                      : 'hover:bg-chalk-200 dark:hover:bg-chalk-800 text-chalk-500 dark:text-chalk-400'
+                  }`}
+                >
+                  <CalendarCheck2 className="w-4 h-4 shrink-0" />
+                  Attendance
+                </button>
+
+                <button 
+                  onClick={() => setActiveTab('marks')}
+                  className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+                    activeTab === 'marks' 
+                      ? 'bg-chalk-950 text-white shadow-md' 
+                      : 'hover:bg-chalk-200 dark:hover:bg-chalk-800 text-chalk-500 dark:text-chalk-400'
+                  }`}
+                >
+                  <BookOpenCheck className="w-4 h-4 shrink-0" />
+                  Marks
+                </button>
+
+                <button 
+                  onClick={() => setActiveTab('calendar')}
+                  className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+                    activeTab === 'calendar' 
+                      ? 'bg-chalk-950 text-white shadow-md' 
+                      : 'hover:bg-chalk-200 dark:hover:bg-chalk-800 text-chalk-500 dark:text-chalk-400'
+                  }`}
+                >
+                  <CalendarPlus className="w-4 h-4 shrink-0" />
+                  Calendar
                 </button>
 
                 <div className="hidden md:block flex-1 border-t border-chalk-200 dark:border-chalk-800 my-4" />
@@ -1980,6 +2033,26 @@ export default function AdminPanel({ isOpen, onClose, data, onSave }: AdminPanel
                         )}
                       </div>
                     )}
+
+                {/* Tab 7: Students Management */}
+                {activeTab === 'students' && (
+                  <AdminStudents onAuthError={handleLogout} />
+                )}
+
+                {/* Tab 8: Attendance */}
+                {activeTab === 'attendance' && (
+                  <AdminAttendance onAuthError={handleLogout} />
+                )}
+
+                {/* Tab 9: Marks */}
+                {activeTab === 'marks' && (
+                  <AdminMarks onAuthError={handleLogout} />
+                )}
+
+                {/* Tab 10: Calendar */}
+                {activeTab === 'calendar' && (
+                  <AdminCalendar onAuthError={handleLogout} />
+                )}
                   </>
                 )}
               </div>

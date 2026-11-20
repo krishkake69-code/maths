@@ -1,5 +1,5 @@
 import React, { useState, useEffect, MouseEvent } from 'react';
-import { Sun, Moon, Lock } from 'lucide-react';
+import { Sun, Moon, Lock, User } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'motion/react';
 import Button3D from './Button3D';
 
@@ -7,9 +7,10 @@ interface NavbarProps {
   darkMode: boolean;
   setDarkMode: (val: boolean) => void;
   onAdminClick?: () => void;
+  onStudentClick?: () => void;
 }
 
-export default function Navbar({ darkMode, setDarkMode, onAdminClick }: NavbarProps) {
+export default function Navbar({ darkMode, setDarkMode, onAdminClick, onStudentClick }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
@@ -154,6 +155,16 @@ export default function Navbar({ darkMode, setDarkMode, onAdminClick }: NavbarPr
                   </button>
                 )}
 
+                {onStudentClick && (
+                  <button
+                    onClick={onStudentClick}
+                    className="p-2 rounded-full text-chalk-500 dark:text-chalk-400 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-chalk-100 dark:hover:bg-chalk-900 transition-colors cursor-pointer"
+                    title="Student Portal"
+                  >
+                    <User className="w-4 h-4" />
+                  </button>
+                )}
+
                 <Button3D
                   variant="primary"
                   size="sm"
@@ -183,6 +194,16 @@ export default function Navbar({ darkMode, setDarkMode, onAdminClick }: NavbarPr
                   title="Admin Control Center"
                 >
                   <Lock className="w-4 h-4" />
+                </button>
+              )}
+
+              {onStudentClick && (
+                <button
+                  onClick={onStudentClick}
+                  className="p-2 rounded-full text-chalk-600 dark:text-chalk-300 hover:bg-chalk-100 dark:hover:bg-chalk-900 transition-colors cursor-pointer"
+                  title="Student Portal"
+                >
+                  <User className="w-4 h-4" />
                 </button>
               )}
 

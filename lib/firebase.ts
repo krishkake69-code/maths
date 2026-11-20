@@ -1,4 +1,6 @@
 import { createSign } from 'crypto';
+import fs from 'fs';
+import path from 'path';
 
 function normalizeEnvValue(value: string | undefined) {
   if (!value) return undefined;
@@ -112,9 +114,36 @@ function toFirestoreValue(value: any): FirestoreValue {
   return { nullValue: null };
 }
 
+const dataFilePath = path.join(process.cwd(), 'src', 'data-store.json');
+
+function readFromFile() {
+  try {
+    if (fs.existsSync(dataFilePath)) {
+      const dataStr = fs.readFileSync(dataFilePath, 'utf8');
+      return JSON.parse(dataStr);
+    }
+  } catch (err) {
+    console.error('Error reading data file:', err);
+  }
+  return null;
+}
+
+function writeToFile(data: any) {
+  try {
+    fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2), 'utf8');
+    return true;
+  } catch (err) {
+    console.error('Error writing data file:', err);
+    return false;
+  }
+}
+
 export async function readDataStore(): Promise<any> {
   const base = getRestBase();
-  if (!base) return null;
+  if (!base) {
+    // Fallback to local file for development
+    return readFromFile();
+  }
 
   const token = await getAccessToken();
   const res = await fetch(`${base}/appData/content`, {
@@ -137,7 +166,10 @@ export async function readDataStore(): Promise<any> {
 
 export async function writeDataStore(data: Record<string, unknown>) {
   const base = getRestBase();
-  if (!base) throw new Error('Firebase is not configured');
+  if (!base) {
+    // Fallback to local file for development
+    return writeToFile(data);
+  }
 
   const token = await getAccessToken();
   const fields: Record<string, FirestoreValue> = {};
