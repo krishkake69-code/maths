@@ -81,6 +81,8 @@ export default function AdminStudents({ onAuthError }: Props) {
     return matchesQuery && matchesBatch;
   });
 
+  console.log('[AdminStudents] filtered:', filtered.length, 'of', students.length);
+
   const counts = BATCH_IDS.reduce<Record<string, number>>((acc, id) => {
     acc[id] = students.filter((s) => s.batchId === id).length;
     return acc;
@@ -93,17 +95,25 @@ export default function AdminStudents({ onAuthError }: Props) {
   };
 
   const openEdit = (s: Student) => {
-    setForm({
-      username: s.username,
-      name: s.name,
-      password: '',
-      class: s.class,
-      batchId: s.batchId,
-      phone: s.phone || '',
-      email: s.email || '',
-    });
-    setEditing(s);
-    setShowForm(true);
+    console.log('[AdminStudents] openEdit called for:', s?.id, s?.name);
+    console.log('[AdminStudents] Student data:', { username: s?.username, class: s?.class, batchId: s?.batchId });
+    console.log('[AdminStudents] Available batches:', BATCH_IDS.map(id => ({ id, className: BATCH_INFO[id].className })));
+    try {
+      setForm({
+        username: s.username,
+        name: s.name,
+        password: '',
+        class: s.class,
+        batchId: s.batchId,
+        phone: s.phone || '',
+        email: s.email || '',
+      });
+      setEditing(s);
+      setShowForm(true);
+      console.log('[AdminStudents] openEdit completed - showForm should be true');
+    } catch (err) {
+      console.error('[AdminStudents] openEdit error:', err);
+    }
   };
 
   const submit = async () => {
@@ -161,10 +171,12 @@ export default function AdminStudents({ onAuthError }: Props) {
 
   // Keep the batch selector in sync with the chosen class.
   const onClassChange = (cls: '11th' | '12th') => {
+    console.log('[AdminStudents] onClassChange called:', cls);
     setForm((f) => {
       const currentBatch = BATCH_INFO[f.batchId];
       const stillValid = currentBatch && currentBatch.className === cls;
       const fallback = BATCH_IDS.find((id) => BATCH_INFO[id].className === cls)!;
+      console.log('[AdminStudents] Batch fallback:', fallback);
       return { ...f, class: cls, batchId: stillValid ? f.batchId : fallback };
     });
   };
