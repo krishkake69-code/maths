@@ -30,7 +30,7 @@ const emptyForm = {
   email: '',
 };
 
-export default function AdminStudents({ onAuthError }: Props) {
+export default function AdminStudents({ onAuthError, onStudentChange }: Props) {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');

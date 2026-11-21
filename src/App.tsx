@@ -37,7 +37,7 @@ function normalizeContentData(value: unknown) {
     const validCandidate = Array.isArray(candidate)
       ? candidate.filter((item) => item && typeof item === 'object' && !Array.isArray(item))
       : [];
-    return validCandidate.length > 0 ? validCandidate : fallback;
+    return Array.isArray(candidate) ? validCandidate : fallback;
   };
   const courses = objectArray('courses').map((course: RecordValue, index: number) => {
     const fallback = asRecord(Array.isArray(defaults.courses) ? defaults.courses[index] : undefined);
