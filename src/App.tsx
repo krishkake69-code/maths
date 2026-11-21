@@ -65,7 +65,7 @@ function normalizeContentData(value: unknown) {
     };
   });
 
-  return {
+  const result = {
     ...defaults,
     ...incoming,
     admissionMessage: asString(incoming.admissionMessage, asString(defaults.admissionMessage)),
@@ -78,6 +78,16 @@ function normalizeContentData(value: unknown) {
     testimonials: objectArray('testimonials'),
     gallery,
   };
+
+  // Operational collections are managed by their own APIs; never mix them into CMS content state
+  delete (result as any).students;
+  delete (result as any).calendar;
+  delete (result as any).attendance;
+  delete (result as any).marks;
+  delete (result as any).inquiries;
+  delete (result as any).newsletter;
+
+  return result;
 }
 
 export default function App() {

@@ -56,7 +56,14 @@ export default function AdminPanel({ isOpen, onClose, data, onSave, onDataChange
   // Load local editable copy when data is provided or panel opens
   useEffect(() => {
     if (data) {
-      setLocalData(JSON.parse(JSON.stringify(data)));
+      const cloned = JSON.parse(JSON.stringify(data));
+      delete cloned.students;
+      delete cloned.calendar;
+      delete cloned.attendance;
+      delete cloned.marks;
+      delete cloned.inquiries;
+      delete cloned.newsletter;
+      setLocalData(cloned);
     }
     
     // Check if token already exists in session/local storage
@@ -196,7 +203,15 @@ export default function AdminPanel({ isOpen, onClose, data, onSave, onDataChange
     setSaveError('');
 
     try {
-      const result = await onSave(localData);
+      const contentPayload = { ...localData };
+      delete (contentPayload as any).students;
+      delete (contentPayload as any).calendar;
+      delete (contentPayload as any).attendance;
+      delete (contentPayload as any).marks;
+      delete (contentPayload as any).inquiries;
+      delete (contentPayload as any).newsletter;
+
+      const result = await onSave(contentPayload);
       if (result.success) {
         setSaveStatus('success');
         setTimeout(() => setSaveStatus('idle'), 3000);
@@ -2064,9 +2079,16 @@ export default function AdminPanel({ isOpen, onClose, data, onSave, onDataChange
         {/* Modal Footer Controls */}
         {isAuthenticated && (
           <footer className="h-16 border-t border-chalk-200 dark:border-chalk-800 px-6 flex items-center justify-between bg-chalk-50 dark:bg-chalk-950/50 shrink-0">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-chalk-400">
-              Verify values and click save. Updates sync globally in real-time.
-            </span>
+            {['students', 'attendance', 'marks', 'calendar', 'mailbox'].includes(activeTab) ? (
+              <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
+                <Check className="w-4 h-4 shrink-0" />
+                Live Cloud Sync: Changes in {activeTab} are saved to the database immediately.
+              </span>
+            ) : (
+              <span className="text-[10px] font-bold uppercase tracking-wider text-chalk-400">
+                Verify values and click save. Updates sync globally in real-time.
+              </span>
+            )}
 
             <div className="flex items-center gap-3">
               <AnimatePresence mode="wait">
@@ -2102,7 +2124,7 @@ export default function AdminPanel({ isOpen, onClose, data, onSave, onDataChange
                 className="bg-chalk-950 hover:bg-chalk-900 text-white font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-xl flex items-center gap-1.5 shadow-md active:scale-95 transition-all cursor-pointer disabled:opacity-50"
               >
                 <Save className="w-4 h-4" />
-                {isSaving ? 'Syncing...' : 'Save All Changes'}
+                {isSaving ? 'Syncing...' : ['students', 'attendance', 'marks', 'calendar', 'mailbox'].includes(activeTab) ? 'Save Website Content' : 'Save All Changes'}
               </button>
             </div>
           </footer>

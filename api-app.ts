@@ -327,7 +327,7 @@ export function createApiApp() {
     res.json({ success: true, inquiries: filtered });
   });
 
-  // Admin: save/update website content (preserves inquiries + newsletter)
+  // Admin: save/update website content (preserves live operational collections)
   app.put('/api/content', saveLimiter, requireAdmin, async (req, res) => {
     const newData = req.body;
     if (!newData || typeof newData !== 'object' || Array.isArray(newData)) {
@@ -335,8 +335,13 @@ export function createApiApp() {
     }
 
     const existing = (await readDataStore()) || {};
+    // Content endpoint only manages CMS content; never overwrite live operational data
     newData.inquiries = Array.isArray(existing.inquiries) ? existing.inquiries : [];
     newData.newsletter = Array.isArray(existing.newsletter) ? existing.newsletter : [];
+    newData.students = Array.isArray(existing.students) ? existing.students : [];
+    newData.calendar = Array.isArray(existing.calendar) ? existing.calendar : [];
+    newData.attendance = Array.isArray(existing.attendance) ? existing.attendance : [];
+    newData.marks = Array.isArray(existing.marks) ? existing.marks : [];
 
     const success = await writeDataStore(newData);
 
