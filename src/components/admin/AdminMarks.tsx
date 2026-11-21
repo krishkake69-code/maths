@@ -12,10 +12,11 @@ import {
 } from 'lucide-react';
 import { adminApi } from '../../lib/api';
 import { batchLabel, formatDate, todayISO } from '../../lib/batches';
-import type { Student, MarkRecord } from '../../types';
+import type { Student, MarkRecord, Course } from '../../types';
 
 interface Props {
   onAuthError: () => void;
+  courses?: Course[];
 }
 
 const emptyForm = {
@@ -31,7 +32,7 @@ const emptyForm = {
 const inputCls =
   'w-full rounded-lg border border-line bg-canvas px-3 py-2 text-sm outline-none focus:border-accent';
 
-export default function AdminMarks({ onAuthError }: Props) {
+export default function AdminMarks({ onAuthError, courses }: Props) {
   const [students, setStudents] = useState<Student[]>([]);
   const [studentId, setStudentId] = useState('');
   const [marks, setMarks] = useState<MarkRecord[]>([]);
@@ -196,7 +197,7 @@ export default function AdminMarks({ onAuthError }: Props) {
             <option value="">— Choose a student —</option>
             {students.map((s) => (
               <option key={s.id} value={s.id}>
-                {s.name} (@{s.username}) · {s.class} · {batchLabel(s.batchId)}
+                {s.name} (@{s.username}) · {s.class} · {batchLabel(s.batchId, courses)}
               </option>
             ))}
           </select>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   CalendarCheck2,
   RefreshCw,
@@ -10,11 +10,12 @@ import {
   Users,
 } from 'lucide-react';
 import { adminApi } from '../../lib/api';
-import { BATCH_IDS, BATCH_INFO, todayISO } from '../../lib/batches';
-import type { BatchId, AttendanceStatus } from '../../types';
+import { getBatchesFromCourses, todayISO } from '../../lib/batches';
+import type { AttendanceStatus, Course } from '../../types';
 
 interface Props {
   onAuthError: () => void;
+  courses?: Course[];
 }
 
 interface Row {
@@ -36,14 +37,22 @@ const STATUS_BTN: Record<AttendanceStatus, { label: string; icon: typeof CheckCi
   absent: { label: 'Absent', icon: XCircle, active: 'bg-red-600 text-white', idle: 'text-red-700 hover:bg-red-50' },
 };
 
-export default function AdminAttendance({ onAuthError }: Props) {
+export default function AdminAttendance({ onAuthError, courses }: Props) {
+  const activeBatches = useMemo(() => getBatchesFromCourses(courses), [courses]);
   const [date, setDate] = useState(todayISO());
-  const [batchId, setBatchId] = useState<string>(BATCH_IDS[0]);
+  const [batchId, setBatchId] = useState<string>(() => activeBatches[0]?.id || '');
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
+
+  // Keep selected batch valid when courses change
+  useEffect(() => {
+    if (activeBatches.length > 0 && !activeBatches.some((b) => b.id === batchId)) {
+      setBatchId(activeBatches[0].id);
+    }
+  }, [activeBatches, batchId]);
 
   const load = async () => {
     setLoading(true);
@@ -132,9 +141,9 @@ export default function AdminAttendance({ onAuthError }: Props) {
             onChange={(e) => setBatchId(e.target.value)}
             className="rounded-xl border border-line bg-canvas px-3 py-2.5 text-sm outline-none focus:border-accent min-w-[220px]"
           >
-            {BATCH_IDS.map((id) => (
-              <option key={id} value={id}>
-                {BATCH_INFO[id].name} ({BATCH_INFO[id].days})
+            {activeBatches.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.name} ({b.className}{b.days ? ` • ${b.days}` : ''})
               </option>
             ))}
           </select>
@@ -180,7 +189,7 @@ export default function AdminAttendance({ onAuthError }: Props) {
         <div className="rounded-2xl border border-line bg-surface overflow-hidden">
           <div className="px-5 py-3 border-b border-line bg-surface-muted flex items-center justify-between">
             <p className="text-sm text-ink font-medium">
-              {BATCH_INFO[batchId as BatchId]?.name} · {rows.length} student{rows.length === 1 ? '' : 's'}
+              {activeBatches.find((b) => b.id === batchId)?.name || batchId} · {rows.length} student{rows.length === 1 ? '' : 's'}
             </p>
             <p className="text-xs text-ink-faint">{marked} marked</p>
           </div>

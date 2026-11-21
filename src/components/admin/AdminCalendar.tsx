@@ -11,11 +11,12 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { adminApi } from '../../lib/api';
-import { BATCH_IDS, BATCH_INFO, batchLabel, formatDate, todayISO } from '../../lib/batches';
-import type { CalendarEvent } from '../../types';
+import { batchLabel, formatDate, getBatchesFromCourses, todayISO } from '../../lib/batches';
+import type { CalendarEvent, Course } from '../../types';
 
 interface Props {
   onAuthError: () => void;
+  courses?: Course[];
 }
 
 const emptyForm = {
@@ -30,7 +31,8 @@ const emptyForm = {
 const inputCls =
   'w-full rounded-lg border border-line bg-canvas px-3 py-2 text-sm outline-none focus:border-accent';
 
-export default function AdminCalendar({ onAuthError }: Props) {
+export default function AdminCalendar({ onAuthError, courses }: Props) {
+  const activeBatches = useMemo(() => getBatchesFromCourses(courses), [courses]);
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -240,16 +242,16 @@ export default function AdminCalendar({ onAuthError }: Props) {
                 className={inputCls}
               />
             </Field>
-            <Field label="Specific batch (optional)">
+            <Field label="Specific course / batch (optional)">
               <select
                 value={form.batchId}
                 onChange={(e) => setForm({ ...form, batchId: e.target.value })}
                 className={inputCls}
               >
-                <option value="">All batches</option>
-                {BATCH_IDS.map((id) => (
-                  <option key={id} value={id}>
-                    {BATCH_INFO[id].name}
+                <option value="">All courses & batches</option>
+                {activeBatches.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.name} ({b.className})
                   </option>
                 ))}
               </select>
@@ -307,7 +309,7 @@ export default function AdminCalendar({ onAuthError }: Props) {
                     {formatDate(e.date)}
                     {e.endDate && e.endDate !== e.date ? ` – ${formatDate(e.endDate)}` : ''}
                     {' · '}
-                    {e.batchId ? batchLabel(e.batchId) : e.class === 'all' ? 'All classes' : `Class ${e.class}`}
+                    {e.batchId ? batchLabel(e.batchId, courses) : e.class === 'all' ? 'All classes' : `Class ${e.class}`}
                   </p>
                 </div>
                 <div className="flex items-center gap-1">

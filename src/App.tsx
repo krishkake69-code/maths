@@ -184,7 +184,7 @@ export default function App() {
           <Contact contactInfo={dynamicData?.contactInfo} centers={dynamicData?.centers} />
         </main>
       </ErrorBoundary>
-      <Footer onAdminClick={() => setIsAdminOpen(true)} contactInfo={dynamicData?.contactInfo} />
+      <Footer onAdminClick={() => setIsAdminOpen(true)} onStudentClick={() => setIsStudentOpen(true)} contactInfo={dynamicData?.contactInfo} />
       <FloatingWhatsApp phone={dynamicData?.contactInfo?.phone} />
       <ErrorBoundary>
         <AdminPanel 

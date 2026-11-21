@@ -158,10 +158,11 @@ export default function Navbar({ darkMode, setDarkMode, onAdminClick, onStudentC
                 {onStudentClick && (
                   <button
                     onClick={onStudentClick}
-                    className="p-2 rounded-full text-chalk-500 dark:text-chalk-400 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-chalk-100 dark:hover:bg-chalk-900 transition-colors cursor-pointer"
-                    title="Student Portal"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-900 transition-all cursor-pointer shadow-xs"
+                    title="Student Corner (Student Login)"
                   >
-                    <User className="w-4 h-4" />
+                    <User className="w-3.5 h-3.5" />
+                    <span>Student Corner</span>
                   </button>
                 )}
 
@@ -200,10 +201,11 @@ export default function Navbar({ darkMode, setDarkMode, onAdminClick, onStudentC
               {onStudentClick && (
                 <button
                   onClick={onStudentClick}
-                  className="p-2 rounded-full text-chalk-600 dark:text-chalk-300 hover:bg-chalk-100 dark:hover:bg-chalk-900 transition-colors cursor-pointer"
-                  title="Student Portal"
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 cursor-pointer"
+                  title="Student Corner"
                 >
-                  <User className="w-4 h-4" />
+                  <User className="w-3.5 h-3.5" />
+                  <span>Student</span>
                 </button>
               )}
 
@@ -264,6 +266,22 @@ export default function Navbar({ darkMode, setDarkMode, onAdminClick, onStudentC
                       </motion.a>
                     );
                   })}
+
+                  {onStudentClick && (
+                    <button
+                      onClick={() => {
+                        setIsOpen(false);
+                        onStudentClick();
+                      }}
+                      className="mt-2 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 cursor-pointer"
+                    >
+                      <span className="flex items-center gap-2">
+                        <User className="w-4 h-4 text-emerald-600" />
+                        <span>Student Corner (Login)</span>
+                      </span>
+                      <span className="text-[10px] uppercase font-bold text-emerald-600">Portal</span>
+                    </button>
+                  )}
 
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}

@@ -3,6 +3,7 @@ import { Heart, MapPin } from 'lucide-react';
 
 interface FooterProps {
   onAdminClick?: () => void;
+  onStudentClick?: () => void;
   contactInfo?: {
     phone: string;
     email: string;
@@ -12,7 +13,7 @@ interface FooterProps {
   };
 }
 
-export default function Footer({ onAdminClick, contactInfo }: FooterProps) {
+export default function Footer({ onAdminClick, onStudentClick, contactInfo }: FooterProps) {
   const handleScrollToSection = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     const target = document.querySelector(href);
@@ -131,6 +132,15 @@ export default function Footer({ onAdminClick, contactInfo }: FooterProps) {
             © 2026 REHMAN MATHEMATICS CLASSES. All Rights Reserved.
           </p>
           <div className="flex items-center gap-3 flex-wrap justify-center text-xs">
+            {onStudentClick && (
+              <button
+                onClick={onStudentClick}
+                className="hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors cursor-pointer font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400"
+              >
+                Student Corner
+              </button>
+            )}
+            {onStudentClick && <span aria-hidden="true">•</span>}
             {onAdminClick && (
               <button
                 onClick={onAdminClick}

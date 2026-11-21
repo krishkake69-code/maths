@@ -115,23 +115,28 @@ export interface GalleryItem {
 /* Student portal: batches, students, attendance, marks, calendar      */
 /* ------------------------------------------------------------------ */
 
-export type BatchId = 'MON_TUE_WED_11' | 'MON_TUE_WED_12' | 'FRI_SAT_SUN_11' | 'FRI_SAT_SUN_12';
+export type BatchId = string;
 
 export interface BatchInfo {
-  id: BatchId;
+  id: string;
   name: string;
   days: string;
-  class: '11th' | '12th';
-  studentsCount: number;
-  description: string;
+  class: string;
+  studentsCount?: number;
+  timing?: string;
+  description?: string;
 }
 
 export interface Student {
   id: string;
   username: string;
   name: string;
-  class: '11th' | '12th';
-  batchId: BatchId;
+  class: string;
+  batchId: string;
+  courseName?: string;
+  courseTiming?: string;
+  courseDays?: string;
+  courseSubjects?: string;
   phone?: string;
   email?: string;
   subjects?: string[];
@@ -172,7 +177,7 @@ export interface CalendarEvent {
   date: string; // YYYY-MM-DD
   endDate?: string;
   batchId?: string;
-  class?: '11th' | '12th' | 'all';
+  class?: string;
   createdAt: string;
   updatedAt?: string;
 }

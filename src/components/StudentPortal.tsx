@@ -1,6 +1,21 @@
-import React, { useState, useEffect, FormEvent } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Lock, LogOut, User, AlertCircle, CheckCircle2, Eye, EyeOff } from 'lucide-react';
+import { useState, useEffect, FormEvent } from 'react';
+import { motion } from 'motion/react';
+import {
+  Lock,
+  LogOut,
+  User,
+  AlertCircle,
+  CheckCircle2,
+  Eye,
+  EyeOff,
+  X,
+  CalendarCheck2,
+  BookOpenCheck,
+  CalendarDays,
+  GraduationCap,
+  Clock,
+  Calendar,
+} from 'lucide-react';
 import { studentApi, setStudentToken, getStudentToken, clearStudentToken } from '../lib/api';
 import type { StudentMe } from '../types';
 
@@ -27,7 +42,7 @@ export default function StudentPortal({ isOpen, onClose }: StudentPortalProps) {
     }
   }, [isOpen]);
 
-  const validateToken = async (token: string) => {
+  const validateToken = async (_token: string) => {
     try {
       const res = await studentApi.session();
       if (res.authenticated && res.studentId) {
@@ -60,7 +75,7 @@ export default function StudentPortal({ isOpen, onClose }: StudentPortalProps) {
     setAuthError('');
 
     try {
-      const res = await studentApi.login({ username, password });
+      const res = await studentApi.login({ username: username.trim().toLowerCase(), password });
       if (res.success && res.token) {
         setStudentToken(res.token);
         setIsAuthenticated(true);
@@ -68,10 +83,10 @@ export default function StudentPortal({ isOpen, onClose }: StudentPortalProps) {
         setUsername('');
         fetchStudentData();
       } else {
-        setAuthError(res.error || 'Invalid username or password.');
+        setAuthError(res.error || 'Incorrect Student ID or password.');
       }
     } catch (err) {
-      setAuthError('Server connection failed. Is the backend running?');
+      setAuthError('Server connection failed. Please try again.');
     } finally {
       setIsSubmittingAuth(false);
     }
@@ -86,35 +101,52 @@ export default function StudentPortal({ isOpen, onClose }: StudentPortalProps) {
 
   if (!isOpen) return null;
 
+  // Attendance analytics
+  const totalAttendanceDays = studentData?.attendance.length || 0;
+  const presentDays = studentData?.attendance.filter((a) => a.status === 'present').length || 0;
+  const lateDays = studentData?.attendance.filter((a) => a.status === 'late').length || 0;
+  const attendanceRate = totalAttendanceDays > 0 ? Math.round(((presentDays + lateDays * 0.5) / totalAttendanceDays) * 100) : 100;
+
+  // Marks analytics
+  const totalTests = studentData?.marks.length || 0;
+  const avgMarksPct = totalTests > 0
+    ? Math.round(
+        studentData!.marks.reduce((sum, m) => sum + (m.maxMarks ? (m.marksObtained / m.maxMarks) * 100 : 0), 0) / totalTests
+      )
+    : 0;
+
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-chalk-900/80 backdrop-blur-md overflow-hidden">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4 bg-chalk-950/80 backdrop-blur-md overflow-hidden">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="bg-white dark:bg-chalk-900 w-full max-w-md h-[85vh] rounded-[2rem] flex flex-col shadow-2xl border border-chalk-300 dark:border-chalk-700 overflow-hidden text-chalk-800 dark:text-chalk-100"
+        className="bg-white dark:bg-chalk-900 w-full max-w-lg h-[88vh] max-h-[720px] rounded-3xl flex flex-col shadow-2xl border border-chalk-200 dark:border-chalk-800 overflow-hidden text-chalk-800 dark:text-chalk-100"
       >
         {/* Modal Header */}
-        <header className="h-16 border-b border-chalk-200 dark:border-chalk-800 flex items-center justify-between px-6 bg-chalk-50 dark:bg-chalk-950/50 shrink-0">
+        <header className="h-16 border-b border-chalk-200 dark:border-chalk-800 flex items-center justify-between px-5 sm:px-6 bg-chalk-50 dark:bg-chalk-950/70 shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-emerald-600 text-white rounded-lg flex items-center justify-center font-bold text-base">
-              <User className="w-5 h-5" />
+            <div className="w-8 h-8 bg-emerald-600 text-white rounded-lg flex items-center justify-center font-bold text-base shadow-xs">
+              <GraduationCap className="w-5 h-5" />
             </div>
-            <span className="text-chalk-950 dark:text-chalk-50 font-extrabold text-lg uppercase tracking-tight">
-              Student <span className="text-emerald-600 dark:text-emerald-400">Portal</span>
-            </span>
+            <div>
+              <span className="text-chalk-950 dark:text-chalk-50 font-extrabold text-base sm:text-lg uppercase tracking-tight">
+                Student <span className="text-emerald-600 dark:text-emerald-400">Corner</span>
+              </span>
+            </div>
             {isAuthenticated && (
-              <span className="bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-400 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Active Session
+              <span className="hidden sm:inline-flex bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-400 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full items-center gap-1">
+                <CheckCircle2 className="w-3.5 h-3.5" /> Logged In
               </span>
             )}
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-full text-chalk-400 hover:text-chalk-600 dark:hover:text-chalk-200 hover:bg-chalk-100 dark:hover:bg-chalk-800 transition-colors"
+            className="p-1.5 rounded-full text-chalk-400 hover:text-chalk-600 dark:hover:text-chalk-200 hover:bg-chalk-100 dark:hover:bg-chalk-800 transition-colors cursor-pointer"
+            aria-label="Close"
           >
-            <Lock className="w-5 h-5" />
+            <X className="w-5 h-5" />
           </button>
         </header>
 
@@ -122,40 +154,40 @@ export default function StudentPortal({ isOpen, onClose }: StudentPortalProps) {
         <div className="flex-1 overflow-hidden flex flex-col">
           {!isAuthenticated ? (
             /* LOGIN CARD */
-            <div className="flex-1 flex items-center justify-center bg-chalk-50 dark:bg-chalk-950 p-6">
+            <div className="flex-1 flex items-center justify-center bg-chalk-50/50 dark:bg-chalk-950/40 p-4 sm:p-6 overflow-y-auto">
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                className="w-full max-w-md bg-white dark:bg-chalk-900 p-8 rounded-2xl shadow-xl border border-chalk-200/60 dark:border-chalk-800 flex flex-col"
+                className="w-full max-w-sm bg-white dark:bg-chalk-900 p-6 sm:p-8 rounded-2xl shadow-xl border border-chalk-200/80 dark:border-chalk-800 flex flex-col"
               >
-                <div className="w-14 h-14 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mb-5 mx-auto">
-                  <Lock className="w-6 h-6" />
+                <div className="w-12 h-12 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center mb-4 mx-auto border border-emerald-200 dark:border-emerald-800/60">
+                  <Lock className="w-5 h-5" />
                 </div>
-                <h2 className="text-center text-2xl font-black text-chalk-950 dark:text-chalk-50 uppercase mb-2">
-                  Student <span className="text-emerald-600 dark:text-emerald-400">Login</span>
+                <h2 className="text-center text-xl font-black text-chalk-950 dark:text-chalk-50 uppercase mb-1">
+                  Student <span className="text-emerald-600 dark:text-emerald-400">Sign In</span>
                 </h2>
-                <p className="text-center text-xs text-chalk-500 dark:text-chalk-400 mb-6">
-                  Enter your credentials to access your attendance, marks, and calendar.
+                <p className="text-center text-xs text-chalk-500 dark:text-chalk-400 mb-5 leading-relaxed">
+                  Enter your Student ID and Password provided by Rehman Sir / Admin to view your attendance, test marks, and batch schedule.
                 </p>
 
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-chalk-500 mb-1.5">
-                      Username
+                    <label className="block text-xs font-bold uppercase tracking-wider text-chalk-600 dark:text-chalk-400 mb-1.5">
+                      Student ID / Username
                     </label>
                     <input
                       type="text"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      placeholder="your_username"
-                      className="w-full px-4 py-3 rounded-xl border-2 border-chalk-200 dark:border-chalk-800 bg-transparent text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-colors"
+                      placeholder="e.g. aarav12"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-chalk-200 dark:border-chalk-700 bg-transparent text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-colors"
                       required
                       autoFocus
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-chalk-500 mb-1.5">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-chalk-600 dark:text-chalk-400 mb-1.5">
                       Password
                     </label>
                     <div className="relative">
@@ -164,15 +196,16 @@ export default function StudentPortal({ isOpen, onClose }: StudentPortalProps) {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full px-4 py-3 rounded-xl border-2 border-chalk-200 dark:border-chalk-800 bg-transparent text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-colors pr-12"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-chalk-200 dark:border-chalk-700 bg-transparent text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-colors pr-10"
                         required
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3 top-1/2 -translate-y-1/2 text-chalk-400 hover:text-emerald-600 dark:hover:text-emerald-400 cursor-pointer"
+                        tabIndex={-1}
                       >
-                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
                     </div>
                   </div>
@@ -187,10 +220,9 @@ export default function StudentPortal({ isOpen, onClose }: StudentPortalProps) {
                   <button
                     type="submit"
                     disabled={isSubmittingAuth}
-                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                   >
-                    {isSubmittingAuth ? 'Signing in...' : 'Access Portal'}
-                    <Lock className="w-4 h-4" />
+                    {isSubmittingAuth ? 'Signing In…' : 'Access Student Corner'}
                   </button>
                 </form>
               </motion.div>
@@ -198,96 +230,122 @@ export default function StudentPortal({ isOpen, onClose }: StudentPortalProps) {
           ) : (
             /* STUDENT DASHBOARD */
             <>
-              {/* Top bar with student info */}
-              <div className="bg-emerald-600/10 dark:bg-emerald-950/20 border-b border-emerald-200/50 dark:border-emerald-800/50 px-6 py-4 shrink-0">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900 rounded-full flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-bold text-lg">
+              {/* Student header bar */}
+              <div className="bg-emerald-50/70 dark:bg-emerald-950/30 border-b border-emerald-200/50 dark:border-emerald-800/40 px-5 py-3.5 shrink-0">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-10 h-10 bg-emerald-600 text-white rounded-xl flex items-center justify-center font-bold text-base shrink-0 shadow-xs">
                       {studentData?.student.name?.charAt(0).toUpperCase() || 'S'}
                     </div>
-                    <div>
-                      <p className="font-bold text-chalk-950 dark:text-chalk-50 text-sm">{studentData?.student.name}</p>
-                      <p className="text-xs text-chalk-500 dark:text-chalk-400">
-                        @{studentData?.student.username} · {studentData?.student.class} · {studentData?.student.batchId}
+                    <div className="min-w-0">
+                      <p className="font-bold text-chalk-950 dark:text-chalk-50 text-sm truncate">
+                        {studentData?.student.name}
+                      </p>
+                      <p className="text-xs text-emerald-700 dark:text-emerald-400 truncate font-medium">
+                        @{studentData?.student.username} • {studentData?.student.courseName || studentData?.student.batchId}
                       </p>
                     </div>
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="p-2 rounded-lg text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 transition-colors cursor-pointer"
-                    title="Log out"
+                    className="px-2.5 py-1.5 rounded-lg border border-rose-200 dark:border-rose-900 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+                    title="Log out of Student Corner"
                   >
-                    <LogOut className="w-4 h-4" />
+                    <LogOut className="w-3.5 h-3.5" /> Log Out
                   </button>
                 </div>
               </div>
 
               {/* Tab Navigation */}
-              <div className="flex border-b border-chalk-200 dark:border-chalk-800 px-4 shrink-0">
+              <div className="flex border-b border-chalk-200 dark:border-chalk-800 px-3 bg-chalk-50/40 dark:bg-chalk-950/30 shrink-0">
                 {[
-                  { id: 'profile', label: 'Profile', icon: User },
-                  { id: 'attendance', label: 'Attendance', icon: Lock },
-                  { id: 'marks', label: 'Marks', icon: Lock },
-                  { id: 'calendar', label: 'Calendar', icon: Lock },
+                  { id: 'profile', label: 'My Course', icon: User },
+                  { id: 'attendance', label: 'Attendance', icon: CalendarCheck2 },
+                  { id: 'marks', label: 'Marks', icon: BookOpenCheck },
+                  { id: 'calendar', label: 'Schedule', icon: CalendarDays },
                 ].map(({ id, label, icon: Icon }) => (
                   <button
                     key={id}
                     onClick={() => setActiveTab(id as typeof activeTab)}
-                    className={`flex-1 py-3 px-2 text-center text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer relative ${
+                    className={`flex-1 py-3 px-1 text-center text-xs font-bold uppercase tracking-wider transition-all cursor-pointer relative flex items-center justify-center gap-1.5 ${
                       activeTab === id
                         ? 'text-emerald-600 dark:text-emerald-400'
                         : 'text-chalk-500 dark:text-chalk-400 hover:text-chalk-700 dark:hover:text-chalk-200'
                     }`}
                   >
-                    <Icon className="w-4 h-4 mx-auto mb-1" />
-                    {label}
+                    <Icon className="w-3.5 h-3.5" />
+                    <span>{label}</span>
                     {activeTab === id && (
-                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-emerald-600 dark:bg-emerald-400 rounded-full" />
+                      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600 dark:bg-emerald-400 rounded-full" />
                     )}
                   </button>
                 ))}
               </div>
 
               {/* Tab Content */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
                 {activeTab === 'profile' && studentData && (
                   <div className="space-y-4">
-                    <div className="bg-white dark:bg-chalk-900 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 p-5 shadow-sm">
-                      <h3 className="text-sm font-bold text-chalk-950 dark:text-chalk-50 uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <User className="w-4 h-4 text-emerald-600" /> Profile Information
+                    {/* Course Card */}
+                    <div className="bg-emerald-50/60 dark:bg-emerald-950/20 rounded-2xl border border-emerald-200 dark:border-emerald-800/50 p-4 sm:p-5 shadow-xs">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+                          Enrolled Batch
+                        </span>
+                        <span className="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
+                          Active Student
+                        </span>
+                      </div>
+                      <h4 className="text-base sm:text-lg font-bold text-chalk-950 dark:text-chalk-50">
+                        {studentData.student.courseName || studentData.student.batchId}
+                      </h4>
+                      <div className="grid grid-cols-2 gap-3 mt-3 text-xs">
+                        {studentData.student.courseDays && (
+                          <div className="flex items-center gap-1.5 text-chalk-600 dark:text-chalk-300">
+                            <Calendar className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                            <span>{studentData.student.courseDays}</span>
+                          </div>
+                        )}
+                        {studentData.student.courseTiming && (
+                          <div className="flex items-center gap-1.5 text-chalk-600 dark:text-chalk-300">
+                            <Clock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                            <span>{studentData.student.courseTiming}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Profile Information */}
+                    <div className="bg-white dark:bg-chalk-900 rounded-2xl border border-chalk-200 dark:border-chalk-800 p-5 shadow-xs">
+                      <h3 className="text-xs font-bold text-chalk-950 dark:text-chalk-50 uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <User className="w-4 h-4 text-emerald-600" /> Student Profile
                       </h3>
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                          <p className="text-chalk-500 dark:text-chalk-400 text-xs uppercase tracking-wide">Full Name</p>
+                          <p className="text-chalk-400 text-xs uppercase tracking-wide">Full Name</p>
                           <p className="font-semibold text-chalk-950 dark:text-chalk-50">{studentData.student.name}</p>
                         </div>
                         <div>
-                          <p className="text-chalk-500 dark:text-chalk-400 text-xs uppercase tracking-wide">Username</p>
-                          <p className="font-semibold text-chalk-950 dark:text-chalk-50">@{studentData.student.username}</p>
+                          <p className="text-chalk-400 text-xs uppercase tracking-wide">Student ID</p>
+                          <p className="font-semibold text-emerald-600 dark:text-emerald-400 font-mono">@{studentData.student.username}</p>
                         </div>
                         <div>
-                          <p className="text-chalk-500 dark:text-chalk-400 text-xs uppercase tracking-wide">Class</p>
+                          <p className="text-chalk-400 text-xs uppercase tracking-wide">Class</p>
                           <p className="font-semibold text-chalk-950 dark:text-chalk-50">{studentData.student.class}</p>
                         </div>
                         <div>
-                          <p className="text-chalk-500 dark:text-chalk-400 text-xs uppercase tracking-wide">Batch</p>
-                          <p className="font-semibold text-chalk-950 dark:text-chalk-50">{studentData.student.batchId}</p>
+                          <p className="text-chalk-400 text-xs uppercase tracking-wide">Contact</p>
+                          <p className="font-semibold text-chalk-950 dark:text-chalk-50">{studentData.student.phone || '—'}</p>
                         </div>
                         <div>
-                          <p className="text-chalk-500 dark:text-chalk-400 text-xs uppercase tracking-wide">Phone</p>
-                          <p className="font-semibold text-chalk-950 dark:text-chalk-50">{studentData.student.phone || 'Not provided'}</p>
+                          <p className="text-chalk-400 text-xs uppercase tracking-wide">Email</p>
+                          <p className="font-semibold text-chalk-950 dark:text-chalk-50 truncate">{studentData.student.email || '—'}</p>
                         </div>
                         <div>
-                          <p className="text-chalk-500 dark:text-chalk-400 text-xs uppercase tracking-wide">Email</p>
-                          <p className="font-semibold text-chalk-950 dark:text-chalk-50">{studentData.student.email || 'Not provided'}</p>
-                        </div>
-                        <div>
-                          <p className="text-chalk-500 dark:text-chalk-400 text-xs uppercase tracking-wide">Subjects</p>
-                          <p className="font-semibold text-chalk-950 dark:text-chalk-50">{studentData.student.subjects?.join(', ') || 'None'}</p>
-                        </div>
-                        <div>
-                          <p className="text-chalk-500 dark:text-chalk-400 text-xs uppercase tracking-wide">Joined</p>
-                          <p className="font-semibold text-chalk-950 dark:text-chalk-50">{studentData.student.createdAt ? new Date(studentData.student.createdAt).toLocaleDateString() : 'N/A'}</p>
+                          <p className="text-chalk-400 text-xs uppercase tracking-wide">Enrolled Since</p>
+                          <p className="font-semibold text-chalk-950 dark:text-chalk-50">
+                            {studentData.student.createdAt ? new Date(studentData.student.createdAt).toLocaleDateString('en-IN') : 'N/A'}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -296,40 +354,59 @@ export default function StudentPortal({ isOpen, onClose }: StudentPortalProps) {
 
                 {activeTab === 'attendance' && studentData && (
                   <div className="space-y-4">
-                    <h3 className="text-sm font-bold text-chalk-950 dark:text-chalk-50 uppercase tracking-wider mb-2 flex items-center gap-2">
-                      <Lock className="w-4 h-4 text-emerald-600" /> Attendance Records
-                    </h3>
+                    {/* Summary statistics */}
+                    <div className="grid grid-cols-3 gap-3 text-center">
+                      <div className="bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/40 rounded-2xl p-3">
+                        <p className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 uppercase">Rate</p>
+                        <p className="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">{attendanceRate}%</p>
+                      </div>
+                      <div className="bg-chalk-50 dark:bg-chalk-950 border border-chalk-200 dark:border-chalk-800 rounded-2xl p-3">
+                        <p className="text-[11px] font-semibold text-chalk-500 uppercase">Present</p>
+                        <p className="text-xl font-bold text-chalk-900 dark:text-chalk-100 mt-0.5">{presentDays}</p>
+                      </div>
+                      <div className="bg-chalk-50 dark:bg-chalk-950 border border-chalk-200 dark:border-chalk-800 rounded-2xl p-3">
+                        <p className="text-[11px] font-semibold text-chalk-500 uppercase">Total Classes</p>
+                        <p className="text-xl font-bold text-chalk-900 dark:text-chalk-100 mt-0.5">{totalAttendanceDays}</p>
+                      </div>
+                    </div>
+
                     {studentData.attendance.length === 0 ? (
-                      <div className="bg-white dark:bg-chalk-900 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 p-12 text-center shadow-sm">
-                        <Lock className="mx-auto h-10 w-10 text-chalk-400" strokeWidth={1.5} />
-                        <p className="mt-3 text-ink font-medium">No attendance records yet</p>
-                        <p className="text-sm text-chalk-400 mt-1">Your teacher will mark attendance after each class.</p>
+                      <div className="bg-white dark:bg-chalk-900 rounded-2xl border border-dashed border-chalk-200 dark:border-chalk-800 p-10 text-center">
+                        <CalendarCheck2 className="mx-auto h-8 w-8 text-chalk-400" />
+                        <p className="mt-2 text-chalk-800 dark:text-chalk-200 font-medium">No attendance recorded yet</p>
+                        <p className="text-xs text-chalk-400 mt-1">Rehman Sir will mark your attendance after each batch class.</p>
                       </div>
                     ) : (
-                      <div className="bg-white dark:bg-chalk-900 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 shadow-sm overflow-hidden">
+                      <div className="bg-white dark:bg-chalk-900 rounded-2xl border border-chalk-200 dark:border-chalk-800 shadow-xs overflow-hidden">
                         <div className="overflow-x-auto">
-                          <table className="w-full text-sm">
+                          <table className="w-full text-xs">
                             <thead>
-                              <tr className="border-b border-chalk-200 dark:border-chalk-800 bg-chalk-50 dark:bg-chalk-950 text-left text-xs uppercase tracking-wider text-chalk-500">
-                                <th className="px-4 py-3 font-semibold">Date</th>
-                                <th className="px-4 py-3 font-semibold">Status</th>
-                                <th className="px-4 py-3 font-semibold">Marked</th>
+                              <tr className="border-b border-chalk-200 dark:border-chalk-800 bg-chalk-50 dark:bg-chalk-950 text-left uppercase tracking-wider text-chalk-500">
+                                <th className="px-4 py-2.5 font-semibold">Date</th>
+                                <th className="px-4 py-2.5 font-semibold">Status</th>
+                                <th className="px-4 py-2.5 font-semibold text-right">Recorded</th>
                               </tr>
                             </thead>
-                            <tbody className="divide-y divide-chalk-200 dark:divide-chalk-800">
+                            <tbody className="divide-y divide-chalk-100 dark:divide-chalk-800">
                               {studentData.attendance.map((a) => (
                                 <tr key={a.id} className="hover:bg-chalk-50/50 dark:hover:bg-chalk-950/50">
-                                  <td className="px-4 py-3 text-chalk-700 dark:text-chalk-300">{new Date(a.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
-                                  <td className="px-4 py-3">
-                                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${
-                                      a.status === 'present' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300' :
-                                      a.status === 'late' ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300' :
-                                      'bg-red-50 text-red-700 dark:bg-red-950/50 dark:text-red-300'
+                                  <td className="px-4 py-2.5 font-medium text-chalk-800 dark:text-chalk-200">
+                                    {new Date(a.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                  </td>
+                                  <td className="px-4 py-2.5">
+                                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${
+                                      a.status === 'present'
+                                        ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300'
+                                        : a.status === 'late'
+                                        ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300'
+                                        : 'bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300'
                                     }`}>
-                                      {a.status.charAt(0).toUpperCase() + a.status.slice(1)}
+                                      {a.status}
                                     </span>
                                   </td>
-                                  <td className="px-4 py-3 text-chalk-500 dark:text-chalk-400 text-xs">{new Date(a.markedAt).toLocaleString()}</td>
+                                  <td className="px-4 py-2.5 text-right text-chalk-400">
+                                    {new Date(a.markedAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+                                  </td>
                                 </tr>
                               ))}
                             </tbody>
@@ -342,42 +419,57 @@ export default function StudentPortal({ isOpen, onClose }: StudentPortalProps) {
 
                 {activeTab === 'marks' && studentData && (
                   <div className="space-y-4">
-                    <h3 className="text-sm font-bold text-chalk-950 dark:text-chalk-50 uppercase tracking-wider mb-2 flex items-center gap-2">
-                      <Lock className="w-4 h-4 text-emerald-600" /> Test Marks
-                    </h3>
+                    <div className="grid grid-cols-2 gap-3 text-center">
+                      <div className="bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/40 rounded-2xl p-3">
+                        <p className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 uppercase">Average Score</p>
+                        <p className="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">{avgMarksPct}%</p>
+                      </div>
+                      <div className="bg-chalk-50 dark:bg-chalk-950 border border-chalk-200 dark:border-chalk-800 rounded-2xl p-3">
+                        <p className="text-[11px] font-semibold text-chalk-500 uppercase">Tests Evaluated</p>
+                        <p className="text-xl font-bold text-chalk-900 dark:text-chalk-100 mt-0.5">{totalTests}</p>
+                      </div>
+                    </div>
+
                     {studentData.marks.length === 0 ? (
-                      <div className="bg-white dark:bg-chalk-900 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 p-12 text-center shadow-sm">
-                        <Lock className="mx-auto h-10 w-10 text-chalk-400" strokeWidth={1.5} />
-                        <p className="mt-3 text-ink font-medium">No marks recorded yet</p>
-                        <p className="text-sm text-chalk-400 mt-1">Your teacher will add test scores after evaluations.</p>
+                      <div className="bg-white dark:bg-chalk-900 rounded-2xl border border-dashed border-chalk-200 dark:border-chalk-800 p-10 text-center">
+                        <BookOpenCheck className="mx-auto h-8 w-8 text-chalk-400" />
+                        <p className="mt-2 text-chalk-800 dark:text-chalk-200 font-medium">No test scores published yet</p>
+                        <p className="text-xs text-chalk-400 mt-1">Your chapter-wise test and DPP scores will appear here after evaluation.</p>
                       </div>
                     ) : (
-                      <div className="bg-white dark:bg-chalk-900 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 shadow-sm overflow-hidden">
+                      <div className="bg-white dark:bg-chalk-900 rounded-2xl border border-chalk-200 dark:border-chalk-800 shadow-xs overflow-hidden">
                         <div className="overflow-x-auto">
-                          <table className="w-full text-sm">
+                          <table className="w-full text-xs">
                             <thead>
-                              <tr className="border-b border-chalk-200 dark:border-chalk-800 bg-chalk-50 dark:bg-chalk-950 text-left text-xs uppercase tracking-wider text-chalk-500">
-                                <th className="px-4 py-3 font-semibold">Test</th>
-                                <th className="px-4 py-3 font-semibold">Subject</th>
-                                <th className="px-4 py-3 font-semibold">Date</th>
-                                <th className="px-4 py-3 font-semibold text-right">Score</th>
-                                <th className="px-4 py-3 font-semibold text-right">%</th>
+                              <tr className="border-b border-chalk-200 dark:border-chalk-800 bg-chalk-50 dark:bg-chalk-950 text-left uppercase tracking-wider text-chalk-500">
+                                <th className="px-4 py-2.5 font-semibold">Test Name</th>
+                                <th className="px-4 py-2.5 font-semibold">Date</th>
+                                <th className="px-4 py-2.5 font-semibold text-right">Score</th>
+                                <th className="px-4 py-2.5 font-semibold text-right">%</th>
                               </tr>
                             </thead>
-                            <tbody className="divide-y divide-chalk-200 dark:divide-chalk-800">
+                            <tbody className="divide-y divide-chalk-100 dark:divide-chalk-800">
                               {studentData.marks.map((m) => {
                                 const pct = m.maxMarks ? Math.round((m.marksObtained / m.maxMarks) * 100) : 0;
                                 return (
                                   <tr key={m.id} className="hover:bg-chalk-50/50 dark:hover:bg-chalk-950/50">
-                                    <td className="px-4 py-3 text-chalk-700 dark:text-chalk-300 font-medium">{m.testName}</td>
-                                    <td className="px-4 py-3 text-chalk-500 dark:text-chalk-400">{m.subject}</td>
-                                    <td className="px-4 py-3 text-chalk-500 dark:text-chalk-400">{new Date(m.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
-                                    <td className="px-4 py-3 text-right text-chalk-700 dark:text-chalk-300">{m.marksObtained} / {m.maxMarks}</td>
-                                    <td className="px-4 py-3 text-right">
-                                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${
-                                        pct >= 75 ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300' :
-                                        pct >= 40 ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300' :
-                                        'bg-red-50 text-red-700 dark:bg-red-950/50 dark:text-red-300'
+                                    <td className="px-4 py-2.5">
+                                      <p className="font-semibold text-chalk-900 dark:text-chalk-100">{m.testName}</p>
+                                      {m.subject && <p className="text-[10px] text-chalk-400">{m.subject}</p>}
+                                    </td>
+                                    <td className="px-4 py-2.5 text-chalk-500">
+                                      {new Date(m.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
+                                    </td>
+                                    <td className="px-4 py-2.5 text-right font-medium text-chalk-800 dark:text-chalk-200">
+                                      {m.marksObtained} / {m.maxMarks}
+                                    </td>
+                                    <td className="px-4 py-2.5 text-right">
+                                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                                        pct >= 75
+                                          ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300'
+                                          : pct >= 40
+                                          ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300'
+                                          : 'bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300'
                                       }`}>
                                         {pct}%
                                       </span>
@@ -394,38 +486,41 @@ export default function StudentPortal({ isOpen, onClose }: StudentPortalProps) {
                 )}
 
                 {activeTab === 'calendar' && studentData && (
-                  <div className="space-y-4">
-                    <h3 className="text-sm font-bold text-chalk-950 dark:text-chalk-50 uppercase tracking-wider mb-2 flex items-center gap-2">
-                      <Lock className="w-4 h-4 text-emerald-600" /> Calendar Events
-                    </h3>
+                  <div className="space-y-3">
+                    <h4 className="text-xs font-bold text-chalk-950 dark:text-chalk-50 uppercase tracking-wider mb-2">
+                      Batch Notices & Upcoming Tests
+                    </h4>
                     {studentData.calendar.length === 0 ? (
-                      <div className="bg-white dark:bg-chalk-900 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 p-12 text-center shadow-sm">
-                        <Lock className="mx-auto h-10 w-10 text-chalk-400" strokeWidth={1.5} />
-                        <p className="mt-3 text-ink font-medium">No upcoming events</p>
-                        <p className="text-sm text-chalk-400 mt-1">Events will appear here when your teacher adds them.</p>
+                      <div className="bg-white dark:bg-chalk-900 rounded-2xl border border-dashed border-chalk-200 dark:border-chalk-800 p-10 text-center">
+                        <CalendarDays className="mx-auto h-8 w-8 text-chalk-400" />
+                        <p className="mt-2 text-chalk-800 dark:text-chalk-200 font-medium">No upcoming events or tests</p>
+                        <p className="text-xs text-chalk-400 mt-1">Check back later for test schedules and announcements.</p>
                       </div>
                     ) : (
-                      <div className="bg-white dark:bg-chalk-900 rounded-2xl border border-chalk-200/60 dark:border-chalk-800/60 shadow-sm overflow-hidden">
-                        <ul className="divide-y divide-chalk-200 dark:divide-chalk-800">
-                          {studentData.calendar.map((e) => (
-                            <li key={e.id} className="flex flex-wrap items-start gap-4 px-5 py-4">
-                              <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 leading-none">
-                                <span className="font-display text-base font-semibold">{e.date?.slice(8, 10)}</span>
-                                <span className="text-[10px] uppercase">{e.date?.slice(5, 7)}</span>
-                              </div>
-                              <div className="min-w-0 flex-1">
-                                <p className="text-chalk-950 dark:text-chalk-50 font-medium">{e.title}</p>
-                                {e.description && <p className="text-sm text-chalk-500 dark:text-chalk-400 mt-0.5">{e.description}</p>}
-                                <p className="text-xs text-chalk-400 mt-1">
-                                  {new Date(e.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                                  {e.endDate && e.endDate !== e.date ? ` – ${new Date(e.endDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}` : ''}
-                                  {' · '}
-                                  {e.batchId ? `Batch: ${e.batchId}` : e.class === 'all' ? 'All classes' : `Class ${e.class}`}
+                      <div className="space-y-2.5">
+                        {studentData.calendar.map((e) => (
+                          <div
+                            key={e.id}
+                            className="bg-white dark:bg-chalk-900 rounded-2xl border border-chalk-200 dark:border-chalk-800 p-3.5 flex items-start gap-3 shadow-xs"
+                          >
+                            <div className="flex h-11 w-11 shrink-0 flex-col items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/40">
+                              <span className="font-bold text-sm leading-none">{e.date?.slice(8, 10)}</span>
+                              <span className="text-[9px] uppercase font-bold mt-0.5 leading-none">{e.date?.slice(5, 7)}</span>
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="font-bold text-xs sm:text-sm text-chalk-950 dark:text-chalk-50">{e.title}</p>
+                              {e.description && (
+                                <p className="text-xs text-chalk-500 dark:text-chalk-400 mt-0.5 leading-relaxed">
+                                  {e.description}
                                 </p>
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
+                              )}
+                              <p className="text-[10px] text-emerald-700 dark:text-emerald-400 font-semibold mt-1">
+                                {new Date(e.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                {e.endDate && e.endDate !== e.date ? ` – ${new Date(e.endDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}` : ''}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     )}
                   </div>

@@ -2037,22 +2037,22 @@ export default function AdminPanel({ isOpen, onClose, data, onSave, onDataChange
 
                 {/* Tab 7: Students Management */}
                 {activeTab === 'students' && (
-                  <AdminStudents onAuthError={handleLogout} onStudentChange={onDataChange} />
+                  <AdminStudents courses={localData?.courses || []} onAuthError={handleLogout} onStudentChange={onDataChange} />
                 )}
 
                 {/* Tab 8: Attendance */}
                 {activeTab === 'attendance' && (
-                  <AdminAttendance onAuthError={handleLogout} />
+                  <AdminAttendance courses={localData?.courses || []} onAuthError={handleLogout} />
                 )}
 
                 {/* Tab 9: Marks */}
                 {activeTab === 'marks' && (
-                  <AdminMarks onAuthError={handleLogout} />
+                  <AdminMarks courses={localData?.courses || []} onAuthError={handleLogout} />
                 )}
 
                 {/* Tab 10: Calendar */}
                 {activeTab === 'calendar' && (
-                  <AdminCalendar onAuthError={handleLogout} />
+                  <AdminCalendar courses={localData?.courses || []} onAuthError={handleLogout} />
                 )}
                   </>
                 )}

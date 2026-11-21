@@ -15,17 +15,12 @@ import {
   verifyPassword,
 } from './server-utils.js';
 
-const BATCH_IDS = ['MON_TUE_WED_11', 'MON_TUE_WED_12', 'FRI_SAT_SUN_11', 'FRI_SAT_SUN_12'] as const;
-type BatchId = (typeof BATCH_IDS)[number];
-const BATCH_CLASS: Record<string, '11th' | '12th'> = {
-  MON_TUE_WED_11: '11th',
-  MON_TUE_WED_12: '12th',
-  FRI_SAT_SUN_11: '11th',
-  FRI_SAT_SUN_12: '12th',
-};
+const LEGACY_BATCH_IDS = ['MON_TUE_WED_11', 'MON_TUE_WED_12', 'FRI_SAT_SUN_11', 'FRI_SAT_SUN_12'] as const;
 
-function isValidBatch(v: unknown): v is BatchId {
-  return typeof v === 'string' && (BATCH_IDS as readonly string[]).includes(v);
+function isAllowedBatchId(batchId: unknown, courses: any[]): boolean {
+  if (typeof batchId !== 'string' || !batchId.trim()) return false;
+  if ((LEGACY_BATCH_IDS as readonly string[]).includes(batchId)) return true;
+  return courses.some((c) => c && typeof c === 'object' && c.id === batchId);
 }
 
 /* ------------------------------------------------------------------ */
@@ -358,6 +353,7 @@ export function createApiApp() {
   app.get('/api/admin/students', requireAdmin, async (req, res) => {
     const store = (await readDataStore()) || {};
     const students: any[] = Array.isArray(store.students) ? store.students : [];
+    const courses: any[] = Array.isArray(store.courses) ? store.courses : [];
     const safe = students.map((s) => ({
       id: s.id,
       username: s.username,
@@ -370,7 +366,29 @@ export function createApiApp() {
       createdAt: s.createdAt,
       updatedAt: s.updatedAt,
     }));
-    res.json({ success: true, students: safe, batches: BATCH_IDS.map((id) => ({ id, class: BATCH_CLASS[id] })) });
+
+    const batches = courses.map((c) => ({
+      id: c.id,
+      name: c.name,
+      days: c.days || '',
+      timing: c.timing || '',
+      class: c.targetClass || c.category || c.name || 'General',
+    }));
+
+    // If legacy students have legacy batchIds, include them as fallbacks
+    for (const legacyId of LEGACY_BATCH_IDS) {
+      if (students.some((s) => s.batchId === legacyId) && !batches.some((b) => b.id === legacyId)) {
+        batches.push({
+          id: legacyId,
+          name: legacyId.replace(/_/g, ' '),
+          days: '',
+          timing: '',
+          class: legacyId.endsWith('12') ? 'Class XII' : 'Class XI',
+        });
+      }
+    }
+
+    res.json({ success: true, students: safe, batches, courses });
   });
 
   app.post('/api/admin/students', requireAdmin, async (req, res) => {
@@ -378,29 +396,31 @@ export function createApiApp() {
     const username = cleanString(body.username, 40).toLowerCase();
     const name = cleanString(body.name, 120);
     const password = typeof body.password === 'string' ? body.password : '';
-    const cls = body.class === '12th' ? '12th' : body.class === '11th' ? '11th' : null;
-    const batchId = body.batchId;
+    const rawClass = typeof body.class === 'string' ? cleanString(body.class, 50) : '';
+    const batchId = typeof body.batchId === 'string' ? body.batchId.trim() : '';
 
-    if (!username || !name || !password || !cls) {
-      return res.status(400).json({ success: false, error: 'Username, name, password and class are required.' });
+    if (!username || !name || !password) {
+      return res.status(400).json({ success: false, error: 'Username, name, and password are required.' });
     }
     if (!/^[a-z0-9_.-]{3,40}$/.test(username)) {
       return res.status(400).json({ success: false, error: 'Username must be 3-40 chars: letters, numbers, _ . -' });
     }
-    if (password.length < 8) {
-      return res.status(400).json({ success: false, error: 'Password must be at least 8 characters.' });
-    }
-    if (!isValidBatch(batchId)) {
-      return res.status(400).json({ success: false, error: 'Choose one of the 4 batches.' });
-    }
-    if (BATCH_CLASS[batchId] !== cls) {
-      return res.status(400).json({ success: false, error: 'Batch does not match the selected class.' });
+    if (password.length < 6) {
+      return res.status(400).json({ success: false, error: 'Password must be at least 6 characters.' });
     }
 
     const store = (await readDataStore()) || {};
+    const courses: any[] = Array.isArray(store.courses) ? store.courses : [];
+    if (!isAllowedBatchId(batchId, courses)) {
+      return res.status(400).json({ success: false, error: 'Please choose an active course/batch from the course list.' });
+    }
+
+    const matchedCourse = courses.find((c) => c.id === batchId);
+    const resolvedClass = rawClass || matchedCourse?.targetClass || matchedCourse?.category || 'General';
+
     const students: any[] = Array.isArray(store.students) ? store.students : [];
     if (students.some((s) => typeof s.username === 'string' && s.username.trim().toLowerCase() === username)) {
-      return res.status(409).json({ success: false, error: 'That username is already taken.' });
+      return res.status(409).json({ success: false, error: 'That username/Student ID is already taken.' });
     }
 
     const now = new Date().toISOString();
@@ -409,11 +429,13 @@ export function createApiApp() {
       username,
       passwordHash: await hashPassword(password),
       name,
-      class: cls,
+      class: resolvedClass,
       batchId,
       phone: cleanString(body.phone, 20),
       email: cleanString(body.email, 120),
-      subjects: Array.isArray(body.subjects) ? body.subjects.slice(0, 20).map((s: any) => cleanString(s, 40)) : [],
+      subjects: Array.isArray(body.subjects) && body.subjects.length > 0
+        ? body.subjects.slice(0, 20).map((s: any) => cleanString(s, 40))
+        : matchedCourse?.subjects ? [matchedCourse.subjects] : [],
       createdAt: now,
       updatedAt: now,
     };
@@ -434,19 +456,22 @@ export function createApiApp() {
     if (!student) return res.status(404).json({ success: false, error: 'Student not found' });
 
     if (typeof body.name === 'string' && body.name.trim()) student.name = cleanString(body.name, 120);
-    if (body.class === '11th' || body.class === '12th') student.class = body.class;
-    if (isValidBatch(body.batchId)) {
-      if (BATCH_CLASS[body.batchId] !== student.class) {
-        return res.status(400).json({ success: false, error: 'Batch does not match the student class.' });
-      }
+    if (typeof body.class === 'string' && body.class.trim()) student.class = cleanString(body.class, 50);
+
+    const courses: any[] = Array.isArray(store.courses) ? store.courses : [];
+    if (body.batchId && isAllowedBatchId(body.batchId, courses)) {
       student.batchId = body.batchId;
+      const matchedCourse = courses.find((c) => c.id === body.batchId);
+      if (matchedCourse?.targetClass && !body.class) {
+        student.class = matchedCourse.targetClass;
+      }
     }
     if (typeof body.phone === 'string') student.phone = cleanString(body.phone, 20);
     if (typeof body.email === 'string') student.email = cleanString(body.email, 120);
     if (Array.isArray(body.subjects)) {
       student.subjects = body.subjects.slice(0, 20).map((s: any) => cleanString(s, 40));
     }
-    if (typeof body.password === 'string' && body.password.length >= 8) {
+    if (typeof body.password === 'string' && body.password.length >= 6) {
       student.passwordHash = await hashPassword(body.password);
     }
     student.updatedAt = new Date().toISOString();
@@ -479,8 +504,9 @@ export function createApiApp() {
     const store = (await readDataStore()) || {};
     const students: any[] = Array.isArray(store.students) ? store.students : [];
     const attendance: any[] = Array.isArray(store.attendance) ? store.attendance : [];
+    const targetBatchId = typeof batchId === 'string' ? batchId.trim() : '';
     const filtered =
-      batchId && isValidBatch(batchId) ? students.filter((s) => s.batchId === batchId) : students;
+      targetBatchId ? students.filter((s) => s.batchId === targetBatchId) : students;
 
     const out: any[] = [];
     filtered.forEach((s) => {
@@ -673,8 +699,8 @@ export function createApiApp() {
       description: cleanString(body.description, 600),
       date,
       endDate: typeof body.endDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(body.endDate) ? body.endDate : '',
-      batchId: isValidBatch(body.batchId) ? body.batchId : '',
-      class: body.class === '11th' || body.class === '12th' || body.class === 'all' ? body.class : 'all',
+      batchId: typeof body.batchId === 'string' ? body.batchId.trim() : '',
+      class: typeof body.class === 'string' && body.class.trim() ? cleanString(body.class, 50) : 'all',
       createdAt: now,
       updatedAt: now,
     };
@@ -700,8 +726,8 @@ export function createApiApp() {
     if (typeof body.endDate === 'string') {
       ev.endDate = /^\d{4}-\d{2}-\d{2}$/.test(body.endDate) ? body.endDate : '';
     }
-    if (isValidBatch(body.batchId)) ev.batchId = body.batchId;
-    if (body.class === '11th' || body.class === '12th' || body.class === 'all') ev.class = body.class;
+    if (typeof body.batchId === 'string') ev.batchId = body.batchId.trim();
+    if (typeof body.class === 'string' && body.class.trim()) ev.class = cleanString(body.class, 50);
     ev.updatedAt = new Date().toISOString();
 
     calendar.sort((a, b) => (a.date < b.date ? -1 : 1));
@@ -788,6 +814,9 @@ export function createApiApp() {
       return res.status(404).json({ success: false, error: 'Student not found' });
     }
 
+    const courses: any[] = Array.isArray(store.courses) ? store.courses : [];
+    const studentCourse = courses.find((c) => c.id === student.batchId);
+
     const attendance: any[] = Array.isArray(store.attendance) ? store.attendance : [];
     const marks: any[] = Array.isArray(store.marks) ? store.marks : [];
     const calendar: any[] = Array.isArray(store.calendar) ? store.calendar : [];
@@ -795,15 +824,23 @@ export function createApiApp() {
     const studentAttendance = attendance.filter((a) => a.studentId === studentId);
     const studentMarks = marks.filter((m) => m.studentId === studentId);
 
+    const studentCalendar = calendar.filter(
+      (e) => !e.batchId || e.batchId === 'all' || e.batchId === student.batchId || e.class === 'all' || e.class === student.class
+    );
+
     const safeStudent = {
       id: student.id,
       username: student.username,
       name: student.name,
-      class: student.class,
+      class: student.class || studentCourse?.targetClass || 'General',
       batchId: student.batchId,
+      courseName: studentCourse?.name || student.batchId,
+      courseTiming: studentCourse?.timing || '',
+      courseDays: studentCourse?.days || '',
+      courseSubjects: studentCourse?.subjects || '',
       phone: student.phone || '',
       email: student.email || '',
-      subjects: student.subjects || [],
+      subjects: student.subjects && student.subjects.length > 0 ? student.subjects : (studentCourse?.subjects ? [studentCourse.subjects] : []),
       createdAt: student.createdAt,
     };
 
@@ -812,7 +849,7 @@ export function createApiApp() {
       student: safeStudent,
       attendance: studentAttendance,
       marks: studentMarks,
-      calendar,
+      calendar: studentCalendar,
     });
   });
 
