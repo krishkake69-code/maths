@@ -1,4 +1,5 @@
 import React, { useState, useEffect, MouseEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { Sun, Moon, Lock, User } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'motion/react';
 import Button3D from './Button3D';
@@ -7,10 +8,9 @@ interface NavbarProps {
   darkMode: boolean;
   setDarkMode: (val: boolean) => void;
   onAdminClick?: () => void;
-  onStudentClick?: () => void;
 }
 
-export default function Navbar({ darkMode, setDarkMode, onAdminClick, onStudentClick }: NavbarProps) {
+export default function Navbar({ darkMode, setDarkMode, onAdminClick }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
@@ -155,16 +155,14 @@ export default function Navbar({ darkMode, setDarkMode, onAdminClick, onStudentC
                   </button>
                 )}
 
-                {onStudentClick && (
-                  <button
-                    onClick={onStudentClick}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-900 transition-all cursor-pointer shadow-xs"
-                    title="Student Corner (Student Login)"
-                  >
-                    <User className="w-3.5 h-3.5" />
-                    <span>Student Corner</span>
-                  </button>
-                )}
+                <Link
+                  to="/student"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-900 transition-all cursor-pointer shadow-xs"
+                  title="Student Corner (Student Login)"
+                >
+                  <User className="w-3.5 h-3.5" />
+                  <span>Student Corner</span>
+                </Link>
 
                 <Button3D
                   variant="primary"
@@ -198,16 +196,14 @@ export default function Navbar({ darkMode, setDarkMode, onAdminClick, onStudentC
                 </button>
               )}
 
-              {onStudentClick && (
-                <button
-                  onClick={onStudentClick}
-                  className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 cursor-pointer"
-                  title="Student Corner"
-                >
-                  <User className="w-3.5 h-3.5" />
-                  <span>Student</span>
-                </button>
-              )}
+              <Link
+                to="/student"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 cursor-pointer"
+                title="Student Corner"
+              >
+                <User className="w-3.5 h-3.5" />
+                <span>Student</span>
+              </Link>
 
               <button
                 onClick={() => setIsOpen(!isOpen)}
@@ -267,21 +263,17 @@ export default function Navbar({ darkMode, setDarkMode, onAdminClick, onStudentC
                     );
                   })}
 
-                  {onStudentClick && (
-                    <button
-                      onClick={() => {
-                        setIsOpen(false);
-                        onStudentClick();
-                      }}
-                      className="mt-2 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 cursor-pointer"
-                    >
-                      <span className="flex items-center gap-2">
-                        <User className="w-4 h-4 text-emerald-600" />
-                        <span>Student Corner (Login)</span>
-                      </span>
-                      <span className="text-[10px] uppercase font-bold text-emerald-600">Portal</span>
-                    </button>
-                  )}
+                  <Link
+                    to="/student"
+                    onClick={() => setIsOpen(false)}
+                    className="mt-2 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 cursor-pointer"
+                  >
+                    <span className="flex items-center gap-2">
+                      <User className="w-4 h-4 text-emerald-600" />
+                      <span>Student Corner (Login)</span>
+                    </span>
+                    <span className="text-[10px] uppercase font-bold text-emerald-600">Portal</span>
+                  </Link>
 
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}

@@ -11,6 +11,10 @@ import {
   AlertCircle,
   CheckCircle2,
   GraduationCap,
+  Copy,
+  Check,
+  MessageSquare,
+  ExternalLink,
 } from 'lucide-react';
 import { adminApi } from '../../lib/api';
 import { batchLabel, getBatchesFromCourses, ResolvedBatch } from '../../lib/batches';
@@ -45,6 +49,29 @@ export default function AdminStudents({ onAuthError, onStudentChange, courses }:
   const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState<Student | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const copyLoginDetails = (s: Student) => {
+    const courseTitle = batchLabel(s.batchId, courses);
+    const portalUrl = `${window.location.origin}/student`;
+    const text = `🎓 *REHMAN MATHEMATICS CLASSES*\n*Student Corner Login Credentials*\n\n👤 *Student Name:* ${s.name}\n🆔 *Student ID:* ${s.username}\n📚 *Course:* ${courseTitle}\n\n🌐 *Portal Login:* ${portalUrl}\n\n_(Use the password given by Rehman Sir / Institute to sign in to check your attendance, test marks, and batch schedule)_`;
+    navigator.clipboard.writeText(text);
+    setCopiedId(s.id);
+    flash(`Copied login credentials for ${s.name}!`);
+    setTimeout(() => setCopiedId(null), 2500);
+  };
+
+  const shareOnWhatsApp = (s: Student) => {
+    const courseTitle = batchLabel(s.batchId, courses);
+    const portalUrl = `${window.location.origin}/student`;
+    const text = encodeURIComponent(
+      `🎓 *REHMAN MATHEMATICS CLASSES*\n*Student Corner Login Credentials*\n\n👤 *Student Name:* ${s.name}\n🆔 *Student ID:* ${s.username}\n📚 *Course:* ${courseTitle}\n\n🌐 *Portal Login:* ${portalUrl}\n\n_(Use the password given by Rehman Sir / Institute to sign in to check your attendance, test marks, and batch schedule)_`
+    );
+    const rawPhone = (s.phone || '').replace(/\D/g, '');
+    const phone = rawPhone.length === 10 ? `91${rawPhone}` : rawPhone;
+    const url = phone ? `https://api.whatsapp.com/send?phone=${phone}&text=${text}` : `https://api.whatsapp.com/send?text=${text}`;
+    window.open(url, '_blank');
+  };
 
   // Compute available batches dynamically from courses passed from AdminPanel or loaded via API
   const activeBatches: ResolvedBatch[] = useMemo(() => {
@@ -498,6 +525,20 @@ export default function AdminStudents({ onAuthError, onStudentChange, courses }:
                       </td>
                       <td className="px-5 py-3.5">
                         <div className="flex items-center justify-end gap-1">
+                          <button
+                            onClick={() => copyLoginDetails(s)}
+                            className="rounded-lg p-2 text-ink-soft hover:text-accent hover:bg-accent-soft transition-colors cursor-pointer"
+                            title="Copy Student Login Details (ID & URL)"
+                          >
+                            {copiedId === s.id ? <Check className="h-4 w-4 text-accent" /> : <Copy className="h-4 w-4" />}
+                          </button>
+                          <button
+                            onClick={() => shareOnWhatsApp(s)}
+                            className="rounded-lg p-2 text-ink-soft hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors cursor-pointer"
+                            title="Send Login Details via WhatsApp"
+                          >
+                            <MessageSquare className="h-4 w-4" />
+                          </button>
                           <button
                             onClick={() => openEdit(s)}
                             className="rounded-lg p-2 text-ink-soft hover:text-accent hover:bg-accent-soft transition-colors cursor-pointer"

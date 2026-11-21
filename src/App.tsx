@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import AdmissionBanner from './components/AdmissionBanner';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -14,7 +15,7 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import AdminPanel from './components/AdminPanel';
-import StudentPortal from './components/StudentPortal';
+import StudentDashboard from './components/StudentDashboard';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import initialData from './data-store.json';
 
@@ -93,7 +94,6 @@ function normalizeContentData(value: unknown) {
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
-  const [isStudentOpen, setIsStudentOpen] = useState(false);
   const [syncError, setSyncError] = useState('');
   const [dynamicData, setDynamicData] = useState<any>(() => normalizeContentData(initialData));
 
@@ -163,63 +163,65 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-paper dark:bg-chalk-950 text-chalk-900 dark:text-chalk-100 font-sans">
-      {syncError && (
-        <div role="status" className="bg-amber-500/15 px-4 py-2 text-center text-sm text-amber-700 dark:text-amber-300">
-          {syncError}
-        </div>
-      )}
-      <AdmissionBanner message={dynamicData?.admissionMessage} />
-      <Navbar darkMode={darkMode} setDarkMode={setDarkMode} onAdminClick={() => setIsAdminOpen(true)} onStudentClick={() => setIsStudentOpen(true)} />
-      <ErrorBoundary
-          fallback={
-            <main id="main-content" className="min-h-[60vh] px-4 py-24 text-center">
-              <h1 className="text-2xl font-bold text-chalk-950 dark:text-chalk-50">Content is temporarily unavailable</h1>
-              <p className="mx-auto mt-2 max-w-lg text-chalk-500 dark:text-chalk-400">
-                The saved content could not be displayed. Please refresh and try again.
-              </p>
+    <Routes>
+      <Route path="/student" element={<StudentDashboard />} />
+      <Route path="*" element={
+        <div className="min-h-screen bg-paper dark:bg-chalk-950 text-chalk-900 dark:text-chalk-100 font-sans">
+          {syncError && (
+            <div role="status" className="bg-amber-500/15 px-4 py-2 text-center text-sm text-amber-700 dark:text-amber-300">
+              {syncError}
+            </div>
+          )}
+          <AdmissionBanner message={dynamicData?.admissionMessage} />
+          <Navbar darkMode={darkMode} setDarkMode={setDarkMode} onAdminClick={() => setIsAdminOpen(true)} />
+          <ErrorBoundary
+              fallback={
+                <main id="main-content" className="min-h-[60vh] px-4 py-24 text-center">
+                  <h1 className="text-2xl font-bold text-chalk-950 dark:text-chalk-50">Content is temporarily unavailable</h1>
+                  <p className="mx-auto mt-2 max-w-lg text-chalk-500 dark:text-chalk-400">
+                    The saved content could not be displayed. Please refresh and try again.
+                  </p>
+                </main>
+              }
+          >
+            <main id="main-content">
+              <Hero hero={dynamicData?.hero} stats={dynamicData?.stats} />
+              <Math3DLab />
+              <About />
+              <Stats stats={dynamicData?.stats} />
+              <Courses courses={dynamicData?.courses} />
+              <WhyChooseUs />
+              <Results results={dynamicData?.results} />
+              <Testimonials testimonials={dynamicData?.testimonials} />
+              <Gallery items={dynamicData?.gallery} />
+              <Contact contactInfo={dynamicData?.contactInfo} centers={dynamicData?.centers} />
             </main>
-          }
-      >
-        <main id="main-content">
-          <Hero hero={dynamicData?.hero} stats={dynamicData?.stats} />
-          <Math3DLab />
-          <About />
-          <Stats stats={dynamicData?.stats} />
-          <Courses courses={dynamicData?.courses} />
-          <WhyChooseUs />
-          <Results results={dynamicData?.results} />
-          <Testimonials testimonials={dynamicData?.testimonials} />
-          <Gallery items={dynamicData?.gallery} />
-          <Contact contactInfo={dynamicData?.contactInfo} centers={dynamicData?.centers} />
-        </main>
-      </ErrorBoundary>
-      <Footer onAdminClick={() => setIsAdminOpen(true)} onStudentClick={() => setIsStudentOpen(true)} contactInfo={dynamicData?.contactInfo} />
-      <FloatingWhatsApp phone={dynamicData?.contactInfo?.phone} />
-      <ErrorBoundary>
-        <AdminPanel 
-          isOpen={isAdminOpen} 
-          onClose={() => setIsAdminOpen(false)} 
-          data={dynamicData} 
-          onSave={handleSaveContent}
-          onDataChange={() => {
-            fetch('/api/content', { cache: 'no-store' })
-              .then(async (response) => {
-                const data = await response.json().catch(() => ({}));
-                if (!response.ok) throw new Error(data.error || `Content API returned ${response.status}`);
-                setDynamicData(normalizeContentData(data));
-                setSyncError('');
-              })
-              .catch((error) => {
-                console.error('Failed to load live content:', error);
-                setSyncError('Live content could not be synced. Showing the last saved content.');
-              });
-          }}
-        />
-      </ErrorBoundary>
-      <ErrorBoundary>
-        <StudentPortal isOpen={isStudentOpen} onClose={() => setIsStudentOpen(false)} />
-      </ErrorBoundary>
-    </div>
+          </ErrorBoundary>
+          <Footer onAdminClick={() => setIsAdminOpen(true)} contactInfo={dynamicData?.contactInfo} />
+          <FloatingWhatsApp phone={dynamicData?.contactInfo?.phone} />
+          <ErrorBoundary>
+            <AdminPanel 
+              isOpen={isAdminOpen} 
+              onClose={() => setIsAdminOpen(false)} 
+              data={dynamicData} 
+              onSave={handleSaveContent}
+              onDataChange={() => {
+                fetch('/api/content', { cache: 'no-store' })
+                  .then(async (response) => {
+                    const data = await response.json().catch(() => ({}));
+                    if (!response.ok) throw new Error(data.error || `Content API returned ${response.status}`);
+                    setDynamicData(normalizeContentData(data));
+                    setSyncError('');
+                  })
+                  .catch((error) => {
+                    console.error('Failed to load live content:', error);
+                    setSyncError('Live content could not be synced. Showing the last saved content.');
+                  });
+              }}
+            />
+          </ErrorBoundary>
+        </div>
+      } />
+    </Routes>
   );
 }
